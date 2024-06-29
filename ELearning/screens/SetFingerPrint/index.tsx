@@ -1,5 +1,5 @@
-import React, {useState, FC} from 'react';
-import {Alert, Linking} from 'react-native';
+import React, { useState, FC } from 'react';
+import { Alert, Linking, TouchableOpacity } from 'react-native';
 import {
   Center,
   Text,
@@ -14,39 +14,45 @@ import {
   VStack,
   Heading,
 } from '@gluestack-ui/themed';
-import ReactNativeBiometrics, {BiometryTypes} from 'react-native-biometrics';
+import ReactNativeBiometrics, { BiometryTypes } from 'react-native-biometrics';
 // @ts-ignore
 import FingerPrintLogo from '../../assets/svg/fingerPrintLogo.svg';
 // @ts-ignore
 import ArrowLeftBlueColor from '../../assets/svg/arrowLeftBlueColor.svg';
 // @ts-ignore
 import Congratulations from '../../assets/svg/congratulations-1.svg';
-import {ScreenProps} from '../../types';
-import {EventModal} from '../../components';
+import { ScreenProps } from '../../types';
+import { EventModal } from '../../components';
 
-export const SetFingerPrint: FC<ScreenProps<'SetFingerPrint'>> = ({
-  navigation,
-}) => {
+export const SetFingerPrint: FC<ScreenProps<'SetFingerPrint'>> = ({ navigation }) => {
   const [modalVisible, setModalVisible] = useState(false);
-  const [enableFingerprintModalVisible, setEnableFingerprintModalVisible] =useState(false);
+  const [enableFingerprintModalVisible, setEnableFingerprintModalVisible] = useState(false);
   const rnBiometrics = new ReactNativeBiometrics();
 
   const saveFingerprint = async () => {
     try {
-      const {available, biometryType} = await rnBiometrics.isSensorAvailable();
+      const { available, biometryType } = await rnBiometrics.isSensorAvailable();
 
       if (available && biometryType === BiometryTypes.Biometrics) {
-        const {publicKey} = await rnBiometrics.createKeys();
+        const { publicKey } = await rnBiometrics.createKeys();
+        console.log("publicKey",publicKey);
 
         if (publicKey) {
-          setModalVisible(true);
+          const result = await rnBiometrics.simplePrompt({ promptMessage: 'Confirm fingerprint' });
+
+          if (result.success) {
+            setModalVisible(true);
+            console.log("Success");
+          } else {
+            Alert.alert('Error', 'Failed to authenticate using fingerprint');
+          }
         } else {
           Alert.alert('Error', 'Failed to save fingerprint');
         }
       } else {
         setEnableFingerprintModalVisible(true);
       }
-    } catch (error:any) {
+    } catch (error: any) {
       Alert.alert('Error', `An error occurred: ${error.message}`);
     }
   };
@@ -70,15 +76,19 @@ export const SetFingerPrint: FC<ScreenProps<'SetFingerPrint'>> = ({
         justifyContent="space-evenly"
         alignItems="center"
         w={'$full'}>
-        <Button bg="$backgroundLight400" rounded={'$full'}>
-          <Text>Skip</Text>
-        </Button>
+
+        <TouchableOpacity style={{borderRadius:30,backgroundColor:'gray',width:100,height:50}} onPress={()=>{navigation.navigate('SignIn')}}>
+          <Text style={{textAlign:'center',marginTop:12}}>Skip</Text>
+        </TouchableOpacity>
+
+
         <Button
           rounded={'$full'}
           flexDirection="row"
           alignSelf="center"
           justifyContent="space-between"
-          onPress={() => setModalVisible(!modalVisible)}>
+          height={55}
+          onPress={saveFingerprint}>
           <Text textAlign="center" color="$white" alignSelf="center" mr={'$5'}>
             Continue
           </Text>
@@ -86,7 +96,7 @@ export const SetFingerPrint: FC<ScreenProps<'SetFingerPrint'>> = ({
             bg="$white"
             p={10}
             rounded={'$full'}
-            w={'$11'}
+            w={'$12'}
             alignItems="center">
             <ArrowLeftBlueColor />
           </View>

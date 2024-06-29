@@ -59,7 +59,7 @@ export const LoginMethod: FC<ScreenProps<'LoginMethod'>> = ({navigation}) => {
               color="$primary700"
               fontSize={'$md'}
               fontWeight={'$semibold'}
-              underline>
+              >
               SIGN UP
             </Text>
           </Button>
