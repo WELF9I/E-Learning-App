@@ -8,6 +8,7 @@ import {
   CheckboxIcon,
   CheckboxIndicator,
   CheckboxLabel,
+  FormControl,
   Icon,
   Input,
   InputField,
@@ -18,11 +19,42 @@ import {
   Text,
   View,
 } from '@gluestack-ui/themed';
+import {TouchableOpacity} from 'react-native';
+import {useForm, Controller} from 'react-hook-form';
+import {zodResolver} from '@hookform/resolvers/zod';
+import * as z from 'zod';
 // @ts-ignore
 import ArrowLeftBlueColor from '../../assets/svg/arrowLeftBlueColor.svg';
 import {CustomButton} from '../../components';
-import { TouchableOpacity } from 'react-native';
+
+// Define validation schema
+const schema = z.object({
+  email: z.string().email({message: 'Invalid email address'}),
+  password: z.string().min(6, {message: 'Password must be at least 6 characters long'}),
+});
+
 export const SignIn: FC<ScreenProps<'SignIn'>> = ({navigation}) => {
+  const {
+    control,
+    handleSubmit,
+    formState: {errors},
+  } = useForm({
+    resolver: zodResolver(schema),
+  });
+
+  const onSubmit = (data: any) => {
+    console.log(data);
+    // Handle sign-in logic here
+    navigation.navigate('SignUp');
+  };
+
+  const getErrorMessage = (error: any) => {
+    if (error) {
+      return error.message;
+    }
+    return '';
+  };
+
   return (
     <AuthContainer
       title="Let’s Sign In.!"
@@ -46,27 +78,69 @@ export const SignIn: FC<ScreenProps<'SignIn'>> = ({navigation}) => {
         </View>
       }>
       <View gap={25}>
-        <Input
-          justifyContent="center"
-          alignItems="center"
-          bgColor="$white"
-          rounded={'$2xl'}
-          h={'$12'}>
-          <InputSlot ml={'$2'}>
-            <InputIcon>
-              <Icon as={MailIcon} />
-            </InputIcon>
-          </InputSlot>
-          <InputField placeholder="Email" type="text" ml={'$4'} />
-        </Input>
-        <Input alignItems="center" bgColor="$white" h={'$12'} rounded={'$2xl'}>
-          <InputSlot ml={'$2'}>
-            <InputIcon>
-              <Icon as={LockIcon} />
-            </InputIcon>
-          </InputSlot>
-          <InputField placeholder="Password" type="password" ml={'$4'} />
-        </Input>
+        <FormControl>
+          <Controller
+            control={control}
+            name="email"
+            render={({field: {onChange, onBlur, value}}) => (
+              <Input
+                justifyContent="center"
+                alignItems="center"
+                bgColor="$white"
+                rounded={'$2xl'}
+                h={'$12'}>
+                <InputSlot ml={'$2'}>
+                  <InputIcon>
+                    <Icon as={MailIcon} />
+                  </InputIcon>
+                </InputSlot>
+                <InputField
+                  placeholder="Email"
+                  type="text"
+                  ml={'$4'}
+                  onBlur={onBlur}
+                  onChangeText={onChange}
+                  value={value}
+                />
+              </Input>
+            )}
+          />
+          {errors.email && (
+            <Text style={{color: 'red'}}>{getErrorMessage(errors.email)}</Text>
+          )}
+        </FormControl>
+
+        <FormControl>
+          <Controller
+            control={control}
+            name="password"
+            render={({field: {onChange, onBlur, value}}) => (
+              <Input
+                alignItems="center"
+                bgColor="$white"
+                h={'$12'}
+                rounded={'$2xl'}>
+                <InputSlot ml={'$2'}>
+                  <InputIcon>
+                    <Icon as={LockIcon} />
+                  </InputIcon>
+                </InputSlot>
+                <InputField
+                  placeholder="Password"
+                  type="password"
+                  ml={'$4'}
+                  onBlur={onBlur}
+                  onChangeText={onChange}
+                  value={value}
+                />
+              </Input>
+            )}
+          />
+          {errors.password && (
+            <Text style={{color: 'red'}}>{getErrorMessage(errors.password)}</Text>
+          )}
+        </FormControl>
+
         <View flexDirection="row" justifyContent="space-between">
           <Checkbox value="agree">
             <CheckboxIndicator mr={'$2'} rounded={'$full'}>
@@ -80,10 +154,10 @@ export const SignIn: FC<ScreenProps<'SignIn'>> = ({navigation}) => {
               Forgot Password?
             </Text>
           </TouchableOpacity>
-
         </View>
+
         <CustomButton
-          pressEvent={() => navigation.navigate('SignUp')}
+          pressEvent={handleSubmit(onSubmit)}
           icon={<ArrowLeftBlueColor />}
           text="Sign In"
         />

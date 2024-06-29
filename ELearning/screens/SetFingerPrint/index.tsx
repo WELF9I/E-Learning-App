@@ -28,8 +28,7 @@ export const SetFingerPrint: FC<ScreenProps<'SetFingerPrint'>> = ({
   navigation,
 }) => {
   const [modalVisible, setModalVisible] = useState(false);
-  const [enableFingerprintModalVisible, setEnableFingerprintModalVisible] =
-    useState(false);
+  const [enableFingerprintModalVisible, setEnableFingerprintModalVisible] =useState(false);
   const rnBiometrics = new ReactNativeBiometrics();
 
   const saveFingerprint = async () => {

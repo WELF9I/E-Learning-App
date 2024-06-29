@@ -14,7 +14,7 @@ import {
   SetFingerPrint,
   ForgotPassword,
   VerifyForgotPassword,
-  CreateNewPassword
+  CreateNewPassword,
 } from '../../screens';
 import {Text} from '@gluestack-ui/themed';
 

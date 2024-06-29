@@ -1,6 +1,6 @@
 import React, {FC, useState} from 'react';
 import {ScreenProps} from '../../types';
-import {Platform} from 'react-native';
+import {Platform,TouchableOpacity, Alert, Image} from 'react-native';
 import {
   Avatar,
   AvatarBadge,
@@ -30,6 +30,7 @@ import {
   InputIcon,
 } from '@gluestack-ui/themed';
 import {useForm, Controller} from 'react-hook-form';
+import { launchImageLibrary } from 'react-native-image-picker';
 import {zodResolver} from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import DateTimePicker from '@react-native-community/datetimepicker';
@@ -59,6 +60,7 @@ const schema = z.object({
 export const FillProfile: FC<ScreenProps<'FillProfile'>> = ({navigation}) => {
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [date, setDate] = useState(new Date());
+  const [avatarUri, setAvatarUri] = useState<string | null>(null);
 
   const {
     control,
@@ -67,6 +69,18 @@ export const FillProfile: FC<ScreenProps<'FillProfile'>> = ({navigation}) => {
   } = useForm({
     resolver: zodResolver(schema),
   });
+
+  const handleSelectImage = () => {
+    launchImageLibrary({ mediaType: 'photo' }, (response:any) => {
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+      } else if (response.errorCode) {
+        console.error('Image picker error: ', response.errorMessage);
+      } else if (response.assets && response.assets.length > 0) {
+        setAvatarUri(response.assets[0].uri);
+      }
+    });
+  };
 
   const handleDateChange = (event: any, selectedDate: any) => {
     const currentDate = selectedDate || date;
@@ -82,22 +96,35 @@ export const FillProfile: FC<ScreenProps<'FillProfile'>> = ({navigation}) => {
     return '';
   };
 
+  const onSubmit = (data: any) => {
+    console.log(data);
+    navigation.navigate('CreateNewPin');
+  };
+
   return (
     <View flex={1} m={18}>
+
       <Center>
-        <Avatar size="xl" borderRadius={'$full'}>
-          <AvatarFallbackText>JD</AvatarFallbackText>
-          <AvatarBadge bg="$green600" borderRadius={'$full'}>
-            <View
-              borderRadius={'$full'}
-              h={'$1/2'}
-              alignItems="center"
-              justifyContent="center">
-              <EditIcon color="$white" mx={'auto'} mt={'$1/2'} />
-            </View>
-          </AvatarBadge>
-        </Avatar>
+        <TouchableOpacity onPress={handleSelectImage}>
+          <Avatar size="xl" borderRadius={'$full'}>
+            {avatarUri ? (
+              <Image source={{ uri: avatarUri }} style={{ width: '100%', height: '100%', borderRadius: 100 }} />
+            ) : (
+              <AvatarFallbackText>KH</AvatarFallbackText>
+            )}
+            <AvatarBadge bg="$green600" borderRadius={'$full'}>
+              <View
+                borderRadius={'$full'}
+                h={'$1/2'}
+                alignItems="center"
+                justifyContent="center">
+                <EditIcon color="$white" mx={'auto'} mt={'$1/2'} />
+              </View>
+            </AvatarBadge>
+          </Avatar>
+        </TouchableOpacity>
       </Center>
+
       <VStack space={'3xl'} mt={10}>
         <FormControl>
           <Controller
@@ -220,8 +247,6 @@ export const FillProfile: FC<ScreenProps<'FillProfile'>> = ({navigation}) => {
           )}
         </FormControl>
 
-
-        
         <FormControl>
           <Controller
             control={control}
@@ -247,7 +272,6 @@ export const FillProfile: FC<ScreenProps<'FillProfile'>> = ({navigation}) => {
             )}
           />
         </FormControl>
-
 
         <FormControl>
           <Controller
@@ -288,7 +312,7 @@ export const FillProfile: FC<ScreenProps<'FillProfile'>> = ({navigation}) => {
         </FormControl>
 
         <CustomButton
-          pressEvent={() => navigation.navigate('CreateNewPin')}
+          pressEvent={handleSubmit(onSubmit)}
           icon={<ArrowLeftBlueColor />}
           text="Continue"
         />
