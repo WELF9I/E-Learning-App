@@ -1,13 +1,21 @@
 import React from 'react';
 import { View, Text, ScrollView, StyleSheet, TouchableOpacity, TextInput, Image } from 'react-native';
 import { Searchbar } from 'react-native-paper';
+// @ts-ignore
 import Icon3DDesign from '../../assets/categories/ICON3D-Design.svg';
+// @ts-ignore
 import IconGraphicDesign from '../../assets/categories/ICONGraphicDesign.svg';
+// @ts-ignore
 import IconWebDevelopment from '../../assets/categories/ICONWebDevelopment.svg';
+// @ts-ignore
 import IconSeoMarketing from '../../assets/categories/ICONSeoMarketing.svg';
+// @ts-ignore
 import IconFinanceAccounting from '../../assets/categories/ICONFinanceAccounting.svg';
+// @ts-ignore
 import IconHRManagement from '../../assets/categories/ICONHRManagement.svg';
+// @ts-ignore
 import IconPersonalDevelopment from '../../assets/categories/ICONPersonalDevelopment.svg';
+// @ts-ignore
 import IconOfficeProductivity from '../../assets/categories/ICONOfficeProductivity.svg';
 import {ScreenProps} from '../../types';
 import {FC} from 'react';

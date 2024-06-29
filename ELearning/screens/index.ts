@@ -12,3 +12,6 @@ export {MyCoursesScreen} from './MyCoursesScreen';
 export {InboxScreen} from './InboxScreen';
 export {ProfileScreen} from './ProfileScreen';
 export {TransactionsScreen} from './TransactionsScreen';
+export {ForgotPassword} from './ForgotPassword';
+export {VerifyForgotPassword} from './VerifyForgotPassword';
+export {CreateNewPassword} from './CreateNewPassword';

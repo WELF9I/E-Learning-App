@@ -17,6 +17,9 @@ export type rootStackParamList = {
   TransactionsScreen:undefined;
   InboxScreen:undefined;
   ProfileScreen:undefined;
+  ForgotPassword:undefined;
+  VerifyForgotPassword:undefined;
+  CreateNewPassword:undefined;
 };
 
 export interface ScreenProps<ScreenName extends keyof rootStackParamList>

@@ -20,8 +20,8 @@ import {
 } from '@gluestack-ui/themed';
 // @ts-ignore
 import ArrowLeftBlueColor from '../../assets/svg/arrowLeftBlueColor.svg';
-import {Link} from '@react-navigation/native';
 import {CustomButton} from '../../components';
+import { TouchableOpacity } from 'react-native';
 export const SignIn: FC<ScreenProps<'SignIn'>> = ({navigation}) => {
   return (
     <AuthContainer
@@ -74,11 +74,13 @@ export const SignIn: FC<ScreenProps<'SignIn'>> = ({navigation}) => {
             </CheckboxIndicator>
             <CheckboxLabel>Remember Me</CheckboxLabel>
           </Checkbox>
-          <Link to="/ForgotPassword">
+
+          <TouchableOpacity onPress={() => navigation.navigate('ForgotPassword')}>
             <Text textAlign="right" color="$primary700">
               Forgot Password?
             </Text>
-          </Link>
+          </TouchableOpacity>
+
         </View>
         <CustomButton
           pressEvent={() => navigation.navigate('SignUp')}

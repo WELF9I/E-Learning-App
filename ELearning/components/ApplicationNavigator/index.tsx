@@ -12,6 +12,9 @@ import {
   FillProfile,
   CreateNewPin,
   SetFingerPrint,
+  ForgotPassword,
+  VerifyForgotPassword,
+  CreateNewPassword
 } from '../../screens';
 import {Text} from '@gluestack-ui/themed';
 
@@ -30,6 +33,49 @@ export const ApplicationNavigator: FC = (): JSX.Element => {
         <Stack.Screen name="SignIn" component={SignIn} />
         <Stack.Screen name="SignUp" component={SignUp} />
       </Stack.Group>
+
+      <Stack.Group>
+        <Stack.Screen
+        options={{
+          headerTitle(props:any) {
+            return (
+              <Text>
+                {props.children.replace(/([a-z])([A-Z])/g, '$1 $2')}
+              </Text>
+            );
+          },
+        }} 
+        name="ForgotPassword" 
+        component={ForgotPassword} />
+
+       <Stack.Screen
+        options={{
+          headerTitle(props:any) {
+            return (
+              <Text>
+                {props.children.replace(/([a-z])([A-Z])/g, '$1 $2')}
+              </Text>
+            );
+          },
+        }} 
+        name="VerifyForgotPassword" 
+        component={VerifyForgotPassword} />
+
+    <Stack.Screen
+        options={{
+          headerTitle(props:any) {
+            return (
+              <Text>
+                {props.children.replace(/([a-z])([A-Z])/g, '$1 $2')}
+              </Text>
+            );
+          },
+        }} 
+        name="CreateNewPassword" 
+        component={CreateNewPassword} />
+
+        </Stack.Group>
+
       <Stack.Group>
         <Stack.Screen
           options={{

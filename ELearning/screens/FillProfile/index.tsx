@@ -1,6 +1,6 @@
 import React, {FC, useState} from 'react';
-import {Platform} from 'react-native';
 import {ScreenProps} from '../../types';
+import {Platform} from 'react-native';
 import {
   Avatar,
   AvatarBadge,
