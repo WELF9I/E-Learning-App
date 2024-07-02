@@ -15,6 +15,16 @@ import {
   ForgotPassword,
   VerifyForgotPassword,
   CreateNewPassword,
+  TopCoursesScreen,
+  TransactionsScreen,
+  Receipt,
+  EditStudentProfile,
+  NotificationSettings,
+  PaymentOption,
+  SecurityOption,
+  LanguageSettings,
+  Profile,
+  Terms
 } from '../../screens';
 import {Text} from '@gluestack-ui/themed';
 
@@ -23,7 +33,9 @@ const Stack = createStackNavigator<rootStackParamList>();
 export const ApplicationNavigator: FC = (): JSX.Element => {
   return (
     <Stack.Navigator>
-      <Stack.Group
+
+
+      {/* <Stack.Group
         screenOptions={{
           headerShown: false,
         }}>
@@ -61,7 +73,7 @@ export const ApplicationNavigator: FC = (): JSX.Element => {
         name="VerifyForgotPassword" 
         component={VerifyForgotPassword} />
 
-    <Stack.Screen
+      <Stack.Screen
         options={{
           headerTitle(props:any) {
             return (
@@ -76,7 +88,7 @@ export const ApplicationNavigator: FC = (): JSX.Element => {
 
         </Stack.Group>
 
-      <Stack.Group>
+        <Stack.Group>
         <Stack.Screen
           options={{
             headerTitle(props:any) {
@@ -116,7 +128,159 @@ export const ApplicationNavigator: FC = (): JSX.Element => {
           name="SetFingerPrint"
           component={SetFingerPrint}
         />
+
+        <Stack.Screen
+          options={{
+            headerTitle(props:any) {
+              return (
+                <Text>
+                  {props.children.replace(/([a-z])([A-Z])/g, '$1 $2')}
+                </Text>
+              );
+            },
+          }}
+          name="TopCoursesScreen"
+          component={TopCoursesScreen}
+        />
+         */}
+        
+           
+        <Stack.Group
+        screenOptions={{
+          headerShown: true,
+        }}>
+          
+        {/* <Stack.Screen
+          options={{
+            headerTitle(props:any) {
+              return (
+                <Text>
+                  {props.children.replace(/([a-z])([A-Z])/g, '$1 $2')}
+                </Text>
+              );
+            },
+          }}
+          name="TransactionsScreen"
+          component={TransactionsScreen}
+        /> 
+
+        <Stack.Screen
+          options={{
+            headerTitle(props:any) {
+              return (
+                <Text>
+                  {props.children.replace(/([a-z])([A-Z])/g, '$1 $2')}
+                </Text>
+              );
+            },
+          }}
+          name="Receipt"
+          component={Receipt}
+        /> 
+        
+        */}
+
+          <Stack.Screen
+          options={{
+            headerTitle(props:any) {
+              return (
+                <Text>
+                  {props.children.replace(/([a-z])([A-Z])/g, '$1 $2')}
+                </Text>
+              );
+            },
+          }}
+          name="Profile"
+          component={Profile}
+        />
+
+        <Stack.Screen
+          options={{
+            headerTitle(props:any) {
+              return (
+                <Text>
+                  {props.children.replace(/([a-z])([A-Z])/g, '$1 $2')}
+                </Text>
+              );
+            },
+          }}
+          name="LanguageSettings"
+          component={LanguageSettings}
+        />
+
+        <Stack.Screen
+          options={{
+            headerTitle(props:any) {
+              return (
+                <Text>
+                  {props.children.replace(/([a-z])([A-Z])/g, '$1 $2')}
+                </Text>
+              );
+            },
+          }}
+          name="SecurityOption"
+          component={SecurityOption}
+        />
+
+        <Stack.Screen
+          options={{
+            headerTitle(props:any) {
+              return (
+                <Text>
+                  {props.children.replace(/([a-z])([A-Z])/g, '$1 $2')}
+                </Text>
+              );
+            },
+          }}
+          name="PaymentOption"
+          component={PaymentOption}
+        />
+
+        <Stack.Screen
+          options={{
+            headerTitle(props:any) {
+              return (
+                <Text>
+                  {props.children.replace(/([a-z])([A-Z])/g, '$1 $2')}
+                </Text>
+              );
+            },
+          }}
+          name="NotificationSettings"
+          component={NotificationSettings}
+        />
+
+        <Stack.Screen
+          options={{
+            headerTitle(props:any) {
+              return (
+                <Text>
+                  {props.children.replace(/([a-z])([A-Z])/g, '$1 $2')}
+                </Text>
+              );
+            },
+          }}
+          name="EditStudentProfile"
+          component={EditStudentProfile}
+        />
+
+        <Stack.Screen
+          options={{
+            headerTitle(props:any) {
+              return (
+                <Text>
+                  {props.children.replace(/([a-z])([A-Z])/g, '$1 $2')}
+                </Text>
+              );
+            },
+          }}
+          name="Terms"
+          component={Terms}
+        />
+          
       </Stack.Group>
+  
+
     </Stack.Navigator>
   );
 };

@@ -16,10 +16,18 @@ export type rootStackParamList = {
   HomeScreen:undefined;
   TransactionsScreen:undefined;
   InboxScreen:undefined;
-  ProfileScreen:undefined;
+  Profile:undefined;
   ForgotPassword:undefined;
   VerifyForgotPassword:undefined;
   CreateNewPassword:undefined;
+  TopCoursesScreen:undefined;
+  Receipt:undefined;
+  EditStudentProfile:undefined;
+  NotificationSettings:undefined;
+  PaymentOption:undefined;
+  SecurityOption:undefined;
+  LanguageSettings:undefined;
+  Terms:undefined;
 };
 
 export interface ScreenProps<ScreenName extends keyof rootStackParamList>

@@ -57,7 +57,7 @@ const schema = z.object({
   gender: z.nativeEnum(EGENDER),
 });
 
-export const FillProfile: FC<ScreenProps<'FillProfile'>> = ({navigation}) => {
+export const EditStudentProfile: FC<ScreenProps<'EditStudentProfile'>> = ({navigation}) => {
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [date, setDate] = useState(new Date());
   const [avatarUri, setAvatarUri] = useState<string | null>(null);
@@ -98,7 +98,6 @@ export const FillProfile: FC<ScreenProps<'FillProfile'>> = ({navigation}) => {
     return '';
   };
 
-  {/* Submit data */}
   const onSubmit = (data: any) => {
     console.log(data);
     navigation.navigate('CreateNewPin');
@@ -113,7 +112,7 @@ export const FillProfile: FC<ScreenProps<'FillProfile'>> = ({navigation}) => {
             {avatarUri ? (
               <Image source={{ uri: avatarUri }} style={{ width: '100%', height: '100%', borderRadius: 100 }} />
             ) : (
-              <AvatarFallbackText>KH</AvatarFallbackText>
+              <AvatarFallbackText>J</AvatarFallbackText>
             )}
             <AvatarBadge bg="$green600" borderRadius={'$full'}>
               <View
@@ -313,11 +312,12 @@ export const FillProfile: FC<ScreenProps<'FillProfile'>> = ({navigation}) => {
             )}
           />
         </FormControl>
+        
 
         <CustomButton
           pressEvent={handleSubmit(onSubmit)}
           icon={<ArrowLeftBlueColor />}
-          text="Continue"
+          text="Update"
         />
       </VStack>
     </View>

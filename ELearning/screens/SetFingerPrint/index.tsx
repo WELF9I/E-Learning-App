@@ -108,7 +108,7 @@ export const SetFingerPrint: FC<ScreenProps<'SetFingerPrint'>> = ({ navigation }
         isVisible={modalVisible}
         redirectFunction={() => {
           setModalVisible(false);
-          // navigation.navigate('Home');
+          navigation.navigate('Receipt');
         }}>
         <VStack
           space="md"

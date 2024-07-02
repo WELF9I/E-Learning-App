@@ -1,8 +1,5 @@
-{/* TODO REST */}
-
-import React, { useState, FC } from 'react';
-import { View, Text, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
-import { Svg, Path } from 'react-native-svg';
+import React, { useState,FC } from 'react';
+import { View, Text, FlatList, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { ScreenProps } from '../../types';
 
 const coursesData = [
@@ -55,22 +52,14 @@ const coursesData = [
 
 const categories = ['All', 'Graphic Design', '3D Design', 'Arts & Crafts', 'Programming', 'Web Development', 'SEO & Marketing'];
 
-export const TopCoursesScreen: FC<ScreenProps<'TopCoursesScreen'>> = ({ navigation }) => {
+export const TopCoursesScreen: FC<ScreenProps<'TopCoursesScreen'>> = ({navigation}) => { 
   const [selectedCategory, setSelectedCategory] = useState('All');
-  const [favorites, setFavorites] = useState<{ [key: string]: boolean }>({});
-
-  const toggleFavorite = (id: string) => {
-    setFavorites((prevFavorites) => ({
-      ...prevFavorites,
-      [id]: !prevFavorites[id],
-    }));
-  };
 
   const filteredCourses = selectedCategory === 'All'
     ? coursesData
     : coursesData.filter(course => course.category === selectedCategory);
-
-  const renderItem = ({ item }: { item: typeof coursesData[0] }) => (
+  //@ts-ignore
+  const renderItem = ({ item }) => (
     <View style={styles.courseCard}>
       <Text style={styles.courseCategory}>{item.category}</Text>
       <Text style={styles.courseTitle}>{item.title}</Text>
@@ -78,17 +67,6 @@ export const TopCoursesScreen: FC<ScreenProps<'TopCoursesScreen'>> = ({ navigati
       <View style={styles.courseFooter}>
         <Text style={styles.courseRating}>⭐ {item.rating}</Text>
         <Text style={styles.courseStudents}>{item.students} Std</Text>
-        <TouchableOpacity onPress={() => toggleFavorite(item.id)}>
-          {favorites[item.id] ? (
-            <Svg height="24" width="24" viewBox="0 0 24 24" fill="green">
-              <Path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
-            </Svg>
-          ) : (
-            <Svg height="24" width="24" viewBox="0 0 24 24" fill="grey">
-              <Path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
-            </Svg>
-          )}
-        </TouchableOpacity>
       </View>
     </View>
   );
@@ -173,3 +151,4 @@ const styles = StyleSheet.create({
     color: '#666',
   },
 });
+
