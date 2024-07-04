@@ -29,6 +29,10 @@ export type rootStackParamList = {
   LanguageSettings:undefined;
   Terms:undefined;
   Footer:undefined;
+  TopMentorsScreen:undefined;
+  OnlineCoursesScreen:undefined;
+  Notifications:undefined;
+  ViewCourse:undefined;
 };
 
 export interface ScreenProps<ScreenName extends keyof rootStackParamList>

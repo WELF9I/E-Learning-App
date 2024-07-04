@@ -23,3 +23,7 @@ export {SecurityOption} from './SecurityOption';
 export {LanguageSettings} from './LanguageSettings';
 export {Terms} from './Terms';
 export {Footer} from './Footer';
+export {TopMentorsScreen} from './TopMentorsScreen';
+export {Notifications} from './Notifications';
+export {ViewCourse} from './ViewCourse';
+export {OnlineCoursesScreen} from './OnlineCoursesScreen';

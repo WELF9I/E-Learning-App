@@ -25,7 +25,13 @@ import {
   LanguageSettings,
   Profile,
   Terms,
-  Footer
+  Footer,
+  HomeScreen,
+  CategoriesScreen,
+  TopMentorsScreen,
+  Notifications,
+  OnlineCoursesScreen,
+  ViewCourse
 } from '../../screens';
 import {Text} from '@gluestack-ui/themed';
 
@@ -181,7 +187,7 @@ export const ApplicationNavigator: FC = (): JSX.Element => {
 
         
 
-          <Stack.Screen
+          {/* <Stack.Screen
           options={{
             headerTitle(props:any) {
               return (
@@ -291,10 +297,93 @@ export const ApplicationNavigator: FC = (): JSX.Element => {
           }}
           name="Footer"
           component={Footer}
+        /> */}
+
+         <Stack.Screen
+          options={{
+            headerShown: false,
+            headerTitle(props:any) {
+              return (
+                <Text>
+                  {props.children.replace(/([a-z])([A-Z])/g, '$1 $2')}
+                </Text>
+              );
+            },
+          }}
+          name="HomeScreen"
+          component={HomeScreen}
+          
+        />
+        <Stack.Screen
+          options={{
+            headerTitle(props:any) {
+              return (
+                <Text>
+                  {props.children.replace(/([a-z])([A-Z])/g, '$1 $2')}
+                </Text>
+              );
+            },
+          }}
+          name="CategoriesScreen"
+          component={CategoriesScreen}
+        />
+        <Stack.Screen
+          options={{
+            headerTitle(props:any) {
+              return (
+                <Text>
+                  {props.children.replace(/([a-z])([A-Z])/g, '$1 $2')}
+                </Text>
+              );
+            },
+          }}
+          name="TopMentorsScreen"
+          component={TopMentorsScreen}
+        />
+
+        <Stack.Screen
+          options={{
+            headerTitle(props:any) {
+              return (
+                <Text>
+                  {props.children.replace(/([a-z])([A-Z])/g, '$1 $2')}
+                </Text>
+              );
+            },
+          }}
+          name="Notifications"
+          component={Notifications}
+        />
+
+        <Stack.Screen
+          options={{
+            headerTitle(props:any) {
+              return (
+                <Text>
+                  {props.children.replace(/([a-z])([A-Z])/g, '$1 $2')}
+                </Text>
+              );
+            },
+          }}
+          name="OnlineCoursesScreen"
+          component={OnlineCoursesScreen}
+        />
+
+        <Stack.Screen
+          options={{
+            headerTitle(props:any) {
+              return (
+                <Text>
+                  {props.children.replace(/([a-z])([A-Z])/g, '$1 $2')}
+                </Text>
+              );
+            },
+          }}
+          name="ViewCourse"
+          component={ViewCourse}
         />
           
       </Stack.Group>
-  
 
     </Stack.Navigator>
   );

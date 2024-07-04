@@ -1,92 +1,423 @@
-import React from 'react';
-import { View, Text, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
-import { Avatar, Button, Card, Title, Paragraph } from 'react-native-paper';
-import {FC} from 'react';
-import {ScreenProps} from '../../types';
+import React, { FC, useEffect, useState } from 'react';
+import { View, Text, ScrollView, StyleSheet, TouchableOpacity, Image,ImageBackground } from 'react-native';
+import { Avatar, Button, Card, Title, Paragraph, Searchbar } from 'react-native-paper';
+import { ScreenProps } from '../../types';
+// @ts-ignore
+import CustomSearchIcon from '../../assets/categories/search.png';
+// @ts-ignore
+import NOTIFICATIONS from '../../assets/categories/NOTIFICATIONS.png';
+// @ts-ignore
+import FILTER from '../../assets/categories/FILTER.png';
+// @ts-ignore
+import BgOff from '../../assets/categories/BgOff.jpg';
+// @ts-ignore
+import BookmarkPressed from '../../assets/categories/BookmarkPressed.png';
+// @ts-ignore
+import BookmarkNotPressed from '../../assets/categories/BookmarkNotPressed.png';
+import { Footer } from '../../components/Footer';
+interface Course {
+  id_cours: number;
+  NomCourse: string;
+  Bande_annonce_cours: string;
+  Niveau_du_cours: string;
+  language: string;
+  duration: string;
+  topic: string;
+  date_Creations: string;
+  Date_miseaj: string;
+  Information_de_cours: string;
+  courseRequirement: string;
+  prix: number;
+  reduction: boolean;
+  Nouveau_prix: number;
+  description: string;
+  Sous_titre: string;
+  Scoremin: number;
+  NbEssai_Quiz: number;
+}
 
-const courses = [
-  { id: 1, title: 'Graphic Design Advanced', category: 'Graphic Design', price: '$28', rating: 4.2, students: 7830, image: 'https://via.placeholder.com/150' },
-  { id: 2, title: 'Graphic Advertisement', category: 'Graphic Design', price: '$42', rating: 4.5, students: 9123, image: 'https://via.placeholder.com/150' },
-  { id: 3, title: 'Graphic Design Advanced', category: 'Graphic Design', price: '$28', rating: 4.2, students: 7830, image: 'https://via.placeholder.com/150' },
-  { id: 4, title: 'Graphic Advertisement', category: 'Graphic Design', price: '$42', rating: 4.5, students: 9123, image: 'https://via.placeholder.com/150' },
-  { id: 5, title: 'Graphic Design Advanced', category: 'Graphic Design', price: '$28', rating: 4.2, students: 7830, image: 'https://via.placeholder.com/150' },
-  { id: 6, title: 'Graphic Advertisement', category: 'Graphic Design', price: '$42', rating: 4.5, students: 9123, image: 'https://via.placeholder.com/150' },
+interface User {
+  Nom_utl: string;
+  pass: string;
+  Role: string;
+  education: string;
+  prénom: string;
+  Img: string;
+  E_mail: string;
+  Num: string;
+}
+
+interface Former extends User {
+  idF: number;
+  linkedinLink: string;
+  twitterLink: string;
+  youtubeLink: string;
+  instaLink: string;
+  fbLink: string;
+  Certifications: string;
+  bio: string;
+}
+
+const courses: Course[] = [
+  {
+    id_cours: 1,
+    NomCourse: 'Graphic Design Advanced',
+    Bande_annonce_cours: 'https://imgs.search.brave.com/-cFNzgqxn9gTksmxjtwquwyy9QRoUKyuA2Q0DcGi1hM/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly9pbWFn/ZXMtbmEuc3NsLWlt/YWdlcy1hbWF6b24u/Y29tL2ltYWdlcy9J/LzcxRDk3TStjNTlM/LmpwZw',
+    Niveau_du_cours: 'Advanced',
+    language: 'English',
+    duration: '6 weeks',
+    topic: 'Graphic Design',
+    date_Creations:'2017-06-15',
+    Date_miseaj:'2020-06-15',
+    Information_de_cours: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+    courseRequirement: 'Basic knowledge of design tools',
+    prix: 28,
+    reduction: true,
+    Nouveau_prix: 20,
+    description: 'This course covers advanced techniques in graphic design.',
+    Sous_titre: 'Learn advanced graphic design skills',
+    Scoremin: 4.2,
+    NbEssai_Quiz: 7830
+  },
+  {
+    id_cours: 2,
+    NomCourse: 'Graphic Advertisement',
+    Bande_annonce_cours: 'https://imgs.search.brave.com/-cFNzgqxn9gTksmxjtwquwyy9QRoUKyuA2Q0DcGi1hM/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly9pbWFn/ZXMtbmEuc3NsLWlt/YWdlcy1hbWF6b24u/Y29tL2ltYWdlcy9J/LzcxRDk3TStjNTlM/LmpwZw',
+    Niveau_du_cours: 'Intermediate',
+    language: 'English',
+    duration: '4 weeks',
+    topic: 'Graphic Design',
+    date_Creations: '2023-06-15',
+    Date_miseaj: '2024-06-15',
+    Information_de_cours: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+    courseRequirement: 'None',
+    prix: 42,
+    reduction: false,
+    Nouveau_prix: 42,
+    description: 'Master the art of graphic advertisement.',
+    Sous_titre: 'Create effective graphic ads',
+    Scoremin: 4.3,
+    NbEssai_Quiz: 7878
+  },
 ];
 
-const mentors = [
-  { id: 1, name: 'Sonja', image: 'https://via.placeholder.com/50' },
-  { id: 2, name: 'Jensen', image: 'https://via.placeholder.com/50' },
-  { id: 3, name: 'Sonja', image: 'https://via.placeholder.com/50' },
-  { id: 4, name: 'Jensen', image: 'https://via.placeholder.com/50' },
-  { id: 5, name: 'Sonja', image: 'https://via.placeholder.com/50' },
-  { id: 6, name: 'Jensen', image: 'https://via.placeholder.com/50' },
-  { id: 7, name: 'Sonja', image: 'https://via.placeholder.com/50' },
-  { id: 8, name: 'Jensen', image: 'https://via.placeholder.com/50' },
-
+const mentors: Former[] = [
+  {
+    idF: 1,
+    Nom_utl: 'Gonja',
+    pass: 'password1',
+    Role: 'Former',
+    education: 'Masters in Design',
+    prénom: 'Sonja',
+    Img: 'https://imgs.search.brave.com/QNuHtKPVBWNcY-g4Xu-6830byfWvLIFPQvp_H1Jsb1A/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly9pbWcu/ZnJlZXBpay5jb20v/cHJlbWl1bS1waG90/by9wb3J0cmFpdC1z/bWlsaW5nLXlvdW5n/LW1hbl8xMDQ4OTQ0/LTE0MzA1ODQ3Lmpw/Zw',
+    E_mail: 'sonja@example.com',
+    Num: '1234567890',
+    linkedinLink: 'https://linkedin.com/in/sonja',
+    twitterLink: 'https://twitter.com/sonja',
+    youtubeLink: 'https://youtube.com/sonja',
+    instaLink: 'https://instagram.com/sonja',
+    fbLink: 'https://facebook.com/sonja',
+    Certifications: 'Certified Graphic Designer',
+    bio: 'Experienced in advanced graphic design techniques.'
+  },
+  {
+    idF: 2,
+    Nom_utl: 'Jensen',
+    pass: 'password2',
+    Role: 'Former',
+    education: 'Bachelors in Computer Science',
+    prénom: 'Jensen',
+    Img: 'https://imgs.search.brave.com/QNuHtKPVBWNcY-g4Xu-6830byfWvLIFPQvp_H1Jsb1A/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly9pbWcu/ZnJlZXBpay5jb20v/cHJlbWl1bS1waG90/by9wb3J0cmFpdC1z/bWlsaW5nLXlvdW5n/LW1hbl8xMDQ4OTQ0/LTE0MzA1ODQ3Lmpw/Zw',
+    E_mail: 'jensen@example.com',
+    Num: '0987654321',
+    linkedinLink: 'https://linkedin.com/in/jensen',
+    twitterLink: 'https://twitter.com/jensen',
+    youtubeLink: 'https://youtube.com/jensen',
+    instaLink: 'https://instagram.com/jensen',
+    fbLink: 'https://facebook.com/jensen',
+    Certifications: 'Certified Web Developer',
+    bio: 'Specialist in web development and advertisement design.'
+  },
 ];
 
-export const HomeScreen:FC<ScreenProps<'HomeScreen'>> = ({navigation}) => {
+export const HomeScreen: FC<ScreenProps<'HomeScreen'>> = ({ navigation }) => {
+  const [searchQuery, setSearchQuery] = useState('');
+  const [courseData, setCourseData] = useState<Course[]>([]);
+  const [filteredCourses, setFilteredCourses] = useState<Course[]>([]);
+  const [filteredMentors, setFilteredMentors] = useState<Former[]>([]);
+  const [isSearching, setIsSearching] = useState(false);
+  const [bookmarkedCourses, setBookmarkedCourses] = useState<number[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState<string>('All');
+
+  const handlePressCategory = (category: string) => {
+    setSelectedCategory(category);
+  };
+
+  const handleSeeAllCategories = () => {
+    navigation.navigate('CategoriesScreen');
+  };
+
+  const handleSeeAllMentors = () => {
+    navigation.navigate('TopMentorsScreen');
+  };
+
+  const handleSeeAllCourses = () => {
+    navigation.navigate('OnlineCoursesScreen');
+  };
+
+  const handleViewNotifications = () => {
+    navigation.navigate('Notifications');
+  };
+
+  const handleFilterPressed = () => {
+    navigation.navigate('ViewCourse');
+  };
+
+  const handleSearch = (query: string) => {
+    setSearchQuery(query);
+
+    if (query.trim() === '') {
+      setFilteredCourses([]);
+      setFilteredMentors([]);
+      setIsSearching(false);
+      return;
+    }
+
+    setIsSearching(true);
+
+    const filteredCourses = courses.filter((course) =>
+      course.NomCourse.toLowerCase().includes(query.toLowerCase())
+    );
+
+    const filteredMentors = mentors.filter((mentor) =>
+      `${mentor.Nom_utl} ${mentor.prénom}`.toLowerCase().includes(query.toLowerCase())
+    );
+
+    setFilteredCourses(filteredCourses);
+    setFilteredMentors(filteredMentors);
+  };
+
+  const toggleBookmark = (id: number) => {
+    setBookmarkedCourses((prev) =>
+      prev.includes(id) ? prev.filter((courseId) => courseId !== id) : [...prev, id]
+    );
+  };
+
+  const FetchCourseData = () => {
+    setCourseData(courses);
+  };
+
+  useEffect(() => {
+    FetchCourseData();
+  }, []);
+
+  const handleCoursePress = (course: Course) => {
+    //@ts-ignore
+    navigation.navigate('ViewCourse', { course });
+  };
+
+  const textStyle1 = {
+    color: '#3399ff',
+  };
+  const textStyle2 = {
+    color: 'black',
+  };
+
+  const textStyle3 = {
+    color: 'white',
+    fontWeight: 'bold',
+  };
+  const textStyle4 = {
+    color: 'black',
+  };
+
+  const ButtonStyle1 = {
+    backgroundColor: '#167F71',
+    marginBottom: 10,
+    marginLeft: 5,
+    padding: 10,
+    borderRadius: 20,
+    marginRight: 2,
+    elevation: 2,
+    shadowRadius: 2,
+  };
+
+  const ButtonStyle2 = {
+    backgroundColor: '#E8F1FF',
+    marginBottom: 10,
+    marginLeft: 5,
+    padding: 10,
+    borderRadius: 20,
+    marginRight: 2,
+    elevation: 2,
+    shadowRadius: 2,
+  };
+
+  const categories = [
+    'All',
+    'Graphic Design',
+    '3D Design',
+    'Web Development',
+    'Seo & Marketing',
+    'Finance & Accounting',
+    'Personal Development',
+    'Office Productivity',
+    'HR Management',
+  ];
+
   return (
     <View style={styles.container}>
       <ScrollView style={styles.scrollContainer} contentContainerStyle={styles.contentContainer}>
         <View style={styles.header}>
-          <Text style={styles.greeting}>Hi, Ronald A. Martin</Text>
-          <Text style={styles.subGreeting}>What would you like to learn today? Search below.</Text>
-        </View>
-
-        <View style={styles.searchContainer}>
-          <Text style={styles.searchPlaceholder}>Search for...</Text>
-          <Button icon="magnify" mode="contained" onPress={() => {}}>
-            Search
-          </Button>
-        </View>
-
-        <Card style={styles.specialOffer}>
-          <Card.Content>
-            <Title>25% OFF*</Title>
-            <Paragraph>Get a Discount for Every Course Order only Valid for Today!</Paragraph>
-          </Card.Content>
-        </Card>
-
-        <View style={styles.categories}>
-          <Text style={styles.sectionTitle}>Categories</Text>
-          <TouchableOpacity onPress={() => navigation.navigate('All Categories')}>
-            <Text style={styles.seeAll}>See All</Text>
+          <View style={styles.headerText}>
+            <Text style={styles.greeting}>Hi, Ronald A. Martin</Text>
+            <Text style={styles.subGreeting}>What would you like to learn today?</Text>
+            <Text>Search below.</Text>
+          </View>
+          <TouchableOpacity onPress={handleViewNotifications}>
+            <Image source={NOTIFICATIONS} style={styles.notificationsIcon} />
           </TouchableOpacity>
         </View>
 
-        <View style={styles.courseList}>
-          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            {courses.map((course) => (
-              <Card key={course.id} style={styles.courseCard}>
-                <Card.Cover source={{ uri: course.image }} />
+        <View style={styles.searchFilterContainer}>
+          <Searchbar
+            placeholder="Search for..."
+            onChangeText={handleSearch}
+            value={searchQuery}
+            icon={() => <Image source={CustomSearchIcon} style={styles.searchIcon} />}
+            style={styles.searchbar}
+          />
+          <TouchableOpacity onPress={handleFilterPressed}>
+            <Image source={FILTER} style={styles.filterIcon} />
+          </TouchableOpacity>
+        </View>
+
+        <Card style={styles.specialOffer}>
+          <ImageBackground source={BgOff} style={styles.backgroundImage}>
+            <Card.Content style={styles.specialOfferContent}>
+              <Title style={styles.specialOfferSmallTitle}>25% OFF*</Title>
+              <Title style={styles.specialOfferBigTitle}>Today's Special</Title>
+              <Paragraph style={styles.specialOfferText}>
+                Get a Discount for Every Course Order only Valid for Today!
+              </Paragraph>
+            </Card.Content>
+          </ImageBackground>
+        </Card>
+
+        <View style={styles.CategoriesSeeAll}>
+          <Text style={styles.sectionTitle}>Categories</Text>
+          <TouchableOpacity onPress={handleSeeAllCategories}>
+            <Text style={styles.sectionLittleTitle}>See All ▶</Text>
+          </TouchableOpacity>
+        </View>
+
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.categoriesContainer}>
+          {categories.map((category) => (
+            <TouchableOpacity
+              key={category}
+              onPress={() => handlePressCategory(category)}
+              style={selectedCategory === category ? ButtonStyle1 : ButtonStyle2}
+            >
+              <Text style={selectedCategory === category ? textStyle3 : textStyle4}>{category}</Text>
+            </TouchableOpacity>
+          ))}
+        </ScrollView>
+
+        <View style={styles.CategoriesSeeAll}>
+          <Text style={styles.sectionTitle}>Online Courses</Text>
+          <TouchableOpacity onPress={handleSeeAllCourses}>
+            <Text style={styles.sectionLittleTitle}>See All ▶</Text>
+          </TouchableOpacity>
+        </View>
+
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.categoriesContainer}>
+          {categories.slice(1).map((category) => (
+            <TouchableOpacity key={category} style={styles.categoryType}>
+              <Text style={selectedCategory === category ? textStyle1 : textStyle2}>{category}</Text>
+            </TouchableOpacity>
+          ))}
+        </ScrollView>
+
+        {isSearching && (
+          <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.courseList}>
+            {filteredCourses.map((course) => (
+              <Card key={course.id_cours} style={styles.courseCard}>
+                <Card.Cover source={{ uri: course.Bande_annonce_cours }} style={styles.courseImage} />
                 <Card.Content>
-                  <Title>{course.title}</Title>
-                  <Paragraph>{course.category}</Paragraph>
-                  <Paragraph>{course.price}</Paragraph>
-                  <Paragraph>
-                    {course.rating} ⭐ | {course.students} students
-                  </Paragraph>
+                  <Paragraph style={styles.courseTopic}>{course.topic}</Paragraph>
+                  <Title style={styles.courseTitle}>{course.NomCourse}</Title>
+                  <View style={{ display: 'flex', flexDirection: 'row' }}>
+                    <Paragraph style={styles.coursePrice}>${course.prix}</Paragraph>
+                    <Paragraph>
+                      | ⭐{course.Scoremin} | {course.NbEssai_Quiz} Std
+                    </Paragraph>
+                  </View>
                 </Card.Content>
-                <Button mode="contained" onPress={() => navigation.navigate('Inbox')}>
-                  Go to details
-                </Button>
               </Card>
             ))}
           </ScrollView>
-        </View>
+        )}
 
-        <View style={styles.mentors}>
-          <Text style={styles.sectionTitle}>Top Mentor</Text>
-        </View>
-
-        <View style={styles.mentorList}>
-          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            {mentors.map((mentor) => (
-              <Avatar.Image key={mentor.id} size={50} source={{ uri: mentor.image }} />
+        {isSearching && (
+          <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.mentorList}>
+            {filteredMentors.map((mentor) => (
+              <View key={mentor.idF} style={styles.mentorItem}>
+                <Avatar.Image size={50} source={{ uri: mentor.Img }} />
+                <Text style={styles.mentorName}>
+                  {mentor.Nom_utl} {mentor.prénom}
+                </Text>
+              </View>
             ))}
           </ScrollView>
+        )}
+
+        {!isSearching && (
+          <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.courseList}>
+            {courses.map((course) => (
+              <TouchableOpacity key={course.id_cours} style={styles.courseCard} onPress={() => handleCoursePress(course)}>
+                <Card.Cover source={{ uri: course.Bande_annonce_cours }} style={styles.courseImage} />
+                <Card.Content>
+                  <View style={{ justifyContent: 'space-between', display: 'flex', flexDirection: 'row-reverse' }}>
+                    <TouchableOpacity onPress={() => toggleBookmark(course.id_cours)} style={{ paddingTop: 10 }}>
+                      <Image
+                        source={bookmarkedCourses.includes(course.id_cours) ? BookmarkPressed : BookmarkNotPressed}
+                        style={styles.bookmarkIcon}
+                      />
+                    </TouchableOpacity>
+                    <Paragraph style={styles.courseTopic}>{course.topic}</Paragraph>
+                  </View>
+                  <Title style={styles.courseTitle}>{course.NomCourse}</Title>
+                  <View style={{ display: 'flex', flexDirection: 'row' }}>
+                    <Paragraph style={styles.coursePrice}>${course.prix}</Paragraph>
+                    <Paragraph>
+                      | ⭐{course.Scoremin} | {course.NbEssai_Quiz} Std
+                    </Paragraph>
+                  </View>
+                </Card.Content>
+              </TouchableOpacity>
+            ))}
+          </ScrollView>
+        )}
+
+        <View style={styles.CategoriesSeeAll}>
+          <Text style={styles.sectionTitle}>Top Mentors</Text>
+          <TouchableOpacity onPress={handleSeeAllMentors}>
+            <Text style={styles.sectionLittleTitle}>See All ▶</Text>
+          </TouchableOpacity>
         </View>
+
+        {!isSearching && (
+          <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.mentorList}>
+            {mentors.map((mentor) => (
+              <View key={mentor.idF} style={styles.mentorItem}>
+                <Avatar.Image size={50} source={{ uri: mentor.Img }} />
+                <Text style={styles.mentorName}>
+                  {mentor.Nom_utl} {mentor.prénom}
+                </Text>
+              </View>
+            ))}
+          </ScrollView>
+        )}
       </ScrollView>
     </View>
   );
@@ -95,7 +426,7 @@ export const HomeScreen:FC<ScreenProps<'HomeScreen'>> = ({navigation}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor:"#F5F9FF",
+    backgroundColor: "#F5F9FF",
   },
   scrollContainer: {
     padding: 16,
@@ -104,57 +435,169 @@ const styles = StyleSheet.create({
     paddingBottom: 50,
   },
   header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     marginBottom: 16,
+  },
+  headerText: {
+    flex: 1,
   },
   greeting: {
     fontSize: 24,
     fontWeight: 'bold',
+    color:"black",
   },
   subGreeting: {
     fontSize: 16,
     color: '#666',
   },
-  searchContainer: {
+  notificationsIcon: {
+    width: 30,
+    height: 30,
+  },
+  searchFilterContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 16,
   },
-  searchPlaceholder: {
+  searchbar: {
     flex: 1,
-    fontSize: 16,
-    color: '#aaa',
+    marginRight: 8,
+    borderRadius: 25,
+    backgroundColor: '#F4F4F4',
+  },
+  searchIcon: {
+    width: 30,
+    height: 30,
+  },
+  backgroundImage: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center', 
+    borderRadius:25,   
   },
   specialOffer: {
+    elevation: 2,
+    margin:'auto',
+    width:'90%',
+    height:'17.5%',
+    overflow: 'hidden',
+    backgroundColor:'transparent',
+    borderRadius:25,
+    marginBottom:20,
+  },
+  specialOfferContent: {
+    padding:20,
+    justifyContent: 'center',
+    width:'100%',
+    height:'100%',
+  },
+  specialOfferSmallTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#fff',
+  },
+  specialOfferBigTitle: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    color: '#fff',
+  },
+  specialOfferText: {
+    fontSize: 16,
+    color: '#fff',
+  },
+  categoriesContainer: {
     marginBottom: 16,
   },
-  categories: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 16,
+  categoryButton: {
+    backgroundColor: '#E8F1FF',
+    marginBottom:10,
+    marginLeft:5,
+    padding: 10,
+    borderRadius: 20,
+    marginRight: 2,
+    elevation: 2,
+    shadowRadius: 2,
+  },
+  categoryType: { 
+    marginRight: 4,
+    padding: 5,
+    borderRadius: 20,
+    color:'#A0A4AB',
   },
   sectionTitle: {
     fontSize: 18,
     fontWeight: 'bold',
+    color:'#202244',  
   },
-  seeAll: {
-    color: '#007BFF',
+  sectionLittleTitle: {
+    fontSize: 15,
+    fontWeight: 'bold',
+    color:'#3399ff',
+  },
+  CategoriesSeeAll: {
+    display:'flex',
+    flexDirection:'row',
+    marginBottom: 10,
+    justifyContent:'space-between',
   },
   courseList: {
-    marginBottom: 16,
+    marginBottom: 20,
+    paddingTop:5,
+    height:225,
   },
   courseCard: {
-    width: 200,
+    width: 250,
+    height:216,
     marginRight: 16,
+    marginLeft:2,
+    backgroundColor:'white',
+    elevation:2,
   },
-  mentors: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 16,
+  courseImage: {
+    height: 125,
+    width:'100%',
+    justifyContent: 'center',
+  },
+  courseTitle: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    color:'#202244',
+  },
+  courseTopic: {
+    fontSize: 12,
+    color: '#FF6B00',
+    paddingTop:5,
+  },
+  coursePrice: {
+    fontWeight: 'bold',
+    fontSize: 16,
+    color: '#3399ff',
+    marginRight:10
+  },
+  courseButton: {
+    marginTop: 10,
   },
   mentorList: {
     flexDirection: 'row',
+    marginBottom: 16,
   },
-});
+  mentorItem: {
+    marginRight: 16,
+    alignItems: 'center',
+  },
+  mentorName: {
+    marginTop: 5,
+    fontSize: 12,
+  },
+  filterIcon: {
+    width: 34,
+    height: 34,
+  },
+  bookmarkIcon: {
+    width: 16,
+    height: 16,
+  },
 
+});
