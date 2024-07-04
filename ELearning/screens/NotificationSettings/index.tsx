@@ -1,8 +1,10 @@
 import React, { useState,FC } from 'react';
 import { View, Text, Switch, StyleSheet } from 'react-native';
 import { ScreenProps } from '../../types';
+import { useTheme } from '../../utils/ThemeContext';
 
 export const NotificationSettings : FC<ScreenProps<'NotificationSettings'>> = ({navigation}) => {
+  const { isDarkMode, toggleDarkMode } = useTheme();
   const [settings, setSettings] = useState({
     specialOffers: true,
     sound: true,
@@ -21,10 +23,10 @@ export const NotificationSettings : FC<ScreenProps<'NotificationSettings'>> = ({
   };
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container,{backgroundColor: isDarkMode ? '#333' : '#f9fafb' }]}>
       {Object.keys(settings).map((key) => (
         <View key={key} style={styles.settingRow}>
-          <Text style={styles.settingText}>{getSettingLabel(key)}</Text>
+          <Text style={[styles.settingText,{color:isDarkMode?'#FFF':'#202244'}]}>{getSettingLabel(key)}</Text>
           <Switch
             trackColor={{ false: '#767577', true: '#b5d2ff' }}
             //@ts-ignore
@@ -70,6 +72,9 @@ const styles = StyleSheet.create({
     padding: 16,
     backgroundColor: '#f0f0f0',
     marginVertical: 15,
+    marginBottom:0,
+    marginTop:0
+    
   },
   settingRow: {
     flexDirection: 'row',

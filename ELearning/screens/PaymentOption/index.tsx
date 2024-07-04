@@ -6,6 +6,7 @@ import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ScreenProps } from '../../types';
 import { CustomButton } from '../../components';
+import { useTheme } from '../../utils/ThemeContext';
 // @ts-ignore
 import ArrowLeftBlueColor from '../../assets/svg/arrowLeftBlueColor.svg';
 //@ts-ignore
@@ -21,6 +22,7 @@ const cardSchema = z.object({
 export const PaymentOption: FC<ScreenProps<'PaymentOption'>> = ({ navigation }) => {
 
   const [isModalVisible, setModalVisible] = useState(false);
+  const { isDarkMode, toggleDarkMode } = useTheme();
   const [cards, setCards] = useState([
     { id: '1', cardNumber: '**** **** **** 3054', status: 'Connected' },
   ]);
@@ -48,7 +50,7 @@ export const PaymentOption: FC<ScreenProps<'PaymentOption'>> = ({ navigation }) 
   };
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container,{ backgroundColor: isDarkMode ? '#333' : '#f9fafb' }]}>
       <FlatList
         data={cards}
         keyExtractor={(item) => item.id}
@@ -65,8 +67,8 @@ export const PaymentOption: FC<ScreenProps<'PaymentOption'>> = ({ navigation }) 
         text="Add New Card"
       />
       <Modal isVisible={isModalVisible}>
-        <View style={styles.modalContent}>
-          <Text style={styles.modalHeader}>Add New Card</Text>
+        <View style={[styles.modalContent,{ backgroundColor: isDarkMode ? '#333' : '#f9fafb' }]}>
+          <Text style={[styles.modalHeader,{ backgroundColor: isDarkMode ? '#333' : '#f9fafb',color:isDarkMode ? 'white' : '#202244' }]}>Add New Card</Text>
           <Card />
 
           <Controller
@@ -149,7 +151,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 14,
     backgroundColor: '#f0f0f0',
-    marginTop: 30,
+    marginTop: 3,
   },
   buttonGroup: {
     flexDirection: 'row',

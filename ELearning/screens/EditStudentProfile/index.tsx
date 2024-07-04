@@ -1,6 +1,6 @@
-import React, {FC, useState} from 'react';
-import {ScreenProps} from '../../types';
-import {Platform,TouchableOpacity, Alert, Image} from 'react-native';
+import React, { FC, useState } from 'react';
+import { ScreenProps } from '../../types';
+import { Platform, TouchableOpacity, Alert, Image, StyleSheet } from 'react-native';
 import {
   Avatar,
   AvatarBadge,
@@ -29,50 +29,51 @@ import {
   InputSlot,
   InputIcon,
 } from '@gluestack-ui/themed';
-import {useForm, Controller} from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 import { launchImageLibrary } from 'react-native-image-picker';
-import {zodResolver} from '@hookform/resolvers/zod';
+import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import PhoneInput from 'react-native-phone-number-input';
-import {EGENDER} from '../../constants';
+import { EGENDER } from '../../constants';
 import {
   ChevronDownIcon,
   SelectPortal,
   SelectContent,
   MailIcon,
 } from '@gluestack-ui/themed';
-import {CustomButton} from '../../components/CustomButton';
+import { CustomButton } from '../../components/CustomButton';
 // @ts-ignore
 import ArrowLeftBlueColor from '../../assets/svg/arrowLeftBlueColor.svg';
+import { useTheme } from '../../utils/ThemeContext';
 
 const schema = z.object({
-  fullName: z.string().nonempty({message: 'Full name is required'}),
-  nickName: z.string().nonempty({message: 'Nick name is required'}),
+  fullName: z.string().nonempty({ message: 'Full name is required' }),
+  nickName: z.string().nonempty({ message: 'Nick name is required' }),
   birthDay: z.date().refine(date => date <= new Date(), {
     message: 'Birth day must be in the past',
   }),
-  email: z.string().email({message: 'Invalid email address'}),
-  phoneNumber: z.string().min(8, {message: 'Invalid phone number'}),
+  email: z.string().email({ message: 'Invalid email address' }),
+  phoneNumber: z.string().min(8, { message: 'Invalid phone number' }),
   gender: z.nativeEnum(EGENDER),
 });
 
-export const EditStudentProfile: FC<ScreenProps<'EditStudentProfile'>> = ({navigation}) => {
+export const EditStudentProfile: FC<ScreenProps<'EditStudentProfile'>> = ({ navigation }) => {
   const [showDatePicker, setShowDatePicker] = useState(false);
+  const { isDarkMode, toggleDarkMode } = useTheme();
   const [date, setDate] = useState(new Date());
   const [avatarUri, setAvatarUri] = useState<string | null>(null);
-  {/*OR with Base64 */}
-
+  
   const {
     control,
     handleSubmit,
-    formState: {errors},
+    formState: { errors },
   } = useForm({
     resolver: zodResolver(schema),
   });
 
   const handleSelectImage = () => {
-    launchImageLibrary({ mediaType: 'photo' }, (response:any) => {
+    launchImageLibrary({ mediaType: 'photo' }, (response: any) => {
       if (response.didCancel) {
         console.log('User cancelled image picker');
       } else if (response.errorCode) {
@@ -104,13 +105,12 @@ export const EditStudentProfile: FC<ScreenProps<'EditStudentProfile'>> = ({navig
   };
 
   return (
-    <View flex={1} m={18}>
-
+    <View flex={1} m={18} style={styles(isDarkMode).container}>
       <Center>
         <TouchableOpacity onPress={handleSelectImage}>
           <Avatar size="xl" borderRadius={'$full'}>
             {avatarUri ? (
-              <Image source={{ uri: avatarUri }} style={{ width: '100%', height: '100%', borderRadius: 100 }} />
+              <Image source={{ uri: avatarUri }} style={styles(isDarkMode).avatarImage} />
             ) : (
               <AvatarFallbackText>J</AvatarFallbackText>
             )}
@@ -132,48 +132,51 @@ export const EditStudentProfile: FC<ScreenProps<'EditStudentProfile'>> = ({navig
           <Controller
             control={control}
             name="fullName"
-            render={({field: {onChange, onBlur, value}}) => (
+            render={({ field: { onChange, onBlur, value } }) => (
               <Input
                 rounded={'$lg'}
-                bg="$white"
+                bg={isDarkMode ? "$gray800" : "$white"}
                 minHeight={'$12'}
                 maxHeight={'$16'}
-                borderColor="$white">
+                borderColor={isDarkMode ? "$gray" : "$white"}>
                 <InputField
                   placeholder="Full name"
                   onBlur={onBlur}
                   onChangeText={onChange}
                   value={value}
+                  color={isDarkMode ? "$white" : "$black"}
                 />
               </Input>
             )}
           />
           {errors.fullName && (
-            <Text style={{color: 'red'}}>{getErrorMessage(errors.fullName)}</Text>
+            <Text style={styles(isDarkMode).errorText}>{getErrorMessage(errors.fullName)}</Text>
           )}
         </FormControl>
+        
         <FormControl>
           <Controller
             control={control}
             name="nickName"
-            render={({field: {onChange, onBlur, value}}) => (
+            render={({ field: { onChange, onBlur, value } }) => (
               <Input
                 rounded={'$lg'}
-                bg="$white"
+                bg={isDarkMode ? "$gray800" : "$white"}
                 minHeight={'$12'}
                 maxHeight={'$16'}
-                borderColor="$white">
+                borderColor={isDarkMode ? "$gray" : "$white"}>
                 <InputField
                   placeholder="Nick name"
                   onBlur={onBlur}
                   onChangeText={onChange}
                   value={value}
+                  color={isDarkMode ? "$white" : "$black"}
                 />
               </Input>
             )}
           />
           {errors.nickName && (
-            <Text style={{color: 'red'}}>{getErrorMessage(errors.nickName)}</Text>
+            <Text style={styles(isDarkMode).errorText}>{getErrorMessage(errors.nickName)}</Text>
           )}
         </FormControl>
 
@@ -181,11 +184,11 @@ export const EditStudentProfile: FC<ScreenProps<'EditStudentProfile'>> = ({navig
           <Controller
             control={control}
             name="birthDay"
-            render={({field: {value, onChange}}) => (
+            render={({ field: { value, onChange } }) => (
               <>
                 <Button
                   onPress={() => setShowDatePicker(true)}
-                  bg="$white"
+                  bg={isDarkMode ? "$gray" : "$white"}
                   rounded={'$lg'}
                   minHeight={'$12'}
                   maxHeight={'$16'}
@@ -194,11 +197,10 @@ export const EditStudentProfile: FC<ScreenProps<'EditStudentProfile'>> = ({navig
                   alignItems="center">
                   <CalendarDaysIcon mr={10} />
                   <FormControlLabel>
-                    <FormControlLabelText color="$backgroundLight400">
-                    {value ? value.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) : 'Date of birth'}
+                    <FormControlLabelText color={isDarkMode ? "$white" : "$backgroundLight400"}>
+                      {value ? value.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) : 'Date of birth'}
                     </FormControlLabelText>
                   </FormControlLabel>
-                 
                 </Button>
                 {showDatePicker && (
                   <DateTimePicker
@@ -216,20 +218,21 @@ export const EditStudentProfile: FC<ScreenProps<'EditStudentProfile'>> = ({navig
             )}
           />
           {errors.birthDay && (
-            <Text style={{color: 'red'}}>{getErrorMessage(errors.birthDay)}</Text>
+            <Text style={styles(isDarkMode).errorText}>{getErrorMessage(errors.birthDay)}</Text>
           )}
         </FormControl>
+
         <FormControl>
           <Controller
             control={control}
             name="email"
-            render={({field: {onChange, onBlur, value}}) => (
+            render={({ field: { onChange, onBlur, value } }) => (
               <Input
                 rounded={'$lg'}
-                bg="$white"
+                bg={isDarkMode ? "$gray800" : "$white"}
                 minHeight={'$12'}
                 maxHeight={'$16'}
-                borderColor="$white">
+                borderColor={isDarkMode ? "$gray" : "$white"}>
                 <InputSlot ml={'$4.5'}>
                   <InputIcon>
                     <Icon as={MailIcon} />
@@ -240,12 +243,13 @@ export const EditStudentProfile: FC<ScreenProps<'EditStudentProfile'>> = ({navig
                   onBlur={onBlur}
                   onChangeText={onChange}
                   value={value}
+                  color={isDarkMode ? "$white" : "$black"}
                 />
               </Input>
             )}
           />
           {errors.email && (
-            <Text style={{color: 'red'}}>{getErrorMessage(errors.email)}</Text>
+            <Text style={styles(isDarkMode).errorText}>{getErrorMessage(errors.email)}</Text>
           )}
         </FormControl>
 
@@ -257,18 +261,18 @@ export const EditStudentProfile: FC<ScreenProps<'EditStudentProfile'>> = ({navig
               <>
                 <PhoneInput
                   defaultCode="TN"
-                  textInputStyle={{ height: 40, borderRadius: 15 }}
-                  containerStyle={{ borderRadius: 15, width: '100%' }}
+                  textInputStyle={{ height: 40, borderRadius: 15, color: isDarkMode ? 'white' : 'black' }}
+                  containerStyle={{ borderRadius: 15, width: '100%', backgroundColor: isDarkMode ? 'gray' : 'white' }}
                   textContainerStyle={{
                     borderRadius: 15,
-                    backgroundColor: 'white',
+                    backgroundColor: isDarkMode ? 'gray' : 'white',
                     width: '100%',
                   }}
                   onChangeFormattedText={onChange}
                   value={value}
                 />
                 {errors.phoneNumber && (
-                  <Text style={{ color: 'red' }}>{getErrorMessage(errors.phoneNumber)}</Text>
+                  <Text style={styles(isDarkMode).errorText}>{getErrorMessage(errors.phoneNumber)}</Text>
                 )}
               </>
             )}
@@ -279,9 +283,9 @@ export const EditStudentProfile: FC<ScreenProps<'EditStudentProfile'>> = ({navig
           <Controller
             control={control}
             name="gender"
-            render={({field: {onChange, value}}) => (
+            render={({ field: { onChange, value } }) => (
               <Select
-                bgColor="$white"
+                bgColor={isDarkMode ? "$gray800" : "$white"}
                 rounded={'$lg'}
                 minHeight={'$12'}
                 maxHeight={'$16'}
@@ -290,7 +294,7 @@ export const EditStudentProfile: FC<ScreenProps<'EditStudentProfile'>> = ({navig
                 <SelectTrigger
                   variant="outline"
                   size="lg"
-                  borderColor="$white"
+                  borderColor={isDarkMode ? "$gray" : "$white"}
                   rounded={'$lg'}>
                   <SelectInput placeholder="Select Gender" />
                   <SelectIcon>
@@ -313,7 +317,6 @@ export const EditStudentProfile: FC<ScreenProps<'EditStudentProfile'>> = ({navig
           />
         </FormControl>
         
-
         <CustomButton
           pressEvent={handleSubmit(onSubmit)}
           icon={<ArrowLeftBlueColor />}
@@ -323,3 +326,18 @@ export const EditStudentProfile: FC<ScreenProps<'EditStudentProfile'>> = ({navig
     </View>
   );
 };
+
+const styles = (isDarkMode: boolean) => StyleSheet.create({
+  container: {
+    backgroundColor: isDarkMode ? '#333' : '#f9fafb',
+    margin:0
+  },
+  avatarImage: {
+    width: '100%',
+    height: '100%',
+    borderRadius: 100,
+  },
+  errorText: {
+    color: 'red',
+  },
+});

@@ -1,7 +1,5 @@
-import React, { useState,FC } from 'react';
-import { ScreenProps } from '../../types';
-import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Alert } from 'react-native';
-// Import SVG icons
+import React, { useState, FC } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
 //@ts-ignore
 import EditProfileIcon from '../../assets/svg/edit-profile-icon.svg';
 //@ts-ignore
@@ -15,29 +13,79 @@ import TermsIcon from '../../assets/svg/terms&condition-icon.svg';
 //@ts-ignore
 import PaymentIcon from '../../assets/svg/payment-icon.svg';
 //@ts-ignore
-import TraductionIcon from '../../assets/svg/traduction-icon.svg';
+import TraductionIcon from '../../assets/svg/Traduction.svg';
 //@ts-ignore
 import ArrowRight from '../../assets/svg/arrowRight.svg';
+//@ts-ignore
+import LogoutIcon from '../../assets/svg/LogOut.svg';
+//@ts-ignore
+import ArrowRightLight from '../../assets/svg/arrowRightLight.svg'; 
+//@ts-ignore
+import EditProfileLight from '../../assets/svg/Edit-profile-light.svg';
+//@ts-ignore
+import TermsLight from '../../assets/svg/TermsLight.svg';
+//@ts-ignore
+import LogoutLight from '../../assets/svg/Logout-light.svg';
+//@ts-ignore
+import DarkModeSwitcher from '../../assets/svg/Switch-mode-light.svg';
+//@ts-ignore
+import LanguageLight from '../../assets/svg/Language-option.svg';
+//@ts-ignore
+import SecurityLight from '../../assets/svg/Security-option.svg';
+//@ts-ignore
+import NotificationLight from '../../assets/svg/Notification-option-light.svg';
+//@ts-ignore
+import PaymentLight from '../../assets/svg/Payment-option-light.svg';
+
 import { Avatar, AvatarFallbackText, Center, Image } from '@gluestack-ui/themed';
+import { Footer } from '../Footer'; 
+import { useTheme } from '../../utils/ThemeContext';
+import { ScreenProps } from '../../types';
 
 export const Profile: FC<ScreenProps<'Profile'>> = ({ navigation }) => {
   const [avatarUri, setAvatarUri] = useState<string | null>(null);
-  {/* Replace with image in the DataBase */}
+  const { isDarkMode, toggleDarkMode } = useTheme();
+
+  const getIcon = (name: string) => {
+    switch (name) {
+      case 'Edit Profile':
+        return isDarkMode ? <EditProfileLight /> : <EditProfileIcon />;
+      case 'Payment Option':
+        return isDarkMode ? <PaymentLight /> : <PaymentIcon />;
+      case 'Notifications':
+        return isDarkMode ? <NotificationLight /> : <NotificationIcon />;
+      case 'Security':
+        return isDarkMode ? <SecurityLight /> : <SecurityIcon />;
+      case 'Language':
+        return isDarkMode ? <LanguageLight /> : <TraductionIcon />;
+      case 'Dark Mode':
+      case 'Light Mode':
+        return isDarkMode ? <DarkModeSwitcher /> : <DarkModeIcon />;
+      case 'Terms & Conditions':
+        return isDarkMode ? <TermsLight /> : <TermsIcon />;
+      case 'Logout':
+        return isDarkMode ? <LogoutLight /> : <LogoutIcon />;
+      default:
+        return null;
+    }
+  };
 
   const menuItems = [
-    { title: 'Edit Profile', icon: <EditProfileIcon />, onPress: () => navigation.navigate('EditStudentProfile') },
-    { title: 'Payment Option', icon: <PaymentIcon />, onPress: () => navigation.navigate('PaymentOption') },
-    { title: 'Notifications', icon: <NotificationIcon />, onPress: () => navigation.navigate('NotificationSettings') },
-    { title: 'Security', icon: <SecurityIcon />, onPress: () => navigation.navigate('SecurityOption') },
-    { title: 'Language', icon: <TraductionIcon />, onPress: () => navigation.navigate('LanguageSettings') },
-    { title: 'Dark Mode', icon: <DarkModeIcon />, onPress: () => navigation.navigate('LanguageSettings') },
-    { title: 'Terms & Conditions', icon: <TermsIcon />, onPress: () => navigation.navigate('Terms') },
+    { title: 'Edit Profile', onPress: () => navigation.navigate('EditStudentProfile') },
+    { title: 'Payment Option', onPress: () => navigation.navigate('PaymentOption') },
+    { title: 'Notifications', onPress: () => navigation.navigate('NotificationSettings') },
+    { title: 'Security', onPress: () => navigation.navigate('SecurityOption') },
+    { title: 'Language', onPress: () => navigation.navigate('LanguageSettings') },
+    //@ts-ignore
+    { title: isDarkMode ? 'Dark Mode' : 'Light Mode', onPress: () => toggleDarkMode() },
+    { title: 'Terms & Conditions', onPress: () => navigation.navigate('Terms') },
+    { title: 'Logout', onPress: () => navigation.navigate('SignIn') },
   ];
 
   return (
-    <ScrollView style={styles.container}>
-      <Center>
-  
+    <View style={[styles.container, { backgroundColor: isDarkMode ? '#333' : '#F7F8FA' }]}>
+      <ScrollView contentContainerStyle={styles.scrollViewContent} showsVerticalScrollIndicator={false}>
+        <Center>
           <Avatar size="xl" borderRadius={'$full'}>
             {avatarUri ? (
               <Image source={{ uri: avatarUri }} style={{ width: '100%', height: '100%', borderRadius: 100 }} />
@@ -46,39 +94,39 @@ export const Profile: FC<ScreenProps<'Profile'>> = ({ navigation }) => {
             )}
           </Avatar>
         </Center>
-      <Text style={styles.name}>James S. Hernandez</Text>
-      <Text style={styles.email}>hernandex.redial@gmail.ac.in</Text>
-
-      {menuItems.map((item, index) => (
-        <TouchableOpacity key={index} style={styles.menuItem} onPress={item.onPress}>
-          <View style={styles.menuItemContent}>
-            {item.icon}
-            <Text style={styles.menuText}>{item.title}</Text>
-          </View>
-          <ArrowRight width={24} height={24} />
-        </TouchableOpacity>
-      ))}
-    </ScrollView>
+        <Text style={[styles.name, { color: isDarkMode ? '#fff' : '#202244' }]}>James S. Hernandez</Text>
+        <Text style={[styles.email, { color: isDarkMode ? '#ccc' : '#545454' }]}>hernandex.redial@gmail.ac.in</Text>
+        {menuItems.map((item, index) => (
+          <TouchableOpacity key={index} style={styles.menuItem} onPress={item.onPress}>
+            <View style={styles.menuItemContent}>
+              {getIcon(item.title)}
+              <Text style={[styles.menuText, { color: isDarkMode ? '#fff' : '#202244' }]}>{item.title}</Text>
+            </View>
+            {isDarkMode ? <ArrowRightLight /> : <ArrowRight />}
+          </TouchableOpacity>
+        ))}
+      </ScrollView>
+      <Footer navigation={navigation} />
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  scrollViewContent: {
     padding: 20,
-    backgroundColor: '#fff',
   },
   name: {
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 5,
     textAlign: 'center',
-    color:'#202244',
-    marginTop:10
+    marginTop: 10,
   },
   email: {
     fontSize: 14,
-    color: '#545454',
     marginBottom: 50,
     textAlign: 'center',
   },
@@ -88,20 +136,16 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingVertical: 15,
     borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
   },
   menuItemContent: {
     flexDirection: 'row',
     alignItems: 'center',
   },
-  icon: {
-    marginRight: 15,
-  },
   menuText: {
     fontSize: 16,
-    fontWeight:'bold',
-    color:'#202244',
-    marginLeft:12
+    fontWeight: 'bold',
+    marginLeft: 12,
   },
 });
 
+export default Profile;

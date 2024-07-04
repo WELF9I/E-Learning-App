@@ -1,26 +1,26 @@
-import React from 'react';
-import { View, Text, ScrollView, StyleSheet, TouchableOpacity, TextInput, Image } from 'react-native';
+import React, { FC, useState } from 'react';
+import { View, Text, ScrollView, StyleSheet, Image } from 'react-native';
 import { Searchbar } from 'react-native-paper';
-// @ts-ignore
-import Icon3DDesign from '../../assets/categories/ICON3D-Design.svg';
-// @ts-ignore
-import IconGraphicDesign from '../../assets/categories/ICONGraphicDesign.svg';
-// @ts-ignore
-import IconWebDevelopment from '../../assets/categories/ICONWebDevelopment.svg';
-// @ts-ignore
-import IconSeoMarketing from '../../assets/categories/ICONSeoMarketing.svg';
-// @ts-ignore
-import IconFinanceAccounting from '../../assets/categories/ICONFinanceAccounting.svg';
-// @ts-ignore
-import IconHRManagement from '../../assets/categories/ICONHRManagement.svg';
-// @ts-ignore
-import IconPersonalDevelopment from '../../assets/categories/ICONPersonalDevelopment.svg';
-// @ts-ignore
-import IconOfficeProductivity from '../../assets/categories/ICONOfficeProductivity.svg';
-import {ScreenProps} from '../../types';
-import {FC} from 'react';
+//@ts-ignore
+import Icon3DDesign from '../../assets/categories/ICON3D-Design.png';
+//@ts-ignore
+import IconGraphicDesign from '../../assets/categories/ICONGraphicDesign.png';
+//@ts-ignore
+import IconWebDevelopment from '../../assets/categories/ICONWebDevelopment.png';
+//@ts-ignore
+import IconSeoMarketing from '../../assets/categories/ICONSeoMarketing.png';
+//@ts-ignore
+import IconFinanceAccounting from '../../assets/categories/ICONFinanceAccounting.png';
+//@ts-ignore
+import IconHRManagement from '../../assets/categories/ICONHRManagement.png';
+//@ts-ignore
+import IconPersonalDevelopment from '../../assets/categories/ICONPersonalDevelopment.png';
+//@ts-ignore
+import IconOfficeProductivity from '../../assets/categories/ICONOfficeProductivity.png';
+//@ts-ignore
+import CustomSearchIcon from '../../assets/categories/search.png'; // Custom search icon
 
-
+import { ScreenProps } from '../../types';
 
 const categories = [
   { id: 1, name: '3D Design', icon: Icon3DDesign },
@@ -32,20 +32,24 @@ const categories = [
   { id: 7, name: 'Office Productivity', icon: IconOfficeProductivity },
   { id: 8, name: 'HR Management', icon: IconHRManagement },
 ];
-const [searchQuery, setSearchQuery] = React.useState('');
 
-export const CategoriesScreen: FC<ScreenProps<'CategoriesScreen'>> = ({navigation}) => {
+export const CategoriesScreen: FC<ScreenProps<'CategoriesScreen'>> = ({ navigation }) => {
+  const [searchQuery, setSearchQuery] = useState('');
+  const filteredCategories = categories.filter(category =>
+    category.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   return (
     <View style={styles.container}>
-      <View style={styles.searchContainer}>
-        <Searchbar
-        placeholder="Search"
+      <Searchbar
+        placeholder="Search for..."
         onChangeText={setSearchQuery}
         value={searchQuery}
-        />
-      </View>
+        icon={() => <Image source={CustomSearchIcon} style={styles.searchIcon} />}
+        style={styles.searchbar}
+      />
       <ScrollView contentContainerStyle={styles.categoriesContainer} showsVerticalScrollIndicator={false}>
-        {categories.map(category => (
+        {filteredCategories.map(category => (
           <View key={category.id} style={styles.categoryItem}>
             <Image source={category.icon} style={styles.categoryIcon} />
             <Text style={styles.categoryText}>{category.name}</Text>
@@ -62,34 +66,19 @@ const styles = StyleSheet.create({
     padding: 16,
     backgroundColor: '#F5F5F5',
   },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 16,
-  },
-  backButton: {
-    fontSize: 16,
-    color: '#007BFF',
-  },
-  title: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginLeft: 10,
-  },
-  searchContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 16,
+  searchbar: {
     backgroundColor: '#FFF',
-    padding: 10,
+    elevation: 15, 
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
     borderRadius: 10,
+    marginBottom: 35
   },
-  searchInput: {
-    flex: 1,
-    fontSize: 16,
-  },
-  searchButton: {
-    marginLeft: 10,
+  searchIcon: {
+    width: 30,
+    height: 30,
   },
   categoriesContainer: {
     flexDirection: 'row',
@@ -106,7 +95,7 @@ const styles = StyleSheet.create({
   },
   categoryIcon: {
     width: 40,
-    height: 40, 
+    height: 40,
     marginBottom: 10,
   },
   categoryText: {
@@ -115,4 +104,4 @@ const styles = StyleSheet.create({
   },
 });
 
-
+export default CategoriesScreen;

@@ -24,7 +24,8 @@ import {
   SecurityOption,
   LanguageSettings,
   Profile,
-  Terms
+  Terms,
+  Footer
 } from '../../screens';
 import {Text} from '@gluestack-ui/themed';
 
@@ -176,9 +177,9 @@ export const ApplicationNavigator: FC = (): JSX.Element => {
           }}
           name="Receipt"
           component={Receipt}
-        /> 
+        />  */}
+
         
-        */}
 
           <Stack.Screen
           options={{
@@ -276,6 +277,20 @@ export const ApplicationNavigator: FC = (): JSX.Element => {
           }}
           name="Terms"
           component={Terms}
+        />
+
+        <Stack.Screen
+          options={{
+            headerTitle(props:any) {
+              return (
+                <Text>
+                  {props.children.replace(/([a-z])([A-Z])/g, '$1 $2')}
+                </Text>
+              );
+            },
+          }}
+          name="Footer"
+          component={Footer}
         />
           
       </Stack.Group>

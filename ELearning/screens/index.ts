@@ -22,3 +22,4 @@ export {PaymentOption} from './PaymentOption';
 export {SecurityOption} from './SecurityOption';
 export {LanguageSettings} from './LanguageSettings';
 export {Terms} from './Terms';
+export {Footer} from './Footer';

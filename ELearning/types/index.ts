@@ -28,6 +28,7 @@ export type rootStackParamList = {
   SecurityOption:undefined;
   LanguageSettings:undefined;
   Terms:undefined;
+  Footer:undefined;
 };
 
 export interface ScreenProps<ScreenName extends keyof rootStackParamList>
