@@ -27,3 +27,4 @@ export {TopMentorsScreen} from './TopMentorsScreen';
 export {Notifications} from './Notifications';
 export {ViewCourse} from './ViewCourse';
 export {OnlineCoursesScreen} from './OnlineCoursesScreen';
+export {ReviewCourse} from './ReviewCourse';

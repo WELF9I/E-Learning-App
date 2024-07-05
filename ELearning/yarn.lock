@@ -4838,6 +4838,25 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/react-native-vector-icons@npm:^6.4.6":
+  version: 6.4.18
+  resolution: "@types/react-native-vector-icons@npm:6.4.18"
+  dependencies:
+    "@types/react": "*"
+    "@types/react-native": ^0.70
+  checksum: 1ef458cb5e7a37f41eb400e3153940b1b152e4df76a7c06c7a47c712dbfe46e14b9999f04dde1bd074f338f850e161c6c925174ddea33386b74f8112c940065b
+  languageName: node
+  linkType: hard
+
+"@types/react-native@npm:^0.70":
+  version: 0.70.19
+  resolution: "@types/react-native@npm:0.70.19"
+  dependencies:
+    "@types/react": "*"
+  checksum: 79b504fa56340631079e7c20ea0d9412ec14147b76d0ce189f4403936f529ef1e6fd031383afab117846c5ae039123bcf3afc948bae4432269c6780282726f71
+  languageName: node
+  linkType: hard
+
 "@types/react-test-renderer@npm:^18.0.0":
   version: 18.3.0
   resolution: "@types/react-test-renderer@npm:18.3.0"
@@ -5140,6 +5159,7 @@ __metadata:
     react-hook-form: ^7.52.0
     react-native: 0.74.2
     react-native-biometrics: ^3.0.1
+    react-native-elements: ^3.4.3
     react-native-gesture-handler: ^2.17.1
     react-native-image-picker: ^7.1.2
     react-native-keychain: ^8.2.0
@@ -7778,7 +7798,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"hoist-non-react-statics@npm:^3.3.0":
+"hoist-non-react-statics@npm:^3.3.0, hoist-non-react-statics@npm:^3.3.2":
   version: 3.3.2
   resolution: "hoist-non-react-statics@npm:3.3.2"
   dependencies:
@@ -10215,6 +10235,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"opencollective-postinstall@npm:^2.0.3":
+  version: 2.0.3
+  resolution: "opencollective-postinstall@npm:2.0.3"
+  bin:
+    opencollective-postinstall: index.js
+  checksum: 0a68c5cef135e46d11e665d5077398285d1ce5311c948e8327b435791c409744d4a6bb9c55bd6507fb5f2ef34b0ad920565adcdaf974cbdae701aead6f32b396
+  languageName: node
+  linkType: hard
+
 "optionator@npm:^0.9.3":
   version: 0.9.4
   resolution: "optionator@npm:0.9.4"
@@ -10778,6 +10807,25 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-native-elements@npm:^3.4.3":
+  version: 3.4.3
+  resolution: "react-native-elements@npm:3.4.3"
+  dependencies:
+    "@types/react-native-vector-icons": ^6.4.6
+    color: ^3.1.2
+    deepmerge: ^4.2.2
+    hoist-non-react-statics: ^3.3.2
+    lodash.isequal: ^4.5.0
+    opencollective-postinstall: ^2.0.3
+    react-native-ratings: 8.0.4
+    react-native-size-matters: ^0.3.1
+  peerDependencies:
+    react-native-safe-area-context: ">= 3.0.0"
+    react-native-vector-icons: ">7.0.0"
+  checksum: e055c18b85527366d7b9e76139828fe3d006a7a8c11f81b165e43b4175c0d4b15eef6308679dd596d33f0813a512c27cb993d6ca49e00c56fcb15a0918d96c6c
+  languageName: node
+  linkType: hard
+
 "react-native-gesture-handler@npm:^2.17.1":
   version: 2.17.1
   resolution: "react-native-gesture-handler@npm:2.17.1"
@@ -10883,6 +10931,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-native-ratings@npm:8.0.4":
+  version: 8.0.4
+  resolution: "react-native-ratings@npm:8.0.4"
+  dependencies:
+    lodash: ^4.17.15
+  peerDependencies:
+    react: "*"
+    react-native: "*"
+  checksum: e420dab914a4941722482719e46f8837b51927a11d9861e2f581bac651910ea08419e9a1a2dd4aa072520439c119d6894f0d8d763db3dcc28a15b73072b9eb76
+  languageName: node
+  linkType: hard
+
 "react-native-safe-area-context@npm:^4.10.5":
   version: 4.10.5
   resolution: "react-native-safe-area-context@npm:4.10.5"
@@ -10897,6 +10957,15 @@ __metadata:
   version: 10.2.1
   resolution: "react-native-share@npm:10.2.1"
   checksum: 9dd4e0329b344668e04ff5421ab982e319dc3ba988d0b7990a619bd1c551beb6012623abe238a80e427f86f2bb03dd21b7afc0e957ee7348e0bd9fb39956912e
+  languageName: node
+  linkType: hard
+
+"react-native-size-matters@npm:^0.3.1":
+  version: 0.3.1
+  resolution: "react-native-size-matters@npm:0.3.1"
+  peerDependencies:
+    react-native: "*"
+  checksum: f8fa7f301d97dae96df029771445648b4778562c982b3d0625ae78cb397b35efd0e2b482b240531dad68fde0d18cc23f5181a3904259c6e1ff155823ac34996d
   languageName: node
   linkType: hard
 

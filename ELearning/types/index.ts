@@ -33,6 +33,7 @@ export type rootStackParamList = {
   OnlineCoursesScreen:undefined;
   Notifications:undefined;
   ViewCourse:undefined;
+  ReviewCourse:undefined;
 };
 
 export interface ScreenProps<ScreenName extends keyof rootStackParamList>

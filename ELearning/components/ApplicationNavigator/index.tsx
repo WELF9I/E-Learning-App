@@ -31,7 +31,8 @@ import {
   TopMentorsScreen,
   Notifications,
   OnlineCoursesScreen,
-  ViewCourse
+  ViewCourse,
+  ReviewCourse
 } from '../../screens';
 import {Text} from '@gluestack-ui/themed';
 
@@ -299,7 +300,7 @@ export const ApplicationNavigator: FC = (): JSX.Element => {
           component={Footer}
         /> */}
 
-         <Stack.Screen
+         {/* <Stack.Screen
           options={{
             headerShown: false,
             headerTitle(props:any) {
@@ -381,6 +382,20 @@ export const ApplicationNavigator: FC = (): JSX.Element => {
           }}
           name="ViewCourse"
           component={ViewCourse}
+        /> */}
+
+        <Stack.Screen
+          options={{
+            headerTitle(props:any) {
+              return (
+                <Text>
+                  {props.children.replace(/([a-z])([A-Z])/g, '$1 $2')}
+                </Text>
+              );
+            },
+          }}
+          name="ReviewCourse"
+          component={ReviewCourse}
         />
           
       </Stack.Group>
