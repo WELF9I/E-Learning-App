@@ -146,7 +146,7 @@ export const ReviewCourse: FC<ScreenProps<'ReviewCourse'>> = ({ navigation }) =>
         contentContainerStyle={styles.flatListContent}
       />
        <CustomButton
-        pressEvent={()=>{console.log('ok')}}
+        pressEvent={()=>{navigation.navigate('WriteReview')}}
         icon={<ArrowLeftBlueColor />}
         text="Write a Review"
       />

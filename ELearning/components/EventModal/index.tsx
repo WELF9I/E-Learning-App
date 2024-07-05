@@ -16,7 +16,7 @@ export const EventModal: FC<IEventModalProps> = ({
     }
   }, [isVisible, redirectFunction]);
   return (
-    <Modal isOpen={isVisible} width={'$full'} height={'$1/2'} mt={'$1/2'}>
+    <Modal isOpen={isVisible} width={'$full'} height={'$1/2'} mt={'$1/2'} >
       <View flex={1} justifyContent="center" alignItems="center">
         <ModalContent>
           <ModalHeader flexDirection="column">

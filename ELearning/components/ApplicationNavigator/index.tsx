@@ -32,7 +32,9 @@ import {
   Notifications,
   OnlineCoursesScreen,
   ViewCourse,
-  ReviewCourse
+  ReviewCourse,
+  WriteReview,
+  PaymentMethods
 } from '../../screens';
 import {Text} from '@gluestack-ui/themed';
 
@@ -150,15 +152,15 @@ export const ApplicationNavigator: FC = (): JSX.Element => {
           name="TopCoursesScreen"
           component={TopCoursesScreen}
         />
-         */}
+         </Stack.Group> */}
         
            
         <Stack.Group
         screenOptions={{
           headerShown: true,
         }}>
-          
-        {/* <Stack.Screen
+        {/*
+       <Stack.Screen
           options={{
             headerTitle(props:any) {
               return (
@@ -184,7 +186,7 @@ export const ApplicationNavigator: FC = (): JSX.Element => {
           }}
           name="Receipt"
           component={Receipt}
-        />  */}
+        />   */}
 
         
 
@@ -298,7 +300,7 @@ export const ApplicationNavigator: FC = (): JSX.Element => {
           }}
           name="Footer"
           component={Footer}
-        /> */}
+        />  */}
 
          {/* <Stack.Screen
           options={{
@@ -382,9 +384,9 @@ export const ApplicationNavigator: FC = (): JSX.Element => {
           }}
           name="ViewCourse"
           component={ViewCourse}
-        /> */}
+        />  */}
 
-        <Stack.Screen
+        {/* <Stack.Screen
           options={{
             headerTitle(props:any) {
               return (
@@ -397,9 +399,36 @@ export const ApplicationNavigator: FC = (): JSX.Element => {
           name="ReviewCourse"
           component={ReviewCourse}
         />
-          
-      </Stack.Group>
 
+        <Stack.Screen
+          options={{
+            headerTitle(props:any) {
+              return (
+                <Text>
+                  {props.children.replace(/([a-z])([A-Z])/g, '$1 $2')}
+                </Text>
+              );
+            },
+          }}
+          name="WriteReview"
+          component={WriteReview}
+        />   */}
+
+          <Stack.Screen
+            options={{
+            headerTitle(props:any) {
+              return (
+                <Text>
+                  {props.children.replace(/([a-z])([A-Z])/g, '$1 $2')}
+                </Text>
+              );
+            },
+          }}
+          name="PaymentMethods"
+          component={PaymentMethods}
+        /> 
+
+      </Stack.Group>
     </Stack.Navigator>
   );
 };

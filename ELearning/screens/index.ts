@@ -28,3 +28,5 @@ export {Notifications} from './Notifications';
 export {ViewCourse} from './ViewCourse';
 export {OnlineCoursesScreen} from './OnlineCoursesScreen';
 export {ReviewCourse} from './ReviewCourse';
+export {WriteReview} from './WriteReview';
+export {PaymentMethods} from './PaymentMethods';

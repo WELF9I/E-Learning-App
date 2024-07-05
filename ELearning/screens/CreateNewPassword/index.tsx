@@ -75,6 +75,7 @@ export const CreateNewPassword: FC<ScreenProps<'CreateNewPassword'>> = ({ naviga
           {showPassword ? <EyeHide /> : <EyeShow />}
         </TouchableOpacity>
       </View>
+      
       {errors.password && <Text style={{ color: 'red' }}>{errors.password.message}</Text>}
       
       <View style={styles.inputContainer}>

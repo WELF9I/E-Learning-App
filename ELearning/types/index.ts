@@ -34,6 +34,8 @@ export type rootStackParamList = {
   Notifications:undefined;
   ViewCourse:undefined;
   ReviewCourse:undefined;
+  WriteReview:undefined;
+  PaymentMethods:undefined;
 };
 
 export interface ScreenProps<ScreenName extends keyof rootStackParamList>
