@@ -9,6 +9,7 @@ import ArrowLeftBlueColor from '../../assets/svg/arrowLeftBlueColor.svg';
 import { ScreenProps } from '../../types';
 import { CustomButton } from '../../components';
 import { useTheme } from '../../utils/ThemeContext';
+import { useTranslation } from 'react-i18next';
 
 const pinSchema = z.object({
   oldPin: z.string().min(4, 'PIN must be 4 digits').max(4, 'PIN must be 4 digits').regex(/^\d{4}$/, 'PIN must be 4 digits'),
@@ -34,6 +35,8 @@ export const SecurityOption: FC<ScreenProps<'SecurityOption'>> = ({ navigation }
   const [rememberMe, setRememberMe] = useState(false);
   const [biometricID, setBiometricID] = useState(false);
   const { isDarkMode, toggleDarkMode } = useTheme();
+  const { t } = useTranslation();
+
   const { control: controlPin, handleSubmit: handleSubmitPin, formState: { errors: errorsPin } } = useForm({
     resolver: zodResolver(pinSchema),
   });
@@ -44,7 +47,7 @@ export const SecurityOption: FC<ScreenProps<'SecurityOption'>> = ({ navigation }
 
   const getErrorMessage = (error: any) => {
     if (error) {
-      return error.message;
+      return t(error.message);
     }
     return '';
   };
@@ -78,8 +81,8 @@ export const SecurityOption: FC<ScreenProps<'SecurityOption'>> = ({ navigation }
 
   return (
     <View style={[styles.container, { backgroundColor: isDarkMode ? '#333' : '#f9fafb' }]}>
-      <View style={[styles.switchRow,{backgroundColor:isDarkMode?'#D0D0D0':'#FFF'}]}>
-        <Text style={[styles.switchText, { color: isDarkMode ? 'black' : '#000' }]}>Remember Me</Text>
+      <View style={[styles.switchRow, { backgroundColor: isDarkMode ? '#D0D0D0' : '#FFF' }]}>
+        <Text style={[styles.switchText, { color: isDarkMode ? 'black' : '#000' }]}>{t('rememberMe')}</Text>
         <Switch
           trackColor={{ false: '#767577', true: '#b5d2ff' }}
           thumbColor={rememberMe ? '#0961F5' : '#f4f3f4'}
@@ -87,8 +90,8 @@ export const SecurityOption: FC<ScreenProps<'SecurityOption'>> = ({ navigation }
           onValueChange={(value) => setRememberMe(value)}
         />
       </View>
-      <View style={[styles.switchRow,{backgroundColor:isDarkMode?'#D0D0D0':'#FFF'}]}>
-        <Text style={[styles.switchText, { color: isDarkMode ? 'black' : '#000' }]}>Biometric ID</Text>
+      <View style={[styles.switchRow, { backgroundColor: isDarkMode ? '#D0D0D0' : '#FFF' }]}>
+        <Text style={[styles.switchText, { color: isDarkMode ? 'black' : '#000' }]}>{t('biometricID')}</Text>
         <Switch
           trackColor={{ false: '#767577', true: '#b5d2ff' }}
           thumbColor={biometricID ? '#0961F5' : '#f4f3f4'}
@@ -99,26 +102,26 @@ export const SecurityOption: FC<ScreenProps<'SecurityOption'>> = ({ navigation }
 
       <View style={{ marginTop: '80%', marginHorizontal: 7 }}>
         <TouchableOpacity style={styles.button} onPress={togglePinModal}>
-          <Text style={[styles.buttonText, { color: isDarkMode ? '#000' : 'black' }]}>Change PIN</Text>
+          <Text style={[styles.buttonText, { color: isDarkMode ? '#000' : 'black' }]}>{t('changePin')}</Text>
         </TouchableOpacity>
         <CustomButton
           pressEvent={togglePasswordModal}
           icon={<ArrowLeftBlueColor />}
-          text="Change Password"
+          text={t('changePassword')}
         />
       </View>
 
       {/* PIN Modal */}
       <Modal isVisible={isPinModalVisible}>
-        <View style={[styles.modalContent,{backgroundColor:isDarkMode?'#333':'white'}]}>
-          <Text style={[styles.modalHeader, { color: isDarkMode ? '#fff' : '#000' }]}>Change PIN</Text>
+        <View style={[styles.modalContent, { backgroundColor: isDarkMode ? '#333' : 'white' }]}>
+          <Text style={[styles.modalHeader, { color: isDarkMode ? '#fff' : '#000' }]}>{t('changePin')}</Text>
           <Controller
             control={controlPin}
             name="oldPin"
             render={({ field: { onChange, onBlur, value } }) => (
               <TextInput
                 style={[styles.input, { color: isDarkMode ? '#fff' : '#000' }, errorsPin.oldPin && styles.errorInput]}
-                placeholder="Old PIN"
+                placeholder={t('oldPin')}
                 placeholderTextColor={isDarkMode ? '#888' : '#ccc'}
                 keyboardType="numeric"
                 onBlur={onBlur}
@@ -137,7 +140,7 @@ export const SecurityOption: FC<ScreenProps<'SecurityOption'>> = ({ navigation }
             render={({ field: { onChange, onBlur, value } }) => (
               <TextInput
                 style={[styles.input, { color: isDarkMode ? '#fff' : '#000' }, errorsPin.newPin && styles.errorInput]}
-                placeholder="New PIN"
+                placeholder={t('newPin')}
                 placeholderTextColor={isDarkMode ? '#888' : '#ccc'}
                 keyboardType="numeric"
                 onBlur={onBlur}
@@ -156,7 +159,7 @@ export const SecurityOption: FC<ScreenProps<'SecurityOption'>> = ({ navigation }
             render={({ field: { onChange, onBlur, value } }) => (
               <TextInput
                 style={[styles.input, { color: isDarkMode ? '#fff' : '#000' }, errorsPin.confirmNewPin && styles.errorInput]}
-                placeholder="Confirm New PIN"
+                placeholder={t('confirmNewPin')}
                 placeholderTextColor={isDarkMode ? '#888' : '#ccc'}
                 keyboardType="numeric"
                 onBlur={onBlur}
@@ -170,23 +173,23 @@ export const SecurityOption: FC<ScreenProps<'SecurityOption'>> = ({ navigation }
           {errorsPin.confirmNewPin && <Text style={styles.errorText}>{getErrorMessage(errorsPin.confirmNewPin)}</Text>}
 
           <View style={styles.buttonGroup}>
-            <Button title="Change PIN" onPress={handleSubmitPin(handleChangePin)} />
-            <Button title="Cancel" onPress={togglePinModal} color="red" />
+            <Button title={t('changePin')} onPress={handleSubmitPin(handleChangePin)} />
+            <Button title={t('cancel')} onPress={togglePinModal} color="red" />
           </View>
         </View>
       </Modal>
 
       {/* Password Modal */}
       <Modal isVisible={isPasswordModalVisible}>
-        <View style={[styles.modalContent,{backgroundColor:isDarkMode?'#333':'white'}]}>
-          <Text style={[styles.modalHeader, { color: isDarkMode ? '#fff' : '#000' }]}>Change Password</Text>
+        <View style={[styles.modalContent, { backgroundColor: isDarkMode ? '#333' : 'white' }]}>
+          <Text style={[styles.modalHeader, { color: isDarkMode ? '#fff' : '#000' }]}>{t('changePassword')}</Text>
           <Controller
             control={controlPassword}
             name="oldPassword"
             render={({ field: { onChange, onBlur, value } }) => (
               <TextInput
                 style={[styles.input, { color: isDarkMode ? '#fff' : '#000' }, errorsPassword.oldPassword && styles.errorInput]}
-                placeholder="Old Password"
+                placeholder={t('oldPassword')}
                 placeholderTextColor={isDarkMode ? '#888' : '#ccc'}
                 secureTextEntry
                 onBlur={onBlur}
@@ -203,7 +206,7 @@ export const SecurityOption: FC<ScreenProps<'SecurityOption'>> = ({ navigation }
             render={({ field: { onChange, onBlur, value } }) => (
               <TextInput
                 style={[styles.input, { color: isDarkMode ? '#fff' : '#000' }, errorsPassword.newPassword && styles.errorInput]}
-                placeholder="New Password"
+                placeholder={t('newPassword')}
                 placeholderTextColor={isDarkMode ? '#888' : '#ccc'}
                 secureTextEntry
                 onBlur={onBlur}
@@ -220,7 +223,7 @@ export const SecurityOption: FC<ScreenProps<'SecurityOption'>> = ({ navigation }
             render={({ field: { onChange, onBlur, value } }) => (
               <TextInput
                 style={[styles.input, { color: isDarkMode ? '#fff' : '#000' }, errorsPassword.confirmNewPassword && styles.errorInput]}
-                placeholder="Confirm New Password"
+                placeholder={t('confirmNewPassword')}
                 placeholderTextColor={isDarkMode ? '#888' : '#ccc'}
                 secureTextEntry
                 onBlur={onBlur}
@@ -232,8 +235,8 @@ export const SecurityOption: FC<ScreenProps<'SecurityOption'>> = ({ navigation }
           {errorsPassword.confirmNewPassword && <Text style={styles.errorText}>{getErrorMessage(errorsPassword.confirmNewPassword)}</Text>}
 
           <View style={styles.buttonGroup}>
-            <Button title="Change Password" onPress={handleSubmitPassword(handleChangePassword)} />
-            <Button title="Cancel" onPress={togglePasswordModal} color="red" />
+            <Button title={t('changePassword')} onPress={handleSubmitPassword(handleChangePassword)} />
+            <Button title={t('cancel')} onPress={togglePasswordModal} color="red" />
           </View>
         </View>
       </Modal>

@@ -9,6 +9,7 @@ import IsNotClickedHeart from '../../assets/categories/IsNotClickedHeart.png';
 // @ts-ignore
 import ArrowLeftBlueColor from '../../assets/svg/arrowLeftBlueColor.svg';
 import { CustomButton } from '../../components';
+import { useTranslation } from 'react-i18next';
 
 const reviews = [
   {
@@ -18,6 +19,7 @@ const reviews = [
     rating: 4.2,
     likes: 760,
     date: '2 Weeks Ago',
+    image:'https://imgs.search.brave.com/QNuHtKPVBWNcY-g4Xu-6830byfWvLIFPQvp_H1Jsb1A/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly9pbWcu/ZnJlZXBpay5jb20v/cHJlbWl1bS1waG90/by9wb3J0cmFpdC1z/bWlsaW5nLXlvdW5n/LW1hbl8xMDQ4OTQ0/LTE0MzA1ODQ3Lmpw/Zw'
   },
   {
     id: '2',
@@ -26,6 +28,7 @@ const reviews = [
     rating: 4.8,
     likes: 918,
     date: '2 Weeks Ago',
+    image:'https://imgs.search.brave.com/QNuHtKPVBWNcY-g4Xu-6830byfWvLIFPQvp_H1Jsb1A/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly9pbWcu/ZnJlZXBpay5jb20v/cHJlbWl1bS1waG90/by9wb3J0cmFpdC1z/bWlsaW5nLXlvdW5n/LW1hbl8xMDQ4OTQ0/LTE0MzA1ODQ3Lmpw/Zw'
   },
   {
     id: '3',
@@ -34,6 +37,7 @@ const reviews = [
     rating: 4.6,
     likes: 914,
     date: '2 Weeks Ago',
+    image:'https://imgs.search.brave.com/QNuHtKPVBWNcY-g4Xu-6830byfWvLIFPQvp_H1Jsb1A/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly9pbWcu/ZnJlZXBpay5jb20v/cHJlbWl1bS1waG90/by9wb3J0cmFpdC1z/bWlsaW5nLXlvdW5n/LW1hbl8xMDQ4OTQ0/LTE0MzA1ODQ3Lmpw/Zw'
   },
   {
     id: '4',
@@ -42,15 +46,11 @@ const reviews = [
     rating: 4.8,
     likes: 0,
     date: '2 Weeks Ago',
+    image:'https://imgs.search.brave.com/QNuHtKPVBWNcY-g4Xu-6830byfWvLIFPQvp_H1Jsb1A/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly9pbWcu/ZnJlZXBpay5jb20v/cHJlbWl1bS1waG90/by9wb3J0cmFpdC1z/bWlsaW5nLXlvdW5n/LW1hbl8xMDQ4OTQ0/LTE0MzA1ODQ3Lmpw/Zw'
   },
 ];
 
-const levels = [
-  'Excellent',
-  'Good',
-  'Average',
-  'BelowAverage',
-];
+const levels = ['Excellent', 'Good', 'Average', 'BelowAverage'];
 
 const levelRatingRanges: { [key: string]: [number, number] } = {
   Excellent: [4.5, 5],
@@ -70,6 +70,8 @@ export const ReviewCourse: FC<ScreenProps<'ReviewCourse'>> = ({ navigation }) =>
     });
     return initialLikeCounts;
   });
+
+  const { t } = useTranslation();
 
   const handlePressLevel = (level: string) => {
     setSelectedLevel(level);
@@ -97,7 +99,7 @@ export const ReviewCourse: FC<ScreenProps<'ReviewCourse'>> = ({ navigation }) =>
       <View style={styles.reviewHeader}>
         <Image 
           style={styles.profileImage} 
-          source={{ uri: 'https://imgs.search.brave.com/QNuHtKPVBWNcY-g4Xu-6830byfWvLIFPQvp_H1Jsb1A/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly9pbWcu/ZnJlZXBpay5jb20v/cHJlbWl1bS1waG90/by9wb3J0cmFpdC1z/bWlsaW5nLXlvdW5n/LW1hbl8xMDQ4OTQ0/LTE0MzA1ODQ3Lmpw/Zw' }} />
+          source={{ uri: item.image }} />
         <Text style={styles.name}>{item.name}</Text>
         <View style={styles.rating}>
           <Rating
@@ -147,7 +149,7 @@ export const ReviewCourse: FC<ScreenProps<'ReviewCourse'>> = ({ navigation }) =>
             onPress={() => handlePressLevel(level)}
             style={[styles.levelButton, selectedLevel === level && styles.selectedLevelButton]}
           >
-            <Text style={[styles.levelText, selectedLevel === level && styles.selectedLevelText]}>{level}</Text>
+            <Text style={[styles.levelText, selectedLevel === level && styles.selectedLevelText]}>{t(level)}</Text>
           </TouchableOpacity>
         ))}
       </ScrollView>
@@ -161,7 +163,7 @@ export const ReviewCourse: FC<ScreenProps<'ReviewCourse'>> = ({ navigation }) =>
       <CustomButton
         pressEvent={() => { navigation.navigate('WriteReview') }}
         icon={<ArrowLeftBlueColor />}
-        text="Write a Review"
+        text={t('writeReview')}
       />
     </ScrollView>
   );

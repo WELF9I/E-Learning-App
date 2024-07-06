@@ -5,21 +5,22 @@ import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as ImagePicker from 'react-native-image-picker';
 import { ScreenProps } from '../../types';
+import { useTranslation } from 'react-i18next';
 //@ts-ignore
 import UploadFileIcon from '../../assets/svg/Upload-Files.svg';
 //@ts-ignore
 import ArrowLeftBlueColor from '../../assets/svg/arrowLeftBlueColor.svg';
-
 import { CustomButton } from '../../components';
 
-const schema = yup.object().shape({
-  review: yup.string().max(250, 'Maximum 250 characters allowed'),
-});
-
 export const WriteReview: FC<ScreenProps<'WriteReview'>> = ({ navigation }) => {
+  const { t } = useTranslation();
   const [imageUri, setImageUri] = useState<string | null>(null);
   const { control, handleSubmit, formState: { errors } } = useForm({
-    resolver: yupResolver(schema),
+    resolver: yupResolver(
+      yup.object().shape({
+        review: yup.string().max(250, t('maxCharacters')),
+      })
+    ),
   });
 
   const onSubmit = (data: any) => {
@@ -51,25 +52,25 @@ export const WriteReview: FC<ScreenProps<'WriteReview'>> = ({ navigation }) => {
         <View style={styles.productInfo}>
           <View style={styles.imagePlaceholder}></View>
           <View>
-            <Text style={styles.productTitle}>Graphic Design</Text>
-            <Text style={styles.productDescription}>Setup your Graphic Design</Text>
+            <Text style={styles.productTitle}>{t('productTitle')}</Text>
+            <Text style={styles.productDescription}>{t('productDescription')}</Text>
           </View>
         </View>
       </View>
 
-      <Text style={styles.label}>Add Photo</Text>
+      <Text style={styles.label}>{t('addPhoto')}</Text>
       <TouchableOpacity style={styles.imageUpload} onPress={pickImage}>
         {imageUri ? (
           <Image source={{ uri: imageUri }} style={styles.uploadedImage} />
         ) : (
           <View style={styles.uploadContent}>
             <UploadFileIcon width={40} height={40} />
-            <Text style={styles.uploadText}>Click here to Upload</Text>
+            <Text style={styles.uploadText}>{t('clickToUpload')}</Text>
           </View>
         )}
       </TouchableOpacity>
 
-      <Text style={styles.label}>Write your Review</Text>
+      <Text style={styles.label}>{t('writeReview')}</Text>
       <Controller
         control={control}
         name="review"
@@ -80,7 +81,7 @@ export const WriteReview: FC<ScreenProps<'WriteReview'>> = ({ navigation }) => {
             onBlur={onBlur}
             onChangeText={onChange}
             value={value}
-            placeholder="Would you like to write anything about this Product?"
+            placeholder={t('reviewPlaceholder')}
             multiline
             maxLength={250}
           />
@@ -91,7 +92,7 @@ export const WriteReview: FC<ScreenProps<'WriteReview'>> = ({ navigation }) => {
       <CustomButton
         pressEvent={handleSubmit(onSubmit)}
         icon={<ArrowLeftBlueColor />}
-        text="Submit Review"
+        text={t('submitReview')}
       />
     </View>
   );
@@ -112,7 +113,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 8,
     elevation: 5,
-    marginTop:25,
+    marginTop: 25,
     marginBottom: 20,
   },
   productInfo: {
@@ -139,7 +140,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
     marginBottom: 10,
-    color:'#202244'
+    color: '#202244',
   },
   imageUpload: {
     height: 100,
@@ -193,4 +194,3 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
 });
-

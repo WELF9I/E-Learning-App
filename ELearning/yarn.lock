@@ -5163,7 +5163,6 @@ __metadata:
     react-native-biometrics: ^3.0.1
     react-native-elements: ^3.4.3
     react-native-gesture-handler: ^2.17.1
-    react-native-i18n: ^2.0.15
     react-native-image-picker: ^7.1.2
     react-native-keychain: ^8.2.0
     react-native-modal: ^13.0.1
@@ -7878,13 +7877,6 @@ __metadata:
   version: 1.1.0
   resolution: "hyphenate-style-name@npm:1.1.0"
   checksum: b9ed74e29181d96bd58a2d0e62fc4a19879db591dba268275829ff0ae595fcdf11faafaeaa63330a45c3004664d7db1f0fc7cdb372af8ee4615ed8260302c207
-  languageName: node
-  linkType: hard
-
-"i18n-js@npm:3.0.11":
-  version: 3.0.11
-  resolution: "i18n-js@npm:3.0.11"
-  checksum: 2fe94bf00f507068a3e9ac632a93d10d9aa7d254bbec33108311f0ee992a9d262fc68b4e48fd14d5fcffc539f6e58d78bfff24252266ebfd493df09618b440f4
   languageName: node
   linkType: hard
 
@@ -10892,15 +10884,6 @@ __metadata:
     react: "*"
     react-native: "*"
   checksum: 70da4fc51d92899591aadf03396a8e0b78223fbe71da5b10e76232058c1ef5943d54c1dd8da815d5b6a8b41f259ea9d50457680e2ef7878c88d7396771170ae3
-  languageName: node
-  linkType: hard
-
-"react-native-i18n@npm:^2.0.15":
-  version: 2.0.15
-  resolution: "react-native-i18n@npm:2.0.15"
-  dependencies:
-    i18n-js: 3.0.11
-  checksum: 8ea3500556c6a55a8e3a0fc838217a9d27bf541e2d6d9cefe5293889859af8fb494d1b8b25de7e80f6086023128814af9b22b6636aa2733443ae1c7118338420
   languageName: node
   linkType: hard
 

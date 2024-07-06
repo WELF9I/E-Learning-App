@@ -48,25 +48,24 @@ import ArrowLeftBlueColor from '../../assets/svg/arrowLeftBlueColor.svg';
 import { useTheme } from '../../utils/ThemeContext';
 import { useTranslation } from 'react-i18next';
 
-
-
 export const EditStudentProfile: FC<ScreenProps<'EditStudentProfile'>> = ({ navigation }) => {
   const [showDatePicker, setShowDatePicker] = useState(false);
   const { isDarkMode, toggleDarkMode } = useTheme();
   const [date, setDate] = useState(new Date());
   const [avatarUri, setAvatarUri] = useState<string | null>(null);
-  const { t } = useTranslation(); // Utilisation de useTranslation pour les traductions
-  
+  const { t } = useTranslation();
+
   const schema = z.object({
-    fullName: z.string().nonempty({ message: 'Full name is required' }),
-    nickName: z.string().nonempty({ message: 'Nick name is required' }),
+    fullName: z.string().nonempty({ message: t('errors.fullNameRequired') }),
+    nickName: z.string().nonempty({ message: t('errors.nickNameRequired') }),
     birthDay: z.date().refine(date => date <= new Date(), {
-      message: 'Birth day must be in the past',
+      message: t('errors.birthDayPast'),
     }),
-    email: z.string().email({ message: 'Invalid email address' }),
-    phoneNumber: z.string().min(8, { message: 'Invalid phone number' }),
+    email: z.string().email({ message: t('errors.invalidEmail') }),
+    phoneNumber: z.string().min(8, { message: t('errors.invalidPhoneNumber') }),
     gender: z.nativeEnum(EGENDER),
   });
+
   const {
     control,
     handleSubmit,
