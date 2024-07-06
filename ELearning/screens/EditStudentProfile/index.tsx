@@ -46,24 +46,27 @@ import { CustomButton } from '../../components/CustomButton';
 // @ts-ignore
 import ArrowLeftBlueColor from '../../assets/svg/arrowLeftBlueColor.svg';
 import { useTheme } from '../../utils/ThemeContext';
+import { useTranslation } from 'react-i18next';
 
-const schema = z.object({
-  fullName: z.string().nonempty({ message: 'Full name is required' }),
-  nickName: z.string().nonempty({ message: 'Nick name is required' }),
-  birthDay: z.date().refine(date => date <= new Date(), {
-    message: 'Birth day must be in the past',
-  }),
-  email: z.string().email({ message: 'Invalid email address' }),
-  phoneNumber: z.string().min(8, { message: 'Invalid phone number' }),
-  gender: z.nativeEnum(EGENDER),
-});
+
 
 export const EditStudentProfile: FC<ScreenProps<'EditStudentProfile'>> = ({ navigation }) => {
   const [showDatePicker, setShowDatePicker] = useState(false);
   const { isDarkMode, toggleDarkMode } = useTheme();
   const [date, setDate] = useState(new Date());
   const [avatarUri, setAvatarUri] = useState<string | null>(null);
+  const { t } = useTranslation(); // Utilisation de useTranslation pour les traductions
   
+  const schema = z.object({
+    fullName: z.string().nonempty({ message: 'Full name is required' }),
+    nickName: z.string().nonempty({ message: 'Nick name is required' }),
+    birthDay: z.date().refine(date => date <= new Date(), {
+      message: 'Birth day must be in the past',
+    }),
+    email: z.string().email({ message: 'Invalid email address' }),
+    phoneNumber: z.string().min(8, { message: 'Invalid phone number' }),
+    gender: z.nativeEnum(EGENDER),
+  });
   const {
     control,
     handleSubmit,
@@ -88,7 +91,6 @@ export const EditStudentProfile: FC<ScreenProps<'EditStudentProfile'>> = ({ navi
     const currentDate = selectedDate || date;
     setShowDatePicker(Platform.OS === 'ios');
     setDate(currentDate);
-    //@ts-ignore
     control.setValue('birthDay', currentDate);
   };
 
@@ -140,7 +142,7 @@ export const EditStudentProfile: FC<ScreenProps<'EditStudentProfile'>> = ({ navi
                 maxHeight={'$16'}
                 borderColor={isDarkMode ? "$gray" : "$white"}>
                 <InputField
-                  placeholder="Full name"
+                  placeholder={t('fullNamePlaceholder')}
                   onBlur={onBlur}
                   onChangeText={onChange}
                   value={value}
@@ -166,7 +168,7 @@ export const EditStudentProfile: FC<ScreenProps<'EditStudentProfile'>> = ({ navi
                 maxHeight={'$16'}
                 borderColor={isDarkMode ? "$gray" : "$white"}>
                 <InputField
-                  placeholder="Nick name"
+                  placeholder={t('nickNamePlaceholder')}
                   onBlur={onBlur}
                   onChangeText={onChange}
                   value={value}
@@ -198,7 +200,7 @@ export const EditStudentProfile: FC<ScreenProps<'EditStudentProfile'>> = ({ navi
                   <CalendarDaysIcon mr={10} />
                   <FormControlLabel>
                     <FormControlLabelText color={isDarkMode ? "$white" : "$backgroundLight400"}>
-                      {value ? value.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) : 'Date of birth'}
+                      {value ? value.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) : t('dateOfBirthPlaceholder')}
                     </FormControlLabelText>
                   </FormControlLabel>
                 </Button>
@@ -239,7 +241,7 @@ export const EditStudentProfile: FC<ScreenProps<'EditStudentProfile'>> = ({ navi
                   </InputIcon>
                 </InputSlot>
                 <InputField
-                  placeholder="Email"
+                  placeholder={t('emailPlaceholder')}
                   onBlur={onBlur}
                   onChangeText={onChange}
                   value={value}
@@ -296,7 +298,7 @@ export const EditStudentProfile: FC<ScreenProps<'EditStudentProfile'>> = ({ navi
                   size="lg"
                   borderColor={isDarkMode ? "$gray" : "$white"}
                   rounded={'$lg'}>
-                  <SelectInput placeholder="Select Gender" />
+                  <SelectInput placeholder={t('selectGenderPlaceholder')} />
                   <SelectIcon>
                     <Icon as={ChevronDownIcon} />
                   </SelectIcon>
@@ -308,7 +310,7 @@ export const EditStudentProfile: FC<ScreenProps<'EditStudentProfile'>> = ({ navi
                       <SelectDragIndicator />
                     </SelectDragIndicatorWrapper>
                     {Object.values(EGENDER).map(key => (
-                      <SelectItem key={key} label={key} value={key} />
+                      <SelectItem key={key} label={t(key)} value={key} />
                     ))}
                   </SelectContent>
                 </SelectPortal>
@@ -320,7 +322,7 @@ export const EditStudentProfile: FC<ScreenProps<'EditStudentProfile'>> = ({ navi
         <CustomButton
           pressEvent={handleSubmit(onSubmit)}
           icon={<ArrowLeftBlueColor />}
-          text="Update"
+          text={t('updateButton')}
         />
       </VStack>
     </View>

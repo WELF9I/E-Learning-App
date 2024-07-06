@@ -41,29 +41,31 @@ import { Avatar, AvatarFallbackText, Center, Image } from '@gluestack-ui/themed'
 import { Footer } from '../Footer'; 
 import { useTheme } from '../../utils/ThemeContext';
 import { ScreenProps } from '../../types';
+import { useTranslation } from 'react-i18next';
 
 export const Profile: FC<ScreenProps<'Profile'>> = ({ navigation }) => {
+  const { t } = useTranslation();
   const [avatarUri, setAvatarUri] = useState<string | null>(null);
   const { isDarkMode, toggleDarkMode } = useTheme();
 
   const getIcon = (name: string) => {
     switch (name) {
-      case 'Edit Profile':
+      case t('EditProfile'):
         return isDarkMode ? <EditProfileLight /> : <EditProfileIcon />;
-      case 'Payment Option':
+      case t('PaymentOption'):
         return isDarkMode ? <PaymentLight /> : <PaymentIcon />;
-      case 'Notifications':
+      case t('Notifications'):
         return isDarkMode ? <NotificationLight /> : <NotificationIcon />;
-      case 'Security':
+      case t('Security'):
         return isDarkMode ? <SecurityLight /> : <SecurityIcon />;
-      case 'Language':
+      case t('Language'):
         return isDarkMode ? <LanguageLight /> : <TraductionIcon />;
-      case 'Dark Mode':
-      case 'Light Mode':
+      case t('DarkMode'):
+      case t('LightMode'):
         return isDarkMode ? <DarkModeSwitcher /> : <DarkModeIcon />;
-      case 'Terms & Conditions':
+      case t('TermsConditions'):
         return isDarkMode ? <TermsLight /> : <TermsIcon />;
-      case 'Logout':
+      case t('Logout'):
         return isDarkMode ? <LogoutLight /> : <LogoutIcon />;
       default:
         return null;
@@ -71,15 +73,15 @@ export const Profile: FC<ScreenProps<'Profile'>> = ({ navigation }) => {
   };
 
   const menuItems = [
-    { title: 'Edit Profile', onPress: () => navigation.navigate('EditStudentProfile') },
-    { title: 'Payment Option', onPress: () => navigation.navigate('PaymentOption') },
-    { title: 'Notifications', onPress: () => navigation.navigate('NotificationSettings') },
-    { title: 'Security', onPress: () => navigation.navigate('SecurityOption') },
-    { title: 'Language', onPress: () => navigation.navigate('LanguageSettings') },
+    { title: t('EditProfile'), onPress: () => navigation.navigate('EditStudentProfile') },
+    { title: t('PaymentOption'), onPress: () => navigation.navigate('PaymentOption') },
+    { title: t('Notifications'), onPress: () => navigation.navigate('NotificationSettings') },
+    { title: t('Security'), onPress: () => navigation.navigate('SecurityOption') },
+    { title: t('Language'), onPress: () => navigation.navigate('LanguageSettings') },
     //@ts-ignore
-    { title: isDarkMode ? 'Dark Mode' : 'Light Mode', onPress: () => toggleDarkMode() },
-    { title: 'Terms & Conditions', onPress: () => navigation.navigate('Terms') },
-    { title: 'Logout', onPress: () => navigation.navigate('SignIn') },
+    { title: isDarkMode ? t('DarkMode') : t('LightMode'), onPress: () => toggleDarkMode() },
+    { title: t('TermsConditions'), onPress: () => navigation.navigate('Terms') },
+    { title: t('Logout'), onPress: () => navigation.navigate('SignIn') },
   ];
 
   return (
@@ -147,5 +149,3 @@ const styles = StyleSheet.create({
     marginLeft: 12,
   },
 });
-
-export default Profile;

@@ -190,7 +190,7 @@ export const ApplicationNavigator: FC = (): JSX.Element => {
 
         
 
-          {/* <Stack.Screen
+          <Stack.Screen
           options={{
             headerTitle(props:any) {
               return (
@@ -300,7 +300,7 @@ export const ApplicationNavigator: FC = (): JSX.Element => {
           }}
           name="Footer"
           component={Footer}
-        />  */}
+        />  
 
          {/* <Stack.Screen
           options={{
@@ -412,9 +412,9 @@ export const ApplicationNavigator: FC = (): JSX.Element => {
           }}
           name="WriteReview"
           component={WriteReview}
-        />   */}
+        />    */}
 
-          <Stack.Screen
+          {/* <Stack.Screen
             options={{
             headerTitle(props:any) {
               return (
@@ -426,7 +426,7 @@ export const ApplicationNavigator: FC = (): JSX.Element => {
           }}
           name="PaymentMethods"
           component={PaymentMethods}
-        /> 
+        />  */}
 
       </Stack.Group>
     </Stack.Navigator>

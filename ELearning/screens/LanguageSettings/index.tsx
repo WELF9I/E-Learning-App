@@ -3,54 +3,57 @@ import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { ScreenProps } from '../../types';
 import { Checkbox, CheckboxIcon, CheckboxIndicator, CheckIcon } from '@gluestack-ui/themed';
 import { useTheme } from '../../utils/ThemeContext';
+import i18next from 'i18next';
+import { useTranslation } from 'react-i18next';
 
 export const LanguageSettings: FC<ScreenProps<'LanguageSettings'>> = ({ navigation }) => {
+  const { t } = useTranslation();
   const [selectedLanguage, setSelectedLanguage] = useState('en');
-  const { isDarkMode, toggleDarkMode } = useTheme();
+  const { isDarkMode } = useTheme();
 
   const languages = [
-    { code: 'en', label: 'English (US)', subCategory: true },
-    { code: 'fr', label: 'French', subCategory: true },
-    { code: 'ar', label: 'Arabic' },
+    { code: 'en', label: t('English'), subCategory: true },
+    { code: 'fr', label: t('French'), subCategory: true },
+    { code: 'ar', label: t('Arabic') },
   ];
 
   const handleLanguageChange = (code: string) => {
     setSelectedLanguage(code);
+    i18next.changeLanguage(code); // Update the language in i18next
   };
 
   return (
-    <View style={[styles.container,{ backgroundColor: isDarkMode ? '#333' : '#fff' }]}>
-
-      <Text style={[styles.subCategory,{color:isDarkMode?'#FFF':'#202244'}]}>SubCategories:</Text>
+    <View style={[styles.container, { backgroundColor: isDarkMode ? '#333' : '#fff' }]}>
+      <Text style={[styles.subCategory, { color: isDarkMode ? '#FFF' : '#202244' }]}>{t("SubCategories")}</Text>
       <ScrollView showsVerticalScrollIndicator={false}>
         {languages.filter(lang => lang.subCategory).map(lang => (
-          <View key={lang.code} style={[styles.languageRow,{backgroundColor:isDarkMode?'#D0D0D0':'#FFF'}]}>
+          <View key={lang.code} style={[styles.languageRow, { backgroundColor: isDarkMode ? '#D0D0D0' : '#FFF' }]}>
             <Text style={styles.languageLabel}>{lang.label}</Text>
             <Checkbox
               value={lang.label}
               isChecked={selectedLanguage === lang.code}
               onChange={() => handleLanguageChange(lang.code)}
-              
+              aria-label={`Select ${lang.label}`}
             >
-            <CheckboxIndicator mr="$2">
+              <CheckboxIndicator mr="$2">
                 <CheckboxIcon as={CheckIcon} />
-            </CheckboxIndicator>
+              </CheckboxIndicator>
             </Checkbox>
           </View>
         ))}
-
-        <Text style={[styles.subCategory,{color:isDarkMode?'#FFF':'#202244'}]}>All Languages:</Text>
+        <Text style={[styles.subCategory, { color: isDarkMode ? '#FFF' : '#202244' }]}>{t('AllLanguages')}:</Text>
         {languages.map(lang => (
-          <View key={lang.code} style={[styles.languageRow,{backgroundColor:isDarkMode?'#D0D0D0':'#FFF'}]}>
+          <View key={lang.code} style={[styles.languageRow, { backgroundColor: isDarkMode ? '#D0D0D0' : '#FFF' }]}>
             <Text style={styles.languageLabel}>{lang.label}</Text>
             <Checkbox
               value={lang.label}
               isChecked={selectedLanguage === lang.code}
               onChange={() => handleLanguageChange(lang.code)}
+              aria-label={`Select ${lang.label}`}
             >
-                <CheckboxIndicator mr="$2">
-                    <CheckboxIcon as={CheckIcon} />
-                </CheckboxIndicator>
+              <CheckboxIndicator mr="$2">
+                <CheckboxIcon as={CheckIcon} />
+              </CheckboxIndicator>
             </Checkbox>
           </View>
         ))}
@@ -95,5 +98,3 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
 });
-
-export default LanguageSettings;

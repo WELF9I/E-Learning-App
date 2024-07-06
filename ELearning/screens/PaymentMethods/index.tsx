@@ -6,15 +6,35 @@ import { CustomButton, EventModal } from '../../components';
 //@ts-ignore
 import ArrowLeftBlueColor from '../../assets/svg/arrowLeftBlueColor.svg';
 //@ts-ignore
-import PaymentSuccessIcon from '../../assets/svg/PaymentSuccess.svg'; 
+import PaymentSuccessIcon from '../../assets/svg/PaymentSuccess.svg';
+//@ts-ignore
+import PaypalIcon from '../../assets/svg/PayPal-icon.svg';
+//@ts-ignore
+import VisaIcon from '../../assets/svg/Visa-icon.svg';
+//@ts-ignore
+import GooglePayIcon from '../../assets/svg/GooglePay-icon.svg';
+//@ts-ignore
+import ApplePayIcon from '../../assets/svg/ApplePay-icon.svg';
+
 import { Heading, VStack } from '@gluestack-ui/themed';
+
+const PaymentIcons = {
+  paypal: <PaypalIcon />,
+  'google pay': <GooglePayIcon />,
+  'apple pay': <ApplePayIcon />,
+  '**** **** **** 3054': <VisaIcon />,
+};
+
+const getPaymentIcon = (method: string) => {
+  //@ts-ignore
+  return PaymentIcons[method.toLowerCase()] || null;
+};
 
 export const PaymentMethods: FC<ScreenProps<'PaymentMethods'>> = ({ navigation }) => {
   const [selectedMethod, setSelectedMethod] = useState('card');
-  // Load with logic backend
   const [PaymentList, setPaymentList] = useState(['Paypal', 'Google Pay', 'Apple Pay', '**** **** **** 3054']);
   const [modalVisible, setModalVisible] = useState(false);
-  
+
   const onSubmit = (data: any) => {
     console.log(data);
     setModalVisible(true);
@@ -36,6 +56,7 @@ export const PaymentMethods: FC<ScreenProps<'PaymentMethods'>> = ({ navigation }
           style={styles.paymentOption}
           onPress={() => setSelectedMethod(method.toLowerCase())}
         >
+          {getPaymentIcon(method)}
           <Text style={styles.paymentText}>{method}</Text>
           <RadioButton
             value={method.toLowerCase()}
@@ -96,7 +117,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 3,
-    height:100
+    height: 100,
   },
   cardImage: {
     width: 50,
@@ -139,9 +160,9 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#202244',
   },
-  LinkCourse:{
-    textDecorationLine:'underline',
-    color:'#167F71',
-    fontWeight:'bold'
-  }
+  LinkCourse: {
+    textDecorationLine: 'underline',
+    color: '#167F71',
+    fontWeight: 'bold',
+  },
 });

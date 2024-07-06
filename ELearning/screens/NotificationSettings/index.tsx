@@ -1,10 +1,12 @@
-import React, { useState,FC } from 'react';
+import React, { useState, FC } from 'react';
 import { View, Text, Switch, StyleSheet } from 'react-native';
 import { ScreenProps } from '../../types';
 import { useTheme } from '../../utils/ThemeContext';
+import { useTranslation } from 'react-i18next';
 
-export const NotificationSettings : FC<ScreenProps<'NotificationSettings'>> = ({navigation}) => {
-  const { isDarkMode, toggleDarkMode } = useTheme();
+export const NotificationSettings: FC<ScreenProps<'NotificationSettings'>> = ({ navigation }) => {
+  const { isDarkMode } = useTheme();
+  const { t } = useTranslation();
   const [settings, setSettings] = useState({
     specialOffers: true,
     sound: true,
@@ -17,16 +19,16 @@ export const NotificationSettings : FC<ScreenProps<'NotificationSettings'>> = ({
     newTips: false,
   });
 
-  const toggleSwitch = (key:any) => {
+  const toggleSwitch = (key: string) => {
     //@ts-ignore
     setSettings({ ...settings, [key]: !settings[key] });
   };
 
   return (
-    <View style={[styles.container,{backgroundColor: isDarkMode ? '#333' : '#f9fafb' }]}>
+    <View style={[styles.container, { backgroundColor: isDarkMode ? '#333' : '#f9fafb' }]}>
       {Object.keys(settings).map((key) => (
-        <View key={key} style={styles.settingRow}>
-          <Text style={[styles.settingText,{color:isDarkMode?'#FFF':'#202244'}]}>{getSettingLabel(key)}</Text>
+        <View key={t(key)} style={styles.settingRow}>
+          <Text style={[styles.settingText, { color: isDarkMode ? '#FFF' : '#202244' }]}>{t(key)}</Text>
           <Switch
             trackColor={{ false: '#767577', true: '#b5d2ff' }}
             //@ts-ignore
@@ -41,40 +43,14 @@ export const NotificationSettings : FC<ScreenProps<'NotificationSettings'>> = ({
   );
 };
 
-const getSettingLabel = (key:String) => {
-  switch (key) {
-    case 'specialOffers':
-      return 'Special Offers';
-    case 'sound':
-      return 'Sound';
-    case 'vibrate':
-      return 'Vibrate';
-    case 'generalNotification':
-      return 'General Notification';
-    case 'promoDiscount':
-      return 'Promo & Discount';
-    case 'paymentOptions':
-      return 'Payment Options';
-    case 'appUpdate':
-      return 'App Update';
-    case 'newService':
-      return 'New Service Available';
-    case 'newTips':
-      return 'New Tips Available';
-    default:
-      return '';
-  }
-};
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
     backgroundColor: '#f0f0f0',
     marginVertical: 15,
-    marginBottom:0,
-    marginTop:0
-    
+    marginBottom: 0,
+    marginTop: 0,
   },
   settingRow: {
     flexDirection: 'row',
@@ -84,7 +60,6 @@ const styles = StyleSheet.create({
   },
   settingText: {
     fontSize: 18,
-    color:'#202244'
+    color: '#202244',
   },
 });
-

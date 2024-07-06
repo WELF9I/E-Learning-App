@@ -57,7 +57,7 @@ export const WriteReview: FC<ScreenProps<'WriteReview'>> = ({ navigation }) => {
         </View>
       </View>
 
-      <Text style={styles.label}>Add Photo (or) Video</Text>
+      <Text style={styles.label}>Add Photo</Text>
       <TouchableOpacity style={styles.imageUpload} onPress={pickImage}>
         {imageUri ? (
           <Image source={{ uri: imageUri }} style={styles.uploadedImage} />

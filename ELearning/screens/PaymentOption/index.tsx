@@ -7,24 +7,25 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { ScreenProps } from '../../types';
 import { CustomButton } from '../../components';
 import { useTheme } from '../../utils/ThemeContext';
+import { useTranslation } from 'react-i18next';
 // @ts-ignore
 import ArrowLeftBlueColor from '../../assets/svg/arrowLeftBlueColor.svg';
 //@ts-ignore
 import Card from '../../assets/svg/CARD.svg';
 
 const cardSchema = z.object({
-  cardName: z.string().min(1, 'Card Name is required').regex(/^[a-zA-Z ]+$/, 'Card Name can only contain letters and spaces'),
-  cardNumber: z.string().min(16, 'Card Number must be 16 digits').regex(/^\d{16}$/, 'Card Number must be 16 digits'),
-  expiryDate: z.string().regex(/^(0[1-9]|1[0-2])\/([0-9]{2})$/, 'Expiry Date must be in MM/YY format'),
-  cvv: z.string().min(3, 'CVV must be 3 digits').max(3, 'CVV must be 3 digits').regex(/^\d{3}$/, 'CVV must be 3 digits'),
+  cardName: z.string().min(1, 'CardNameError').regex(/^[a-zA-Z ]+$/, 'CardNameError'),
+  cardNumber: z.string().min(16, 'CardNumberError').regex(/^\d{16}$/, 'CardNumberError'),
+  expiryDate: z.string().regex(/^(0[1-9]|1[0-2])\/([0-9]{2})$/, 'ExpiryDateError'),
+  cvv: z.string().min(3, 'CVVError').max(3, 'CVVError').regex(/^\d{3}$/, 'CVVError'),
 });
 
 export const PaymentOption: FC<ScreenProps<'PaymentOption'>> = ({ navigation }) => {
-
+  const { t } = useTranslation();
   const [isModalVisible, setModalVisible] = useState(false);
-  const { isDarkMode, toggleDarkMode } = useTheme();
+  const { isDarkMode } = useTheme();
   const [cards, setCards] = useState([
-    { id: '1', cardNumber: '**** **** **** 3054', status: 'Connected' },
+    { id: '1', cardNumber: '**** **** **** 3054', status: t('Connected') },
   ]);
 
   const { control, handleSubmit, formState: { errors } } = useForm({
@@ -33,7 +34,7 @@ export const PaymentOption: FC<ScreenProps<'PaymentOption'>> = ({ navigation }) 
 
   const getErrorMessage = (error: any) => {
     if (error) {
-      return error.message;
+      return t(error.message);
     }
     return '';
   };
@@ -44,13 +45,13 @@ export const PaymentOption: FC<ScreenProps<'PaymentOption'>> = ({ navigation }) 
 
   const handleAddCard = (data: any) => {
     const maskedCardNumber = `**** **** **** ${data.cardNumber.slice(-4)}`;
-    const newCard = { id: (cards.length + 1).toString(), cardNumber: maskedCardNumber, status: 'Connected' };
+    const newCard = { id: (cards.length + 1).toString(), cardNumber: maskedCardNumber, status: t('Connected') };
     setCards([...cards, newCard]);
     toggleModal();
   };
 
   return (
-    <View style={[styles.container,{ backgroundColor: isDarkMode ? '#333' : '#f9fafb' }]}>
+    <View style={[styles.container, { backgroundColor: isDarkMode ? '#333' : '#f9fafb' }]}>
       <FlatList
         data={cards}
         keyExtractor={(item) => item.id}
@@ -64,11 +65,13 @@ export const PaymentOption: FC<ScreenProps<'PaymentOption'>> = ({ navigation }) 
       <CustomButton
         pressEvent={toggleModal}
         icon={<ArrowLeftBlueColor />}
-        text="Add New Card"
+        text={t('AddNewCard')}
       />
       <Modal isVisible={isModalVisible}>
-        <View style={[styles.modalContent,{ backgroundColor: isDarkMode ? '#333' : '#f9fafb' }]}>
-          <Text style={[styles.modalHeader,{ backgroundColor: isDarkMode ? '#333' : '#f9fafb',color:isDarkMode ? 'white' : '#202244' }]}>Add New Card</Text>
+        <View style={[styles.modalContent, { backgroundColor: isDarkMode ? '#333' : '#f9fafb' }]}>
+          <Text style={[styles.modalHeader, { backgroundColor: isDarkMode ? '#333' : '#f9fafb', color: isDarkMode ? 'white' : '#202244' }]}>
+            {t('AddNewCard')}
+          </Text>
           <Card />
 
           <Controller
@@ -77,7 +80,7 @@ export const PaymentOption: FC<ScreenProps<'PaymentOption'>> = ({ navigation }) 
             render={({ field: { onChange, onBlur, value } }) => (
               <TextInput
                 style={[styles.input, errors.cardName && styles.errorInput]}
-                placeholder="Card Name"
+                placeholder={t('CardName')}
                 onBlur={onBlur}
                 onChangeText={onChange}
                 value={value}
@@ -92,7 +95,7 @@ export const PaymentOption: FC<ScreenProps<'PaymentOption'>> = ({ navigation }) 
             render={({ field: { onChange, onBlur, value } }) => (
               <TextInput
                 style={[styles.input, errors.cardNumber && styles.errorInput]}
-                placeholder="Card Number"
+                placeholder={t('CardNumber')}
                 keyboardType="numeric"
                 onBlur={onBlur}
                 onChangeText={onChange}
@@ -110,7 +113,7 @@ export const PaymentOption: FC<ScreenProps<'PaymentOption'>> = ({ navigation }) 
               render={({ field: { onChange, onBlur, value } }) => (
                 <TextInput
                   style={[styles.input, styles.smallInput, errors.expiryDate && styles.errorInput]}
-                  placeholder="Expiry:(MM/YY)"
+                  placeholder={t('ExpiryDate')}
                   onBlur={onBlur}
                   onChangeText={onChange}
                   value={value}
@@ -124,7 +127,7 @@ export const PaymentOption: FC<ScreenProps<'PaymentOption'>> = ({ navigation }) 
               render={({ field: { onChange, onBlur, value } }) => (
                 <TextInput
                   style={[styles.input, styles.smallInput, errors.cvv && styles.errorInput]}
-                  placeholder="CVV"
+                  placeholder={t('CVV')}
                   onBlur={onBlur}
                   onChangeText={onChange}
                   value={value}
@@ -137,8 +140,8 @@ export const PaymentOption: FC<ScreenProps<'PaymentOption'>> = ({ navigation }) 
           {errors.cvv && <Text style={styles.errorText}>{getErrorMessage(errors.cvv)}</Text>}
 
           <View style={styles.buttonGroup}>
-            <Button title="Add Card" onPress={handleSubmit(handleAddCard)} />
-            <Button title="Cancel" onPress={toggleModal} color="red" />
+            <Button title={t('AddCard')} onPress={handleSubmit(handleAddCard)} />
+            <Button title={t('Cancel')} onPress={toggleModal} color="red" />
           </View>
         </View>
       </Modal>
@@ -158,7 +161,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     width: '60%',
     marginTop: 20,
-    marginBottom:25,
+    marginBottom: 25,
   },
   cardRow: {
     flexDirection: 'row',
@@ -184,14 +187,14 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     justifyContent: 'center',
     alignItems: 'center',
-    width:'95%',
+    width: '95%',
   },
   modalHeader: {
     fontSize: 20,
     color: '#202244',
     fontWeight: 'bold',
     marginBottom: 16,
-    marginTop:20
+    marginTop: 20,
   },
   input: {
     marginBottom: 16,
@@ -200,8 +203,6 @@ const styles = StyleSheet.create({
     padding: 10,
     backgroundColor: '#f9f9f9',
     borderRadius: 8,
-
-    
   },
   smallInput: {
     width: '48%',

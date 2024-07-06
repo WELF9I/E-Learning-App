@@ -1,6 +1,6 @@
 import React, { FC, useState } from 'react';
 import { View, Text, FlatList, StyleSheet, Image, TouchableOpacity, ScrollView } from 'react-native';
-import { Icon, Rating } from 'react-native-elements';
+import { Rating } from 'react-native-elements';
 import { ScreenProps } from '../../types';
 //@ts-ignore
 import IsClickedHeart from '../../assets/categories/IsClickedHeart.png';
@@ -49,8 +49,15 @@ const levels = [
   'Excellent',
   'Good',
   'Average',
-  'Below Average',
+  'BelowAverage',
 ];
+
+const levelRatingRanges: { [key: string]: [number, number] } = {
+  Excellent: [4.5, 5],
+  Good: [3.5, 4.4],
+  Average: [2.5, 3.4],
+  BelowAverage: [0, 2.4],
+};
 
 export const ReviewCourse: FC<ScreenProps<'ReviewCourse'>> = ({ navigation }) => {
   const [selectedLevel, setSelectedLevel] = useState<string>('Excellent');
@@ -58,7 +65,7 @@ export const ReviewCourse: FC<ScreenProps<'ReviewCourse'>> = ({ navigation }) =>
   const [likeCounts, setLikeCounts] = useState<{ [key: string]: number }>(() => {
     const initialLikeCounts = {};
     reviews.forEach(review => {
-        //@ts-ignore
+      //@ts-ignore
       initialLikeCounts[review.id] = review.likes;
     });
     return initialLikeCounts;
@@ -78,13 +85,19 @@ export const ReviewCourse: FC<ScreenProps<'ReviewCourse'>> = ({ navigation }) =>
       [id]: prevCounts[id] + (likeStates[id] ? -1 : 1),
     }));
   };
+
+  const filteredReviews = reviews.filter(review => {
+    const [min, max] = levelRatingRanges[selectedLevel];
+    return review.rating >= min && review.rating <= max;
+  });
+
   //@ts-ignore
   const renderReview = ({ item }) => (
     <View style={styles.reviewCard}>
       <View style={styles.reviewHeader}>
         <Image 
-            style={styles.profileImage} 
-            source={{ uri: 'https://imgs.search.brave.com/QNuHtKPVBWNcY-g4Xu-6830byfWvLIFPQvp_H1Jsb1A/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly9pbWcu/ZnJlZXBpay5jb20v/cHJlbWl1bS1waG90/by9wb3J0cmFpdC1z/bWlsaW5nLXlvdW5n/LW1hbl8xMDQ4OTQ0/LTE0MzA1ODQ3Lmpw/Zw' }} />
+          style={styles.profileImage} 
+          source={{ uri: 'https://imgs.search.brave.com/QNuHtKPVBWNcY-g4Xu-6830byfWvLIFPQvp_H1Jsb1A/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly9pbWcu/ZnJlZXBpay5jb20v/cHJlbWl1bS1waG90/by9wb3J0cmFpdC1z/bWlsaW5nLXlvdW5n/LW1hbl8xMDQ4OTQ0/LTE0MzA1ODQ3Lmpw/Zw' }} />
         <Text style={styles.name}>{item.name}</Text>
         <View style={styles.rating}>
           <Rating
@@ -105,7 +118,7 @@ export const ReviewCourse: FC<ScreenProps<'ReviewCourse'>> = ({ navigation }) =>
               style={styles.heartIcon}
             />
           </TouchableOpacity>
-          <Text style={{marginLeft: 6}}>{likeCounts[item.id]}</Text>
+          <Text style={{ marginLeft: 6 }}>{likeCounts[item.id]}</Text>
         </View>
         <Text style={styles.date}>{item.date}</Text>
       </View>
@@ -125,7 +138,7 @@ export const ReviewCourse: FC<ScreenProps<'ReviewCourse'>> = ({ navigation }) =>
         />
         <Text style={styles.reviewsCount}>Based on 448 Reviews</Text>
       </View>
-      
+
       {/* Levels */}
       <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.levelContainer}>
         {levels.map((level) => (
@@ -140,18 +153,17 @@ export const ReviewCourse: FC<ScreenProps<'ReviewCourse'>> = ({ navigation }) =>
       </ScrollView>
 
       <FlatList
-        data={reviews}
+        data={filteredReviews}
         renderItem={renderReview}
         keyExtractor={item => item.id}
         contentContainerStyle={styles.flatListContent}
       />
-       <CustomButton
-        pressEvent={()=>{navigation.navigate('WriteReview')}}
+      <CustomButton
+        pressEvent={() => { navigation.navigate('WriteReview') }}
         icon={<ArrowLeftBlueColor />}
         text="Write a Review"
       />
     </ScrollView>
-    
   );
 };
 
@@ -222,7 +234,7 @@ const styles = StyleSheet.create({
   name: {
     fontSize: 16,
     fontWeight: 'bold',
-    color:'#202244'
+    color: '#202244',
   },
   rating: {
     marginLeft: 'auto',
@@ -240,14 +252,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
-  likesCount: {
-    marginLeft: 4,
-    fontSize: 14,
-  },
   date: {
     fontSize: 14,
     color: '#202244',
-    fontWeight:'bold',
+    fontWeight: 'bold',
   },
   flatListContent: {
     paddingBottom: 16,
