@@ -1,30 +1,51 @@
-import React, { FC, useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import React, { FC, useRef, useState } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import Share from 'react-native-share';
 import RNPrint from 'react-native-print';
 import Clipboard from '@react-native-clipboard/clipboard';
 import QRCode from 'react-native-qrcode-svg';
+import ViewShot, { captureRef } from 'react-native-view-shot';
+import RNFS from 'react-native-fs';
 import { ScreenProps } from '../../types';
-//@ts-ignore
+// @ts-ignore
 import Facture from '../../assets/svg/Facture.svg';
-//@ts-ignore
+// @ts-ignore
 import Copy from '../../assets/svg/Copy.svg';
-//@ts-ignore
+// @ts-ignore
 import BarOption from '../../assets/svg/BarOption.svg';
-//@ts-ignore
+// @ts-ignore
 import Exit from '../../assets/svg/Exit.svg';
-//@ts-ignore
+// @ts-ignore
 import Download from '../../assets/svg/Download.svg';
-//@ts-ignore
+// @ts-ignore
 import Print from '../../assets/svg/Print.svg';
-//@ts-ignore
+// @ts-ignore
 import ShareIcon from '../../assets/svg/Share.svg';
-
 
 export const Receipt: FC<ScreenProps<'Receipt'>> = ({ route, navigation }) => {
   const [isListVisible, setIsListVisible] = useState(false);
-  //@ts-ignore
+  const viewShotRef = useRef<View>(null);
+  // @ts-ignore
   const { transaction } = route.params;
+
+  const ReceiptRef = useRef<View>(null);
+
+  const handleDownloadPDF = async () => {
+    try {
+      const uri = await captureRef(ReceiptRef, {
+        format: 'png',
+        quality: 1,
+      });
+
+      await Share.open({
+        url: uri,
+        title: 'Download Facture',
+        message: 'Here is your Facture.',
+      });
+    } catch (error) {
+      console.error('Error capturing screenshot:', error);
+    }
+  };
 
   const handleToggleList = () => {
     setIsListVisible(!isListVisible);
@@ -43,62 +64,61 @@ export const Receipt: FC<ScreenProps<'Receipt'>> = ({ route, navigation }) => {
 
   const handleDownloadPrint = async () => {
     const detailsHtml = Object.keys(transaction)
-      .filter(key => key !== 'id') // Exclude id
+      .filter(key => key !== 'id')
       .map(key => {
         return `
-        <div style="display: flex; justify-content: space-between; margin-bottom: 8px; width: 80%;">
-          <div style="color: red; font-weight: bold; margin-right: 10px;">${key}:</div>
-          <div>${transaction[key]}</div>
-        </div>`;
+          <div style="display: flex; justify-content: space-between; margin-bottom: 8px; width: 80%;">
+            <div style="color: red; font-weight: bold; margin-right: 10px;">${key}:</div>
+            <div>${transaction[key]}</div>
+          </div>`;
       })
       .join('');
 
     const html = `
-    <html>
-    <head>
-      <style>
-        body {
-          font-family: Arial, sans-serif;
-          padding: 20px;
-          text-align: center;
-        }
-        .container {
-          max-width: 600px;
-          margin: 0 auto;
-        }
-        .facture {
-          text-align: center;
-          margin-bottom: 20px;
-        }
-        .details {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          justify-content: center;
-          margin-top:160px;
-        }
-        h1 {
-          color: black;
-        }
-      </style>
-    </head>
-    <body>
-      <div class="container">
-        <h1>Transaction</h1>
-        <div class="details">
-          ${detailsHtml}
+      <html>
+      <head>
+        <style>
+          body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            text-align: center;
+          }
+          .container {
+            max-width: 600px;
+            margin: 0 auto;
+          }
+          .facture {
+            text-align: center;
+            margin-bottom: 20px;
+          }
+          .details {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin-top:160px;
+          }
+          h1 {
+            color: black;
+          }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <h1>Transaction</h1>
+          <div class="details">
+            ${detailsHtml}
+          </div>
         </div>
-      </div>
-    </body>
-    </html>
+      </body>
+      </html>
     `;
     try {
       await RNPrint.print({ html });
     } catch (error) {
-      console.error('Error downloading:', error);
+      console.error('Error printing:', error);
     }
   };
-
 
   const copyToClipboard = (text: string) => {
     Clipboard.setString(text);
@@ -116,22 +136,21 @@ export const Receipt: FC<ScreenProps<'Receipt'>> = ({ route, navigation }) => {
     { label: 'Status', value: transaction.status, isStatus: true },
   ];
 
-  {/* Backend Logic URL to Generate in PDF */}
   const qrCodeValue = JSON.stringify(transaction);
 
   return (
     <View style={styles.container}>
-      <View style={{ alignItems: 'center', marginTop: '6%' }}>
+    <ViewShot ref={ReceiptRef} style={styles.container}>
+      <View style={{ alignItems: 'center', marginTop: '24%' }}>
         <Facture />
       </View>
-      {/* QR Code Here */}
-      <View style={{marginLeft:130,marginTop:50}}>
-      <QRCode
-        value={qrCodeValue}
-        logo={{uri:'../../assets/LOGO_Telead.png'}}
-        logoSize={30}
-        logoBackgroundColor='transparent'
-      />
+      <View style={{ marginLeft: 130, marginTop: 30 }}>
+        <QRCode
+          value={qrCodeValue}
+          logo={{ uri: '../../assets/LOGO_Telead.png' }}
+          logoSize={30}
+          logoBackgroundColor='transparent'
+        />
       </View>
       <View style={styles.courseDetails}>
         {details.map((detail, index) => (
@@ -153,6 +172,7 @@ export const Receipt: FC<ScreenProps<'Receipt'>> = ({ route, navigation }) => {
           </View>
         ))}
       </View>
+      </ViewShot>
       <View style={styles.iconContainer}>
         <TouchableOpacity onPress={handleToggleList}>
           {isListVisible ? <Exit /> : <BarOption />}
@@ -163,7 +183,7 @@ export const Receipt: FC<ScreenProps<'Receipt'>> = ({ route, navigation }) => {
               <ShareIcon />
               <Text style={styles.listText}>Share</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={handleDownloadPrint} style={styles.listItem}>
+            <TouchableOpacity onPress={handleDownloadPDF} style={styles.listItem}>
               <Download />
               <Text style={styles.listText}>Download</Text>
             </TouchableOpacity>
@@ -174,7 +194,7 @@ export const Receipt: FC<ScreenProps<'Receipt'>> = ({ route, navigation }) => {
           </View>
         )}
       </View>
-    </View>
+      </View>
   );
 };
 
@@ -188,6 +208,7 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     justifyContent: 'center',
     flex: 1,
+    marginBottom:35
   },
   detailRow: {
     flexDirection: 'row',
@@ -197,14 +218,14 @@ const styles = StyleSheet.create({
   detailItem: {
     fontSize: 14,
     color: '#202244',
-    width: 100, 
+    width: 100,
   },
   detailValue: {
     flex: 1,
     color: '#545454',
   },
   copyIcon: {
-    marginRight: 150,
+    marginRight: 130,
   },
   statusPaid: {
     backgroundColor: '#167F71',
