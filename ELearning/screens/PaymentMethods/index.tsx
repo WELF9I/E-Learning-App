@@ -30,7 +30,9 @@ const getPaymentIcon = (method: string) => {
   return PaymentIcons[method.toLowerCase()] || null;
 };
 
-export const PaymentMethods: FC<ScreenProps<'PaymentMethods'>> = ({ navigation }) => {
+export const PaymentMethods: FC<ScreenProps<'PaymentMethods'>> = ({ navigation,route }) => {
+  //@ts-ignore
+  const course = route.params?.course || { prix: 0 };
   const [selectedMethod, setSelectedMethod] = useState('card');
   const [PaymentList, setPaymentList] = useState(['Paypal', 'Google Pay', 'Apple Pay', '**** **** **** 3054']);
   const [modalVisible, setModalVisible] = useState(false);
@@ -45,8 +47,8 @@ export const PaymentMethods: FC<ScreenProps<'PaymentMethods'>> = ({ navigation }
       <View style={styles.card}>
         <View style={styles.cardImage}></View>
         <View>
-          <Text style={styles.cardTitle}>Graphic Design</Text>
-          <Text style={styles.cardSubtitle}>Setup your Graphic Design</Text>
+          <Text style={styles.cardTitle}>{course.topic}</Text>
+          <Text style={styles.cardSubtitle}>{course.NomCourse}</Text>
         </View>
       </View>
       <Text style={styles.selectionText}>Select the Payment Methods you Want to Use</Text>
@@ -69,7 +71,7 @@ export const PaymentMethods: FC<ScreenProps<'PaymentMethods'>> = ({ navigation }
         <CustomButton
           pressEvent={() => onSubmit({ selectedMethod })}
           icon={<ArrowLeftBlueColor />}
-          text="Enroll Course - $55"
+          text={`Enroll Course -$${course.prix}`}
         />
       </View>
 
@@ -78,7 +80,7 @@ export const PaymentMethods: FC<ScreenProps<'PaymentMethods'>> = ({ navigation }
         isVisible={modalVisible}
         redirectFunction={() => {
           setModalVisible(false);
-          // navigation.navigate('Home');
+          navigation.navigate('HomeScreen');
         }}>
         <VStack
           space="md"
@@ -90,7 +92,7 @@ export const PaymentMethods: FC<ScreenProps<'PaymentMethods'>> = ({ navigation }
           <Text style={{ marginLeft: 10, textAlign: 'center' }}>
             Your Payment is Successfully.Purchase a new Course
           </Text>
-          <TouchableOpacity onPress={()=>{console.log('Course Link')}}>
+          <TouchableOpacity onPress={()=>{navigation.navigate('MyCourses')}}>
             <Text style={styles.LinkCourse}>Watch the Course</Text>
           </TouchableOpacity>
         </VStack>

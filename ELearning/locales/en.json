@@ -86,6 +86,7 @@
   "clickToUpload": "Click here to Upload",
   "reviewPlaceholder": "Would you like to write anything about this Product?",
   "submitReview": "Submit Review",
-  "maxCharacters": "Maximum 250 characters allowed"
+  "maxCharacters": "Maximum 250 characters allowed",
+  "BookMark":"BookMark"
   
 }

@@ -14,7 +14,6 @@ export const LanguageSettings: FC<ScreenProps<'LanguageSettings'>> = ({ navigati
   const languages = [
     { code: 'en', label: t('English'), subCategory: true },
     { code: 'fr', label: t('French'), subCategory: true },
-    { code: 'ar', label: t('Arabic') },
   ];
 
   const handleLanguageChange = (code: string) => {

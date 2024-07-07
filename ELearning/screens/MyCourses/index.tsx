@@ -1,15 +1,11 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useState ,useEffect} from 'react';
 import { View, Text, ScrollView, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { Card, Searchbar, Avatar,Title, Paragraph } from 'react-native-paper';
+import { ProgressBar, MD3Colors } from 'react-native-paper';
 import { ScreenProps } from '../../types';
 // @ts-ignore
 import CustomSearchIcon from '../../assets/categories/search.png';
-// @ts-ignore
-import BookmarkPressed from '../../assets/categories/BookmarkPressed.png';
-// @ts-ignore
-import BookmarkNotPressed from '../../assets/categories/BookmarkNotPressed.png';
-// @ts-ignore
-import FILTER from '../../assets/categories/filter.png';
+import { Footer } from '../Footer';
 
 interface Course {
   id_cours: number;
@@ -54,7 +50,7 @@ interface Former extends User {
   bio: string;
 }
 
-const courses: Course[] = [
+const CompletedCourses: Course[] = [
   {
     id_cours: 1,
     NomCourse: 'Design Advanced',
@@ -77,7 +73,7 @@ const courses: Course[] = [
   },
   {
     id_cours: 2,
-    NomCourse: 'Graphic Advertisement',
+    NomCourse: 'Web Development',
     Bande_annonce_cours: 'https://imgs.search.brave.com/-cFNzgqxn9gTksmxjtwquwyy9QRoUKyuA2Q0DcGi1hM/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly9pbWFn/ZXMtbmEuc3NsLWlt/YWdlcy1hbWF6b24u/Y29tL2ltYWdlcy9J/LzcxRDk3TStjNTlM/LmpwZw',
     Niveau_du_cours: 'Intermediate',
     language: 'English',
@@ -95,116 +91,126 @@ const courses: Course[] = [
     Scoremin: 4.1,
     NbEssai_Quiz: 5047
   },
-  
 ];
-const mentors: Former[] = [
-  {
-    idF: 1,
-    Nom_utl: 'Gonja',
-    pass: 'password1',
-    Role: 'Former',
-    education: 'Masters in Design',
-    prénom: 'Sonja',
-    Img: 'https://imgs.search.brave.com/QNuHtKPVBWNcY-g4Xu-6830byfWvLIFPQvp_H1Jsb1A/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly9pbWcu/ZnJlZXBpay5jb20v/cHJlbWl1bS1waG90/by9wb3J0cmFpdC1z/bWlsaW5nLXlvdW5n/LW1hbl8xMDQ4OTQ0/LTE0MzA1ODQ3Lmpw/Zw',
-    E_mail: 'sonja@example.com',
-    Num: '1234567890',
-    linkedinLink: 'https://linkedin.com/in/sonja',
-    twitterLink: 'https://twitter.com/sonja',
-    youtubeLink: 'https://youtube.com/sonja',
-    instaLink: 'https://instagram.com/sonja',
-    fbLink: 'https://facebook.com/sonja',
-    Certifications: '3D Design',
-    bio: 'Experienced in advanced graphic design techniques.'
-  },
-  {
-    idF: 2,
-    Nom_utl: 'Jensen',
-    pass: 'password2',
-    Role: 'Former',
-    education: 'Bachelors in Computer Science',
-    prénom: 'Jensen',
-    Img: 'https://imgs.search.brave.com/QNuHtKPVBWNcY-g4Xu-6830byfWvLIFPQvp_H1Jsb1A/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly9pbWcu/ZnJlZXBpay5jb20v/cHJlbWl1bS1waG90/by9wb3J0cmFpdC1z/bWlsaW5nLXlvdW5n/LW1hbl8xMDQ4OTQ0/LTE0MzA1ODQ3Lmpw/Zw',
-    E_mail: 'jensen@example.com',
-    Num: '0987654321',
-    linkedinLink: 'https://linkedin.com/in/jensen',
-    twitterLink: 'https://twitter.com/jensen',
-    youtubeLink: 'https://youtube.com/jensen',
-    instaLink: 'https://instagram.com/jensen',
-    fbLink: 'https://facebook.com/jensen',
-    Certifications: 'Web Development',
-    bio: 'Specialist in web development and advertisement design.'
-  },
-];
+const OngoingCourses: Course[] = [
+    {
+      id_cours: 1,
+      NomCourse: 'Design Advanced',
+      Bande_annonce_cours: 'https://imgs.search.brave.com/-cFNzgqxn9gTksmxjtwquwyy9QRoUKyuA2Q0DcGi1hM/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly9pbWFn/ZXMtbmEuc3NsLWlt/YWdlcy1hbWF6b24u/Y29tL2ltYWdlcy9J/LzcxRDk3TStjNTlM/LmpwZw',
+      Niveau_du_cours: 'Advanced',
+      language: 'English',
+      duration: '6 weeks',
+      topic: 'Graphic Design',
+      date_Creations: '2017-06-15',
+      Date_miseaj:'2020-06-15',
+      Information_de_cours: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+      courseRequirement: 'Basic knowledge of design tools',
+      prix: 28,
+      reduction: true,
+      Nouveau_prix: 20,
+      description: 'This course covers advanced techniques in graphic design.',
+      Sous_titre: 'Learn advanced graphic design skills',
+      Scoremin: 4.2,
+      NbEssai_Quiz: 7830
+    },
+    {
+      id_cours: 2,
+      NomCourse: 'Web Development for Beginners',
+      Bande_annonce_cours: 'https://imgs.search.brave.com/-cFNzgqxn9gTksmxjtwquwyy9QRoUKyuA2Q0DcGi1hM/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly9pbWFn/ZXMtbmEuc3NsLWlt/YWdlcy1hbWF6b24u/Y29tL2ltYWdlcy9J/LzcxRDk3TStjNTlM/LmpwZw',
+      Niveau_du_cours: 'Intermediate',
+      language: 'English',
+      duration: '4 weeks',
+      topic: 'Web Development',
+      date_Creations:'2023-06-15',
+      Date_miseaj:  '2024-06-15',
+      Information_de_cours: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+      courseRequirement: 'None',
+      prix: 42,
+      reduction: false,
+      Nouveau_prix: 42,
+      description: 'Master the art of graphic advertisement.',
+      Sous_titre: 'Create effective graphic ads',
+      Scoremin: 4.1,
+      NbEssai_Quiz: 5047
+    },
+  ];
 
-export const OnlineCoursesScreen: FC<ScreenProps<'OnlineCoursesScreen'>> = ({ navigation }) => {
+export const MyCourses: FC<ScreenProps<'MyCourses'>> = ({ navigation }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [coursesData, setCoursesData] = useState<Course[]>([]);
   const [mentorsData, setMentorsData] = useState<Former[]>([]);
+  const [progressValue, setProgressValue] = useState<number>(0);
+  const [progressColor, setProgressColor] = useState<string>('#167F71');
   const [bookmarkedCourses, setBookmarkedCourses] = useState<number[]>([]);
-  const [isCoursesActive, setIsCoursesActive] = useState<boolean>(true);
-  const [isMentorsActive, setIsMentorsActive] = useState<boolean>(false);
+  const [isCompletedActive, setIsCompletedActive] = useState<boolean>(false);
+  const [isOngoingActive, setIsOngoingActive] = useState<boolean>(true);
 
-  const handleCoursePress = (course: Course) => {
-    //@ts-ignore
-    navigation.navigate('ViewCourse', { course });
-  };
-  const filteredCourses = courses.filter(course =>
+  useEffect(() => {
+    let progress = 0.46;
+    setProgressValue(progress);
+  }, []);
+  useEffect(() => {
+    const colors = ['#167F71', '#FCCB40', '#FF6B00'];
+    const randomIndex = Math.floor(Math.random() * colors.length);
+    setProgressColor(colors[randomIndex]);
+  }, []);
+  const filteredCompletedCourses = CompletedCourses.filter(course =>
     course.NomCourse.toLowerCase().includes(searchQuery.toLowerCase())
   );
-
-  const filteredMentors = mentors.filter(mentor =>
-    mentor.Nom_utl.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    mentor.prénom.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredOngoingCourses = OngoingCourses.filter(course =>
+    course.NomCourse.toLowerCase().includes(searchQuery.toLowerCase())
   );
-
-  const toggleBookmark = (id: number) => {
-    setBookmarkedCourses(prev => 
-      prev.includes(id) ? prev.filter(courseId => courseId !== id) : [...prev, id]
-    );
+  const handleOngoingCoursePress = (course: Course) => {
+    //@ts-ignore
+    navigation.navigate('MyCoursesOngoing', { course });
   };
-
+  const handleCompletedCoursePress = (course: Course) => {
+    //@ts-ignore
+    navigation.navigate('MyCoursesCompleted', { course });
+  };
   const handleSearch = (query: string) => {
     setSearchQuery(query);
   };
 
-  const toggleCourses = () => {
-    setIsCoursesActive(true);
-    setIsMentorsActive(false);
+  const toggleCompleted = () => {
+    setIsCompletedActive(true);
+    setIsOngoingActive(false);
   };
   
-  const toggleMentors = () => {
-    setIsMentorsActive(true);
-    setIsCoursesActive(false);
+  const toggleOngoing = () => {
+    setIsOngoingActive(true);
+    setIsCompletedActive(false);
   };
+  const handleViewCertificate=()=>{
+    console.log("button pressed");
+  }
 
   const Style1 = {
-    color: isCoursesActive ? 'white' : 'black',
+    color: isCompletedActive ? 'white' : 'black',
   };
   
   const Style2 = {
-    color: isMentorsActive ? 'white' : 'black',
+    color: isOngoingActive ? 'white' : 'black',
   };
   
   const textStyle1= { ...Style1, fontWeight: 'bold', fontSize: 16 };
   const textStyle2= { ...Style2, fontWeight: 'bold', fontSize: 16 };
 
   const ButtonStyle1={
-    textAlign:'center',
+    alignItems:'center',
+    justifyContent:'center',
     borderRadius:25,
     backgroundColor:'#167F71',
-    paddingTop:10,
-    paddingLeft:45,
     width:150,
     height:45,
     elevation: 5,
   };
   
   const ButtonStyle2={
-    textAlign:'center',
+    alignItems:'center',
+    justifyContent:'center',
     borderRadius:25,
     backgroundColor:'#E8E8E8',
-    paddingTop:10,
-    paddingLeft:45,
     width:150,
     height:45,
     elevation: 5,
@@ -220,43 +226,34 @@ export const OnlineCoursesScreen: FC<ScreenProps<'OnlineCoursesScreen'>> = ({ na
           style={styles.searchbar}
           icon={() => <Image source={CustomSearchIcon} style={styles.searchIcon} />}
         />
-        <TouchableOpacity style={styles.filterButton}>
-          <Image source={FILTER} style={styles.filterIcon} />
-        </TouchableOpacity>
       </View>
       
      {/* Buttons */}
      <View style={styles.buttonsContainer}>
-        <TouchableOpacity onPress={toggleCourses} style={isCoursesActive ? ButtonStyle1 : ButtonStyle2}><Text style={textStyle1}>Courses</Text></TouchableOpacity>
-        <TouchableOpacity onPress={toggleMentors} style={isMentorsActive ? ButtonStyle1 : ButtonStyle2}><Text style={textStyle2}>Mentors</Text></TouchableOpacity>
+        <TouchableOpacity onPress={toggleCompleted} style={isCompletedActive ? ButtonStyle1 : ButtonStyle2}><Text style={textStyle1}>Completed</Text></TouchableOpacity>
+        <TouchableOpacity onPress={toggleOngoing} style={isOngoingActive ? ButtonStyle1 : ButtonStyle2}><Text style={textStyle2}>Ongoing</Text></TouchableOpacity>
       </View>
       {/* End Buttons */}
 
       <ScrollView contentContainerStyle={styles.scrollViewContent} showsVerticalScrollIndicator={false}>
-        {isCoursesActive && (
-          <View>
-            {filteredCourses.map(course => (
-              <TouchableOpacity key={course.id_cours} onPress={() => handleCoursePress(course)}>
+        {isCompletedActive && (
+          <View style={{paddingTop:15,}}>
+            {filteredCompletedCourses.map(course => (
+            <TouchableOpacity key={course.id_cours}onPress={() => handleCompletedCoursePress(course)}>
               <Card key={course.id_cours} style={styles.courseCard}>
               <View style={{display:'flex',flexDirection:'row'}}>
               <Card.Cover source={{ uri: course.Bande_annonce_cours }} style={styles.courseImage} />
               <Card.Content style={{paddingTop:25,width:'63%'}}>
-                <View style={{justifyContent:'space-between',display:'flex',flexDirection:'row-reverse'}}>
-                  <TouchableOpacity onPress={() => toggleBookmark(course.id_cours)} style={{paddingTop:10}}>
-                    <Image
-                      source={bookmarkedCourses.includes(course.id_cours) ? BookmarkPressed : BookmarkNotPressed}
-                      style={styles.bookmarkIcon}
-                    />
-                  </TouchableOpacity>
-                  <Paragraph style={styles.courseTopic}>{course.topic}</Paragraph>
-                </View>
+              <View style={{display:'flex',flexDirection:'row',justifyContent:'space-between'}}>     
+                <Paragraph style={styles.courseTopic}>{course.topic}</Paragraph>
+                <Image source={require('../../assets/categories/completed.png')} style={styles.CompletedIcon} />
+              </View>
                 <Title style={styles.courseTitle}>{course.NomCourse}</Title>
                 <View style={styles.courseDetails}>
-                  <Text style={styles.coursePrice}>${course.prix}</Text>
-                  <Text style={styles.courseOriginalPrice}>${course.Nouveau_prix}</Text>
                   <Paragraph>
                     ⭐{course.Scoremin}
                   </Paragraph>
+                  <TouchableOpacity onPress={handleViewCertificate}><Text style={styles.certificateText}>VIEW CERTIFICATE</Text></TouchableOpacity>
                 </View>
               </Card.Content>
               </View>
@@ -266,20 +263,37 @@ export const OnlineCoursesScreen: FC<ScreenProps<'OnlineCoursesScreen'>> = ({ na
           </View>
         )}
 
-        {isMentorsActive && (
-          <View>
-            {filteredMentors.map(mentor => (
-              <View key={mentor.idF} style={styles.mentorItem}>
-                <Avatar.Image size={55} source={{ uri: mentor.Img }} />
-                <View style={{marginLeft:10}}>
-                  <Text style={styles.mentorName}>{mentor.Nom_utl} {mentor.prénom}</Text>
-                  <Paragraph style={styles.mentorCertification}>{mentor.Certifications}</Paragraph>
+        {isOngoingActive && (
+          <View style={{paddingTop:15,}}>
+          {filteredOngoingCourses.map(course => (
+          <TouchableOpacity key={course.id_cours}onPress={() => handleOngoingCoursePress(course)}>
+            <Card key={course.id_cours} style={styles.courseCard}>
+            <View style={{display:'flex',flexDirection:'row'}}>
+            <Card.Cover source={{ uri: course.Bande_annonce_cours }} style={styles.courseImage} />
+            <Card.Content style={{paddingTop:25,width:'63%'}}>   
+              <Paragraph style={styles.courseTopic}>{course.topic}</Paragraph>
+              <Title style={styles.courseTitle}>{course.NomCourse}</Title>
+                <Paragraph>
+                  ⭐{course.Scoremin}
+                </Paragraph>
+                <View style={styles.progressBar}>
+                <ProgressBar
+                    progress={progressValue}
+                    theme={{ colors: { primary: progressColor } }}
+                    style={{ height: 6, borderRadius: 5 ,width:'90%',marginBottom:10}}
+                  />
                 </View>
+            </Card.Content>
             </View>
-            ))}
-          </View>
+          </Card>
+          </TouchableOpacity>
+          ))}
+        </View>
         )}
       </ScrollView>
+      <View style={{width:'110%',bottom:0,position:'absolute'}}>
+        <Footer navigation={navigation} />
+      </View>
     </View>
   );
 };
@@ -289,6 +303,10 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 16,
     backgroundColor: '#f5f5f5',
+  },
+  progressBar: {
+    height: 10,
+    marginTop: 10,
   },
   searchContainer: {
     flexDirection: 'row',
@@ -315,7 +333,7 @@ const styles = StyleSheet.create({
     marginTop:12,
     marginLeft:20,
     marginRight:40,
-    marginBottom:50,
+    marginBottom:20,
     height:45,
     justifyContent:'space-between',
     display:'flex',
@@ -345,25 +363,23 @@ const styles = StyleSheet.create({
     height: 24,
   },
   courseCard: {
-    marginBottom: 16,
+    marginBottom: 25,
     backgroundColor: 'white',
-    elevation: 2,
     width:'99.4%'
   },
   courseImage: {
     height: 150,
-    width:140,
+    width:160,
   },
   courseTopic: {
     fontSize: 12,
     color: '#FF6B00',
-    paddingTop: 5,
+    marginTop:-10,
   },
   courseTitle: {
-    fontSize: 14.5,
+    fontSize: 14,
     fontWeight: 'bold',
     color: '#202244',
-    marginVertical: 5,
   },
   courseDetails: {
     flexDirection: 'row',
@@ -396,6 +412,18 @@ const styles = StyleSheet.create({
   },
   mentorCertification:{
     color : '#545454'
+  },
+  certificateText:{
+    marginLeft:25,
+    color:'#167F71',
+    textDecorationLine: 'underline',
+  },
+  CompletedIcon:{
+    width:30,
+    height:30,
+    position:'absolute',
+    right:20,
+    top:-37,
   }
 });
 

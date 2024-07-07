@@ -7,14 +7,11 @@ import CustomSearchIcon from '../../assets/categories/search.png';
 // @ts-ignore
 import NOTIFICATIONS from '../../assets/categories/NOTIFICATIONS.png';
 // @ts-ignore
-import FILTER from '../../assets/categories/FILTER.png';
+import FILTER from '../../assets/categories/filter.png';
 // @ts-ignore
 import BgOff from '../../assets/categories/BgOff.jpg';
-// @ts-ignore
-import BookmarkPressed from '../../assets/categories/BookmarkPressed.png';
-// @ts-ignore
-import BookmarkNotPressed from '../../assets/categories/BookmarkNotPressed.png';
-import { Footer } from '../../components/Footer';
+import { Footer } from '../Footer';
+
 interface Course {
   id_cours: number;
   NomCourse: string;
@@ -81,12 +78,32 @@ const courses: Course[] = [
   },
   {
     id_cours: 2,
-    NomCourse: 'Graphic Advertisement',
+    NomCourse: 'Web Development',
     Bande_annonce_cours: 'https://imgs.search.brave.com/-cFNzgqxn9gTksmxjtwquwyy9QRoUKyuA2Q0DcGi1hM/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly9pbWFn/ZXMtbmEuc3NsLWlt/YWdlcy1hbWF6b24u/Y29tL2ltYWdlcy9J/LzcxRDk3TStjNTlM/LmpwZw',
     Niveau_du_cours: 'Intermediate',
     language: 'English',
     duration: '4 weeks',
-    topic: 'Graphic Design',
+    topic: '3D Design',
+    date_Creations: '2023-06-15',
+    Date_miseaj: '2024-06-15',
+    Information_de_cours: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+    courseRequirement: 'None',
+    prix: 42,
+    reduction: false,
+    Nouveau_prix: 42,
+    description: 'Master the art of graphic advertisement.',
+    Sous_titre: 'Create effective graphic ads',
+    Scoremin: 4.3,
+    NbEssai_Quiz: 7878
+  },
+  {
+    id_cours: 3,
+    NomCourse: 'Web Development',
+    Bande_annonce_cours: 'https://imgs.search.brave.com/-cFNzgqxn9gTksmxjtwquwyy9QRoUKyuA2Q0DcGi1hM/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly9pbWFn/ZXMtbmEuc3NsLWlt/YWdlcy1hbWF6b24u/Y29tL2ltYWdlcy9J/LzcxRDk3TStjNTlM/LmpwZw',
+    Niveau_du_cours: 'Intermediate',
+    language: 'English',
+    duration: '4 weeks',
+    topic: 'Web Development',
     date_Creations: '2023-06-15',
     Date_miseaj: '2024-06-15',
     Information_de_cours: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
@@ -139,8 +156,10 @@ const mentors: Former[] = [
     bio: 'Specialist in web development and advertisement design.'
   },
 ];
+const prices = ['Paid', 'Free'];
 
-export const HomeScreen: FC<ScreenProps<'HomeScreen'>> = ({ navigation }) => {
+const ratings = ['4.5 & Up Above', '4.0 & Up Above', '3.5 & Up Above', '3.0 & Up Above'];
+export const HomeScreen: FC<ScreenProps<'HomeScreen'>> = ({ navigation, route }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [courseData, setCourseData] = useState<Course[]>([]);
   const [filteredCourses, setFilteredCourses] = useState<Course[]>([]);
@@ -148,6 +167,25 @@ export const HomeScreen: FC<ScreenProps<'HomeScreen'>> = ({ navigation }) => {
   const [isSearching, setIsSearching] = useState(false);
   const [bookmarkedCourses, setBookmarkedCourses] = useState<number[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
+  const [filters, setFilters] = useState<{ [key: string]: boolean }>({});
+
+  useEffect(() => {
+    if (selectedCategory === 'All') {
+      setCourseData(courses);
+    } else {
+      const filteredData = courses.filter((course) => course.topic === selectedCategory);
+      setCourseData(filteredData);
+    }
+  }, [selectedCategory]);
+
+  useEffect(() => {
+    //@ts-ignore
+    if (route.params?.filters) {
+      //@ts-ignore
+      setFilters(route.params.filters);
+    }
+    //@ts-ignore
+  }, [route.params?.filters]);
 
   const handlePressCategory = (category: string) => {
     setSelectedCategory(category);
@@ -168,10 +206,19 @@ export const HomeScreen: FC<ScreenProps<'HomeScreen'>> = ({ navigation }) => {
   const handleViewNotifications = () => {
     navigation.navigate('Notifications');
   };
+  // const handleFilterPressed = () => {
+  //   navigation.navigate('MyCourses');
+  // };
 
   const handleFilterPressed = () => {
-    navigation.navigate('ViewCourse');
+    //@ts-ignore
+    navigation.navigate('Filter', { filters });
   };
+
+  const handleDataMentor=(mentor:Former)=>{
+    //@ts-ignore
+    navigation.navigate('MentorProfile', { mentor });
+  }
 
   const handleSearch = (query: string) => {
     setSearchQuery(query);
@@ -215,6 +262,32 @@ export const HomeScreen: FC<ScreenProps<'HomeScreen'>> = ({ navigation }) => {
     //@ts-ignore
     navigation.navigate('ViewCourse', { course });
   };
+
+  const applyFiltersToCourses = (courses: Course[]): Course[] => {
+    return courses.filter((course) => {
+      const categoryMatch =
+        !Object.keys(filters).some((key) => categories.includes(key) && filters[key]) ||
+        filters[course.topic];
+  
+      const priceMatch =
+        !Object.keys(filters).some((key) => prices.includes(key) && filters[key]) ||
+        (filters['Paid'] && course.prix > 0) ||
+        (filters['Free'] && course.prix === 0);
+  
+      const ratingMatch =
+        !Object.keys(filters).some((key) => ratings.includes(key) && filters[key]) ||
+        (filters['4.5 & Up Above'] && course.Scoremin >= 4.5) ||
+        (filters['4.0 & Up Above'] && course.Scoremin >= 4.0) ||
+        (filters['3.5 & Up Above'] && course.Scoremin >= 3.5) ||
+        (filters['3.0 & Up Above'] && course.Scoremin >= 3.0);
+  
+      return categoryMatch && priceMatch && ratingMatch;
+    });
+  };
+  useEffect(() => {
+    const filtered = applyFiltersToCourses(courseData);
+    setFilteredCourses(filtered);
+  }, [courseData, filters]);
 
   const textStyle1 = {
     color: '#3399ff',
@@ -278,7 +351,7 @@ export const HomeScreen: FC<ScreenProps<'HomeScreen'>> = ({ navigation }) => {
             <Image source={NOTIFICATIONS} style={styles.notificationsIcon} />
           </TouchableOpacity>
         </View>
-
+  
         <View style={styles.searchFilterContainer}>
           <Searchbar
             placeholder="Search for..."
@@ -291,7 +364,7 @@ export const HomeScreen: FC<ScreenProps<'HomeScreen'>> = ({ navigation }) => {
             <Image source={FILTER} style={styles.filterIcon} />
           </TouchableOpacity>
         </View>
-
+  
         <Card style={styles.specialOffer}>
           <ImageBackground source={BgOff} style={styles.backgroundImage}>
             <Card.Content style={styles.specialOfferContent}>
@@ -303,14 +376,14 @@ export const HomeScreen: FC<ScreenProps<'HomeScreen'>> = ({ navigation }) => {
             </Card.Content>
           </ImageBackground>
         </Card>
-
+  
         <View style={styles.CategoriesSeeAll}>
           <Text style={styles.sectionTitle}>Categories</Text>
           <TouchableOpacity onPress={handleSeeAllCategories}>
             <Text style={styles.sectionLittleTitle}>See All ▶</Text>
           </TouchableOpacity>
         </View>
-
+  
         <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.categoriesContainer}>
           {categories.map((category) => (
             <TouchableOpacity
@@ -322,14 +395,14 @@ export const HomeScreen: FC<ScreenProps<'HomeScreen'>> = ({ navigation }) => {
             </TouchableOpacity>
           ))}
         </ScrollView>
-
+  
         <View style={styles.CategoriesSeeAll}>
           <Text style={styles.sectionTitle}>Online Courses</Text>
           <TouchableOpacity onPress={handleSeeAllCourses}>
             <Text style={styles.sectionLittleTitle}>See All ▶</Text>
           </TouchableOpacity>
         </View>
-
+  
         <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.categoriesContainer}>
           {categories.slice(1).map((category) => (
             <TouchableOpacity key={category} style={styles.categoryType}>
@@ -337,91 +410,91 @@ export const HomeScreen: FC<ScreenProps<'HomeScreen'>> = ({ navigation }) => {
             </TouchableOpacity>
           ))}
         </ScrollView>
-
-        {isSearching && (
-          <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.courseList}>
-            {filteredCourses.map((course) => (
-              <Card key={course.id_cours} style={styles.courseCard}>
-                <Card.Cover source={{ uri: course.Bande_annonce_cours }} style={styles.courseImage} />
-                <Card.Content>
-                  <Paragraph style={styles.courseTopic}>{course.topic}</Paragraph>
-                  <Title style={styles.courseTitle}>{course.NomCourse}</Title>
-                  <View style={{ display: 'flex', flexDirection: 'row' }}>
-                    <Paragraph style={styles.coursePrice}>${course.prix}</Paragraph>
-                    <Paragraph>
-                      | ⭐{course.Scoremin} | {course.NbEssai_Quiz} Std
-                    </Paragraph>
-                  </View>
-                </Card.Content>
-              </Card>
-            ))}
-          </ScrollView>
-        )}
-
-        {isSearching && (
-          <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.mentorList}>
-            {filteredMentors.map((mentor) => (
-              <View key={mentor.idF} style={styles.mentorItem}>
-                <Avatar.Image size={50} source={{ uri: mentor.Img }} />
-                <Text style={styles.mentorName}>
-                  {mentor.Nom_utl} {mentor.prénom}
-                </Text>
-              </View>
-            ))}
-          </ScrollView>
-        )}
-
-        {!isSearching && (
-          <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.courseList}>
-            {courses.map((course) => (
-              <TouchableOpacity key={course.id_cours} style={styles.courseCard} onPress={() => handleCoursePress(course)}>
-                <Card.Cover source={{ uri: course.Bande_annonce_cours }} style={styles.courseImage} />
-                <Card.Content>
-                  <View style={{ justifyContent: 'space-between', display: 'flex', flexDirection: 'row-reverse' }}>
-                    <TouchableOpacity onPress={() => toggleBookmark(course.id_cours)} style={{ paddingTop: 10 }}>
-                      <Image
-                        source={bookmarkedCourses.includes(course.id_cours) ? BookmarkPressed : BookmarkNotPressed}
-                        style={styles.bookmarkIcon}
-                      />
-                    </TouchableOpacity>
+  
+        {/* Display filtered courses and mentors based on search state */}
+        {isSearching ? (
+          <>
+            <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.courseList}>
+              {filteredCourses.map((course) => (
+                <TouchableOpacity key={course.id_cours} style={styles.courseCard} onPress={() => handleCoursePress(course)}>
+                <Card key={course.id_cours} style={styles.courseCard}>
+                  <Card.Cover source={{ uri: course.Bande_annonce_cours }} style={styles.courseImage} />
+                  <Card.Content>
                     <Paragraph style={styles.courseTopic}>{course.topic}</Paragraph>
-                  </View>
-                  <Title style={styles.courseTitle}>{course.NomCourse}</Title>
-                  <View style={{ display: 'flex', flexDirection: 'row' }}>
-                    <Paragraph style={styles.coursePrice}>${course.prix}</Paragraph>
-                    <Paragraph>
-                      | ⭐{course.Scoremin} | {course.NbEssai_Quiz} Std
-                    </Paragraph>
-                  </View>
-                </Card.Content>
-              </TouchableOpacity>
-            ))}
-          </ScrollView>
+                    <Title style={styles.courseTitle}>{course.NomCourse}</Title>
+                    <View style={{ display: 'flex', flexDirection: 'row' }}>
+                      <Paragraph style={styles.coursePrice}>${course.prix}</Paragraph>
+                      <Paragraph>
+                        | ⭐{course.Scoremin}
+                      </Paragraph>
+                    </View>
+                  </Card.Content>             
+                </Card>
+                </TouchableOpacity>
+              ))}
+            </ScrollView>
+          </>
+        ) : (
+          <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.courseList}>
+              {filteredCourses.map((course) => (
+                <Card key={course.id_cours} style={styles.courseCard} onPress={() => handleCoursePress(course)}>
+                  <Card.Cover source={{ uri: course.Bande_annonce_cours }} style={styles.courseImage} />
+                  <Card.Content>
+                    <Paragraph style={styles.courseTopic}>{course.topic}</Paragraph>
+                    <Title style={styles.courseTitle}>{course.NomCourse}</Title>
+                    <View style={{ display: 'flex', flexDirection: 'row' }}>
+                      <Paragraph style={styles.coursePrice}>${course.prix}</Paragraph>
+                      <Paragraph>
+                        | ⭐{course.Scoremin}
+                      </Paragraph>
+                    </View>
+                  </Card.Content>
+                </Card>
+              ))}
+            </ScrollView>
         )}
-
+  
         <View style={styles.CategoriesSeeAll}>
           <Text style={styles.sectionTitle}>Top Mentors</Text>
           <TouchableOpacity onPress={handleSeeAllMentors}>
             <Text style={styles.sectionLittleTitle}>See All ▶</Text>
           </TouchableOpacity>
         </View>
-
-        {!isSearching && (
+  
+        {/* Always display top mentors, filtered or not */}
+        {isSearching ? (
           <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.mentorList}>
-            {mentors.map((mentor) => (
+            {filteredMentors.map((mentor) => (
               <View key={mentor.idF} style={styles.mentorItem}>
-                <Avatar.Image size={50} source={{ uri: mentor.Img }} />
-                <Text style={styles.mentorName}>
-                  {mentor.Nom_utl} {mentor.prénom}
-                </Text>
+                <TouchableOpacity onPress={()=> handleDataMentor(mentor)}>
+                      <Avatar.Image size={50} source={{ uri: mentor.Img }} />
+                      <Text style={styles.mentorName}>
+                          {`${mentor.Nom_utl} ${mentor.prénom}`}
+                      </Text>
+                </TouchableOpacity>
               </View>
             ))}
           </ScrollView>
-        )}
+        ) : (
+          <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.mentorList}>
+            {mentors.map((mentor) => (
+              <View key={mentor.idF} style={styles.mentorItem}>
+                <TouchableOpacity onPress={()=> handleDataMentor(mentor)}>
+                  <Avatar.Image size={50} source={{ uri: mentor.Img }} />
+                  <Text style={styles.mentorName}>
+                      {`${mentor.Nom_utl} ${mentor.prénom}`}
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            ))}
+          </ScrollView>
+        )}   
       </ScrollView>
+      <Footer navigation={navigation} />
     </View>
   );
-};
+};  
+
 
 const styles = StyleSheet.create({
   container: {
@@ -548,6 +621,7 @@ const styles = StyleSheet.create({
     height:225,
   },
   courseCard: {
+    borderRadius:15,
     width: 250,
     height:216,
     marginRight: 16,

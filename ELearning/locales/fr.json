@@ -86,5 +86,6 @@
   "clickToUpload": "Cliquez ici pour télécharger",
   "reviewPlaceholder": "Souhaitez-vous écrire quelque chose à propos de ce produit ?",
   "submitReview": "Soumettre l'avis",
-  "maxCharacters": "Maximum de 250 caractères autorisés"
+  "maxCharacters": "Maximum de 250 caractères autorisés",
+  "BookMark":"FavorisLivre"
 }

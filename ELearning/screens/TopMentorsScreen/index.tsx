@@ -76,6 +76,10 @@ export const TopMentorsScreen : FC<ScreenProps<'TopMentorsScreen'>> = ({ navigat
   const handleSearch = (query: string) => {
     setSearchQuery(query);
   };
+  const handleDataMentor=(mentor:Former)=>{
+    //@ts-ignore
+    navigation.navigate('MentorProfile', { mentor });
+  }
 
 
   return (
@@ -92,12 +96,14 @@ export const TopMentorsScreen : FC<ScreenProps<'TopMentorsScreen'>> = ({ navigat
       <ScrollView contentContainerStyle={styles.scrollViewContent} showsVerticalScrollIndicator={false}>
       <View>
             {filteredMentors.map(mentor => (
-              <View key={mentor.idF} style={styles.mentorItem}>
+              <View key={mentor.idF}>
+                <TouchableOpacity onPress={() => handleDataMentor(mentor)} style={styles.mentorItem}>
                 <Avatar.Image size={55} source={{ uri: mentor.Img }} />
                 <View style={{marginLeft:10}}>
                   <Text style={styles.mentorName}>{mentor.Nom_utl} {mentor.prénom}</Text>
                   <Paragraph style={styles.mentorCertification}>{mentor.Certifications}</Paragraph>
                 </View>
+                </TouchableOpacity>
             </View>
             ))}
           </View>

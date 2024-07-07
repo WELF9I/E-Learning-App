@@ -24,11 +24,11 @@ export const Footer: FC<ScreenProps<'Footer'>> = ({ navigation }) => {
   const { isDarkMode } = useTheme();
 
   return (
-    <View style={{ flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center', backgroundColor: isDarkMode ? '#484848' : 'white', paddingVertical: 10 }}>
-      <TouchableOpacity onPress={() => navigation.navigate('LanguageSettings')}>
+    <View style={{ flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center', backgroundColor: isDarkMode ? '#484848' : 'white', paddingVertical: 10}}>
+      <TouchableOpacity onPress={() => navigation.navigate('HomeScreen')}>
         {isDarkMode?<HomeLightIcon/>:<HomeIcon/>}
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => navigation.navigate('SecurityOption')}>
+      <TouchableOpacity onPress={() => navigation.navigate('MyCourses')}>
         {isDarkMode?<CoursesLightIcon/>:<CousesIcon />}
       </TouchableOpacity>
       <TouchableOpacity onPress={() => navigation.navigate('TransactionsScreen')}>

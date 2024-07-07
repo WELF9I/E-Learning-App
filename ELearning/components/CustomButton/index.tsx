@@ -12,7 +12,9 @@ export const CustomButton: FC<ICustomButtonProps> = ({
   return (
     <Button
       mb={30}
+      ml={35}
       h={'$16'}
+      w={'$4/5'}
       rounded={'$full'}
       flexDirection="row"
       justifyContent="space-between"

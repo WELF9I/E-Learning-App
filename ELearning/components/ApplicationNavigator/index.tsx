@@ -31,10 +31,17 @@ import {
   TopMentorsScreen,
   Notifications,
   OnlineCoursesScreen,
+  MyCourses,
+  MyCoursesOngoing,
+  MyCoursesCompleted,
   ViewCourse,
+  Curriculum,
+  MyBookmark,
+  MentorProfile,
   ReviewCourse,
   WriteReview,
-  PaymentMethods
+  PaymentMethods,
+  Filter
 } from '../../screens';
 import {Text} from '@gluestack-ui/themed';
 
@@ -159,8 +166,134 @@ export const ApplicationNavigator: FC = (): JSX.Element => {
         screenOptions={{
           headerShown: true,
         }}>
-        {/*
-       <Stack.Screen
+
+         <Stack.Screen
+          options={{
+            headerShown: false,
+            headerTitle(props:any) {
+              return (
+                <Text>
+                  {props.children.replace(/([a-z])([A-Z])/g, '$1 $2')}
+                </Text>
+              );
+            },
+          }}
+          name="HomeScreen"
+          component={HomeScreen}
+          
+        />
+        <Stack.Screen
+          options={{
+            headerTitle(props:any) {
+              return (
+                <Text>
+                  {props.children.replace(/([a-z])([A-Z])/g, '$1 $2')}
+                </Text>
+              );
+            },
+          }}
+          name="CategoriesScreen"
+          component={CategoriesScreen}
+        />
+        <Stack.Screen
+          options={{
+            headerTitle(props:any) {
+              return (
+                <Text>
+                  {props.children.replace(/([a-z])([A-Z])/g, '$1 $2')}
+                </Text>
+              );
+            },
+          }}
+          name="TopMentorsScreen"
+          component={TopMentorsScreen}
+        />
+
+        <Stack.Screen
+          options={{
+            headerTitle(props:any) {
+              return (
+                <Text>
+                  {props.children.replace(/([a-z])([A-Z])/g, '$1 $2')}
+                </Text>
+              );
+            },
+          }}
+          name="Notifications"
+          component={Notifications}
+        />
+
+        <Stack.Screen
+          options={{
+            headerTitle(props:any) {
+              return (
+                <Text>
+                  {props.children.replace(/([a-z])([A-Z])/g, '$1 $2')}
+                </Text>
+              );
+            },
+          }}
+          name="OnlineCoursesScreen"
+          component={OnlineCoursesScreen}
+        />
+
+        <Stack.Screen
+          options={{
+            headerTitle(props:any) {
+              return (
+                <Text>
+                  {props.children.replace(/([a-z])([A-Z])/g, '$1 $2')}
+                </Text>
+              );
+            },
+          }}
+          name="ViewCourse"
+          component={ViewCourse}
+        />
+
+        <Stack.Screen
+          options={{
+            headerTitle(props:any) {
+              return (
+                <Text>
+                  {props.children.replace(/([a-z])([A-Z])/g, '$1 $2')}
+                </Text>
+              );
+            },
+          }}
+          name="MyCourses"
+          component={MyCourses}
+        />
+
+        <Stack.Screen
+          options={{
+            headerTitle(props:any) {
+              return (
+                <Text>
+                  {props.children.replace(/([a-z])([A-Z])/g, '$1 $2')}
+                </Text>
+              );
+            },
+          }}
+          name="MyCoursesCompleted"
+          component={MyCoursesCompleted}
+        /> 
+
+        <Stack.Screen
+          options={{
+            headerTitle(props:any) {
+              return (
+                <Text>
+                  {props.children.replace(/([a-z])([A-Z])/g, '$1 $2')}
+                </Text>
+              );
+            },
+          }}
+          name="MyCoursesOngoing"
+          component={MyCoursesOngoing}
+        />
+
+        <Stack.Screen
           options={{
             headerTitle(props:any) {
               return (
@@ -186,11 +319,9 @@ export const ApplicationNavigator: FC = (): JSX.Element => {
           }}
           name="Receipt"
           component={Receipt}
-        />   */}
+        />
 
-        
-
-          {/* <Stack.Screen
+        <Stack.Screen
           options={{
             headerTitle(props:any) {
               return (
@@ -300,48 +431,6 @@ export const ApplicationNavigator: FC = (): JSX.Element => {
           }}
           name="Footer"
           component={Footer}
-        />    */}
-
-         {/* <Stack.Screen
-          options={{
-            headerShown: false,
-            headerTitle(props:any) {
-              return (
-                <Text>
-                  {props.children.replace(/([a-z])([A-Z])/g, '$1 $2')}
-                </Text>
-              );
-            },
-          }}
-          name="HomeScreen"
-          component={HomeScreen}
-          
-        />
-        <Stack.Screen
-          options={{
-            headerTitle(props:any) {
-              return (
-                <Text>
-                  {props.children.replace(/([a-z])([A-Z])/g, '$1 $2')}
-                </Text>
-              );
-            },
-          }}
-          name="CategoriesScreen"
-          component={CategoriesScreen}
-        />
-        <Stack.Screen
-          options={{
-            headerTitle(props:any) {
-              return (
-                <Text>
-                  {props.children.replace(/([a-z])([A-Z])/g, '$1 $2')}
-                </Text>
-              );
-            },
-          }}
-          name="TopMentorsScreen"
-          component={TopMentorsScreen}
         />
 
         <Stack.Screen
@@ -354,12 +443,12 @@ export const ApplicationNavigator: FC = (): JSX.Element => {
               );
             },
           }}
-          name="Notifications"
-          component={Notifications}
+          name="Curriculum"
+          component={Curriculum}
         />
 
-        <Stack.Screen
-          options={{
+         <Stack.Screen
+            options={{
             headerTitle(props:any) {
               return (
                 <Text>
@@ -368,12 +457,12 @@ export const ApplicationNavigator: FC = (): JSX.Element => {
               );
             },
           }}
-          name="OnlineCoursesScreen"
-          component={OnlineCoursesScreen}
+          name="PaymentMethods"
+          component={PaymentMethods}
         />
 
         <Stack.Screen
-          options={{
+            options={{
             headerTitle(props:any) {
               return (
                 <Text>
@@ -382,9 +471,37 @@ export const ApplicationNavigator: FC = (): JSX.Element => {
               );
             },
           }}
-          name="ViewCourse"
-          component={ViewCourse}
-        />  */}
+          name="MyBookmark"
+          component={MyBookmark}
+        />
+
+        <Stack.Screen
+            options={{
+            headerTitle(props:any) {
+              return (
+                <Text>
+                  {props.children.replace(/([a-z])([A-Z])/g, '$1 $2')}
+                </Text>
+              );
+            },
+          }}
+          name="MentorProfile"
+          component={MentorProfile}
+        />
+
+        <Stack.Screen
+            options={{
+            headerTitle(props:any) {
+              return (
+                <Text>
+                  {props.children.replace(/([a-z])([A-Z])/g, '$1 $2')}
+                </Text>
+              );
+            },
+          }}
+          name="Filter"
+          component={Filter}
+        />        
 
         {/* <Stack.Screen
           options={{
@@ -414,19 +531,6 @@ export const ApplicationNavigator: FC = (): JSX.Element => {
           component={WriteReview}
         />    */}
 
-         {/* <Stack.Screen
-            options={{
-            headerTitle(props:any) {
-              return (
-                <Text>
-                  {props.children.replace(/([a-z])([A-Z])/g, '$1 $2')}
-                </Text>
-              );
-            },
-          }}
-          name="PaymentMethods"
-          component={PaymentMethods}
-        />  */}
 
       </Stack.Group>
     </Stack.Navigator>
