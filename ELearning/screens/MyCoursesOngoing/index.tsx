@@ -3,10 +3,16 @@ import { View, Text, FlatList, StyleSheet, TouchableOpacity, Image, Modal, Dimen
 import { Card, Searchbar, Avatar, Title, Paragraph } from 'react-native-paper';
 import Video from 'react-native-video';
 import { WebView } from 'react-native-webview';
-import { Button } from '@gluestack-ui/themed';
+import { Button, Heading, VStack } from '@gluestack-ui/themed';
 import { ScreenProps } from '../../types';
 // @ts-ignore
 import CustomSearchIcon from '../../assets/categories/search.png';
+import { CustomButton, EventModal } from '../../components';
+//@ts-ignore
+import ArrowLeftBlueColor from '../../assets/svg/arrowLeftBlueColor.svg';
+//@ts-ignore
+import CourseCompletedIcon from '../../assets/svg/Course-Completed.svg';
+import { Rating } from 'react-native-elements';
 
 interface Course {
   id_cours: number;
@@ -52,9 +58,11 @@ const sections: Section[] = [
 ];
 
 export const MyCoursesOngoing: FC<ScreenProps<'MyCoursesOngoing'>> = ({ navigation, route }) => {
+  //@ts-ignore
   const course = route.params?.course || { prix: 0 };
   const [videoUrl, setVideoUrl] = useState<string | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
+  const [modalEventVisible, setModalEventVisible] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
 
   const handlePlayVideo = (url: string) => {
@@ -65,6 +73,15 @@ export const MyCoursesOngoing: FC<ScreenProps<'MyCoursesOngoing'>> = ({ navigati
   const handleSearch = (query: string) => {
     setSearchQuery(query);
   };
+
+  const onContinueCourse = () => {
+    setModalEventVisible(true);
+  };
+
+  const handleWriteReview=(course:Course)=>{
+    //@ts-ignore
+    navigation.navigate('WriteReview',{course});
+  }
 
   const renderVideoPlayer = () => {
     if (videoUrl && videoUrl.includes('youtu')) {
@@ -97,6 +114,7 @@ export const MyCoursesOngoing: FC<ScreenProps<'MyCoursesOngoing'>> = ({ navigati
         />
       );
     } else {
+      //@ts-ignore
       return <Video source={{ uri: videoUrl }} style={styles.video} controls fullscreen resizeMode="contain" />;
     }
   };
@@ -154,9 +172,45 @@ export const MyCoursesOngoing: FC<ScreenProps<'MyCoursesOngoing'>> = ({ navigati
         />
       </View>
 
-      <TouchableOpacity style={styles.enrollButton}>
-        <Text style={styles.enrollButtonText}>Continue Courses</Text>
-      </TouchableOpacity>
+      <CustomButton
+        pressEvent={()=>onContinueCourse()}
+        icon={<ArrowLeftBlueColor/>}
+        text="Continue Course"
+      />
+
+        <EventModal
+        icon={<CourseCompletedIcon />}
+        isVisible={modalEventVisible}
+        redirectFunction={() => {
+          setModalEventVisible(false);
+        }}>
+        <VStack
+          space="md"
+          flexDirection="column"
+          alignItems="center"
+          justifyContent="center"
+          mt={'$6'}>
+          
+          <Heading>Course Completed</Heading>
+          <Text style={{ marginLeft: 10, textAlign: 'center' }}>
+            Course Completed.Please Write a Review
+          </Text>
+          <Rating
+            type="star"
+            ratingCount={5}
+            imageSize={25}
+            readonly
+            startingValue={4}
+          />
+          <CustomButton
+            pressEvent={()=>handleWriteReview(course)}
+            icon={<ArrowLeftBlueColor />}
+            text="Write a Review"
+          />
+          
+        </VStack>
+      </EventModal>
+
 
       {videoUrl && (
         <Modal
@@ -245,24 +299,6 @@ const styles = StyleSheet.create({
   icon: {
     width: 25,
     height: 25,
-  },
-  enrollButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#0080ff',
-    padding: 16,
-    borderRadius: 25,
-    width: 300,
-    left: 50,
-    bottom: 20,
-    marginTop: 35,
-  },
-  enrollButtonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: 'bold',
-    marginRight: 8,
   },
   modalContainer: {
     flex: 1,

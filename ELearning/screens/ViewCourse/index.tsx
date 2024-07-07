@@ -117,6 +117,11 @@ export const ViewCourse: FC<ScreenProps<'ViewCourse'>> = ({navigation,route }) =
     navigation.navigate('Curriculum', { course });
   };
 
+  const handleCourseReview=(course:Course)=>{
+    //@ts-ignore
+    navigation.navigate('ReviewCourse',{course})
+  }
+
   // const handleLikeReview=(id: string)=>{
   //   setLikeReview(!likeReview);
   // }
@@ -297,7 +302,9 @@ export const ViewCourse: FC<ScreenProps<'ViewCourse'>> = ({navigation,route }) =
         <View style={styles.reviewsContainer}>
             <View style={styles.reviewsHeader}>
                 <Text style={styles.reviewsTitle}>Reviews</Text>
-                <TouchableOpacity><Text style={styles.seeAll}>See All ▶</Text></TouchableOpacity>
+                <TouchableOpacity onPress={()=>handleCourseReview(course)}>
+                  <Text style={styles.seeAll}>See All ▶</Text>
+                </TouchableOpacity>
             </View>
 
             {/* One review */}

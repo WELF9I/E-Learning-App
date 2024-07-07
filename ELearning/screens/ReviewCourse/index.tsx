@@ -11,6 +11,27 @@ import ArrowLeftBlueColor from '../../assets/svg/arrowLeftBlueColor.svg';
 import { CustomButton } from '../../components';
 import { useTranslation } from 'react-i18next';
 
+interface Course {
+  id_cours: number;
+  NomCourse: string;
+  Bande_annonce_cours: string;
+  Niveau_du_cours: string;
+  language: string;
+  duration: string;
+  topic: string;
+  date_Creations: Date;
+  Date_miseaj: Date;
+  Information_de_cours: string;
+  courseRequirement: string;
+  prix: number;
+  reduction: boolean;
+  Nouveau_prix: number;
+  description: string;
+  Sous_titre: string;
+  Scoremin: number;
+  NbEssai_Quiz: number;
+}
+
 const reviews = [
   {
     id: '1',
@@ -59,7 +80,9 @@ const levelRatingRanges: { [key: string]: [number, number] } = {
   BelowAverage: [0, 2.4],
 };
 
-export const ReviewCourse: FC<ScreenProps<'ReviewCourse'>> = ({ navigation }) => {
+export const ReviewCourse: FC<ScreenProps<'ReviewCourse'>> = ({ navigation,route }) => {
+  //@ts-ignore
+  const { course } = route.params;
   const [selectedLevel, setSelectedLevel] = useState<string>('Excellent');
   const [likeStates, setLikeStates] = useState<{ [key: string]: boolean }>({});
   const [likeCounts, setLikeCounts] = useState<{ [key: string]: number }>(() => {
@@ -76,6 +99,11 @@ export const ReviewCourse: FC<ScreenProps<'ReviewCourse'>> = ({ navigation }) =>
   const handlePressLevel = (level: string) => {
     setSelectedLevel(level);
   };
+
+  const handleWriteReview=(course:Course)=>{
+    //@ts-ignore
+    navigation.navigate('WriteReview',{course});
+  }
 
   const handleLikeReview = (id: string) => {
     setLikeStates(prevState => ({
@@ -161,7 +189,7 @@ export const ReviewCourse: FC<ScreenProps<'ReviewCourse'>> = ({ navigation }) =>
         contentContainerStyle={styles.flatListContent}
       />
       <CustomButton
-        pressEvent={() => { navigation.navigate('WriteReview') }}
+        pressEvent={()=>handleWriteReview(course)}
         icon={<ArrowLeftBlueColor />}
         text={t('writeReview')}
       />

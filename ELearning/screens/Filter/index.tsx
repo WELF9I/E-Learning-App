@@ -1,8 +1,11 @@
 import React, { FC, useState, useEffect } from 'react';
 import { ScreenProps } from '../../types';
 import { View, Text, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
-import { Checkbox, CheckboxIcon, CheckboxIndicator, CheckIcon } from '@gluestack-ui/themed';
+import CheckBox from '@react-native-community/checkbox';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { CustomButton } from '../../components';
+//@ts-ignore
+import ArrowLeftBlueColor from '../../assets/svg/arrowLeftBlueColor.svg';
 
 const categories = [
   'Graphic Design',
@@ -45,7 +48,7 @@ export const Filter: FC<ScreenProps<'Filter'>> = ({ navigation, route }) => {
     setCheckedItems(updatedCheckedItems);
 
     AsyncStorage.setItem('checkedItems', JSON.stringify(updatedCheckedItems))
-      .catch((error:any) => {
+      .catch((error) => {
         console.error('Failed to save checked items:', error);
       });
   };
@@ -55,7 +58,7 @@ export const Filter: FC<ScreenProps<'Filter'>> = ({ navigation, route }) => {
     setCheckedItems(clearedCheckedItems);
 
     AsyncStorage.setItem('checkedItems', JSON.stringify(clearedCheckedItems))
-      .catch((error:any) => {
+      .catch((error) => {
         console.error('Failed to clear checked items:', error);
       });
   };
@@ -70,14 +73,7 @@ export const Filter: FC<ScreenProps<'Filter'>> = ({ navigation, route }) => {
       <Text style={styles.sectionTitle}>{title}</Text>
       {items.map((item) => (
         <TouchableOpacity key={item} style={styles.checkboxContainer} onPress={() => toggleCheckbox(item)}>
-          <Checkbox 
-            value={!!checkedItems[item]} 
-            aria-label={`Select ${checkedItems[item]}`}
-            onChange={() => toggleCheckbox(item)} >
-                <CheckboxIndicator mr="$2">
-                <CheckboxIcon as={CheckIcon} />
-              </CheckboxIndicator>
-            </Checkbox>
+          <CheckBox value={!!checkedItems[item]} onValueChange={() => toggleCheckbox(item)} />
           <Text style={styles.label}>{item}</Text>
         </TouchableOpacity>
       ))}
@@ -92,9 +88,11 @@ export const Filter: FC<ScreenProps<'Filter'>> = ({ navigation, route }) => {
       {renderCheckboxGroup('SubCategories:', categories)}
       {renderCheckboxGroup('Price:', prices)}
       {renderCheckboxGroup('Rating:', ratings)}
-      <TouchableOpacity onPress={applyFilters} style={styles.applyButton}>
-        <Text style={styles.applyButtonText}>Apply Filters</Text>
-      </TouchableOpacity>
+      <CustomButton
+          pressEvent={applyFilters}
+          icon={<ArrowLeftBlueColor />}
+          text="Apply Filters"
+        />
     </ScrollView>
   );
 };
@@ -127,15 +125,5 @@ const styles = StyleSheet.create({
     color: '#167F71',
     marginBottom: 16,
     textAlign: 'right',
-  },
-  applyButton: {
-    backgroundColor: '#167F71',
-    padding: 10,
-    borderRadius: 20,
-    alignItems: 'center',
-  },
-  applyButtonText: {
-    color: 'white',
-    fontSize: 16,
   },
 });

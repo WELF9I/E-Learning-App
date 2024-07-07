@@ -43,6 +43,7 @@ export type rootStackParamList = {
   MyCoursesCompleted:undefined;
   MyCoursesOngoing:undefined;
   Filter:undefined;
+  CertificateScreen:undefined;
 };
 
 export interface ScreenProps<ScreenName extends keyof rootStackParamList>

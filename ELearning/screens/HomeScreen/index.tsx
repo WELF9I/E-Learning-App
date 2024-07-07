@@ -183,6 +183,8 @@ export const HomeScreen: FC<ScreenProps<'HomeScreen'>> = ({ navigation, route })
     if (route.params?.filters) {
       //@ts-ignore
       setFilters(route.params.filters);
+      console.log('Applied Filters:', route.params?.filters);
+
     }
     //@ts-ignore
   }, [route.params?.filters]);

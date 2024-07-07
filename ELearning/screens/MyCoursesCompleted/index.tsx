@@ -63,6 +63,10 @@ export const MyCoursesCompleted: FC<ScreenProps<'MyCoursesCompleted'>> = ({ navi
     setModalVisible(true);
   };
 
+  const handleCertificate=()=>{
+    navigation.navigate('CertificateScreen');
+  }
+
   const handleSearch = (query: string) => {
     setSearchQuery(query);
   };
@@ -157,7 +161,12 @@ export const MyCoursesCompleted: FC<ScreenProps<'MyCoursesCompleted'>> = ({ navi
       </View>
 
      <View style={{display:'flex',flexDirection:'row', justifyContent:'space-between',alignItems:'center',width:'85%',margin:'auto'}}>
-      <TouchableOpacity><Image source={require('../../assets/categories/diploma.png')} style={styles.diplomaIcon} /></TouchableOpacity>
+      <TouchableOpacity onPress={()=>{handleCertificate()}}>
+          <Image 
+            source={require('../../assets/categories/diploma.png')} 
+            style={styles.diplomaIcon} 
+          />
+        </TouchableOpacity>
         <TouchableOpacity style={styles.enrollButton}>
           <Text style={styles.enrollButtonText}>Start Course Again</Text>
         </TouchableOpacity>

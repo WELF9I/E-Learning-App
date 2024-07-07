@@ -37,3 +37,4 @@ export {MyCourses} from './MyCourses';
 export {MyCoursesCompleted} from './MyCoursesCompleted';
 export {MyCoursesOngoing} from './MyCoursesOngoing';
 export {Filter} from './Filter';
+export {CertificateScreen} from './CertificateScreen';

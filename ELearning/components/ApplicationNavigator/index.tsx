@@ -41,7 +41,8 @@ import {
   ReviewCourse,
   WriteReview,
   PaymentMethods,
-  Filter
+  Filter,
+  CertificateScreen
 } from '../../screens';
 import {Text} from '@gluestack-ui/themed';
 
@@ -501,9 +502,8 @@ export const ApplicationNavigator: FC = (): JSX.Element => {
           }}
           name="Filter"
           component={Filter}
-        />        
-
-        {/* <Stack.Screen
+        />
+        <Stack.Screen
           options={{
             headerTitle(props:any) {
               return (
@@ -529,8 +529,21 @@ export const ApplicationNavigator: FC = (): JSX.Element => {
           }}
           name="WriteReview"
           component={WriteReview}
-        />    */}
+        /> 
 
+          <Stack.Screen
+          options={{
+            headerTitle(props:any) {
+              return (
+                <Text>
+                  {props.children.replace(/([a-z])([A-Z])/g, '$1 $2')}
+                </Text>
+              );
+            },
+          }}
+          name="CertificateScreen"
+          component={CertificateScreen}
+        />       
 
       </Stack.Group>
     </Stack.Navigator>

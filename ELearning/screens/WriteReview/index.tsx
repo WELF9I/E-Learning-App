@@ -12,7 +12,9 @@ import UploadFileIcon from '../../assets/svg/Upload-Files.svg';
 import ArrowLeftBlueColor from '../../assets/svg/arrowLeftBlueColor.svg';
 import { CustomButton } from '../../components';
 
-export const WriteReview: FC<ScreenProps<'WriteReview'>> = ({ navigation }) => {
+export const WriteReview: FC<ScreenProps<'WriteReview'>> = ({ navigation,route }) => {
+  //@ts-ignore
+  const { course } = route.params;
   const { t } = useTranslation();
   const [imageUri, setImageUri] = useState<string | null>(null);
   const { control, handleSubmit, formState: { errors } } = useForm({
@@ -25,6 +27,8 @@ export const WriteReview: FC<ScreenProps<'WriteReview'>> = ({ navigation }) => {
 
   const onSubmit = (data: any) => {
     console.log(data);
+    //@ts-ignore
+    navigation.navigate('ReviewCourse',{course});
     // Handle review submission logic here
   };
 
@@ -52,8 +56,8 @@ export const WriteReview: FC<ScreenProps<'WriteReview'>> = ({ navigation }) => {
         <View style={styles.productInfo}>
           <View style={styles.imagePlaceholder}></View>
           <View>
-            <Text style={styles.productTitle}>{t('productTitle')}</Text>
-            <Text style={styles.productDescription}>{t('productDescription')}</Text>
+            <Text style={styles.productTitle}>{course.NomCourse}</Text>
+            <Text style={styles.productDescription}>{course.topic}</Text>
           </View>
         </View>
       </View>
