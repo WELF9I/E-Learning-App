@@ -135,7 +135,7 @@ const OngoingCourses: Course[] = [
     },
   ];
 
-export const MyCourses: FC<ScreenProps<'MyCourses'>> = ({ navigation }) => {
+export const MyCourses: FC<ScreenProps<'MyCourses'>> = ({ navigation,route }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [coursesData, setCoursesData] = useState<Course[]>([]);
   const [mentorsData, setMentorsData] = useState<Former[]>([]);
@@ -165,13 +165,16 @@ export const MyCourses: FC<ScreenProps<'MyCourses'>> = ({ navigation }) => {
     navigation.navigate('MyCoursesOngoing', { course });
   };
   const handleCompletedCoursePress = (course: Course) => {
-    //@ts-ignore
     navigation.navigate('MyCoursesCompleted', { course });
   };
+
   const handleSearch = (query: string) => {
     setSearchQuery(query);
   };
-
+  const handleViewCertificate = (course: Course) => {
+    navigation.navigate('CertificateScreen', { course });
+  };
+  
   const toggleCompleted = () => {
     setIsCompletedActive(true);
     setIsOngoingActive(false);
@@ -181,9 +184,6 @@ export const MyCourses: FC<ScreenProps<'MyCourses'>> = ({ navigation }) => {
     setIsOngoingActive(true);
     setIsCompletedActive(false);
   };
-  const handleViewCertificate=()=>{
-    console.log("button pressed");
-  }
 
   const Style1 = {
     color: isCompletedActive ? 'white' : 'black',
@@ -239,7 +239,7 @@ export const MyCourses: FC<ScreenProps<'MyCourses'>> = ({ navigation }) => {
         {isCompletedActive && (
           <View style={{paddingTop:15,}}>
             {filteredCompletedCourses.map(course => (
-            <TouchableOpacity key={course.id_cours}onPress={() => handleCompletedCoursePress(course)}>
+            <TouchableOpacity key={course.id_cours} onPress={() => handleCompletedCoursePress(course)}>
               <Card key={course.id_cours} style={styles.courseCard}>
               <View style={{display:'flex',flexDirection:'row'}}>
               <Card.Cover source={{ uri: course.Bande_annonce_cours }} style={styles.courseImage} />
@@ -253,7 +253,9 @@ export const MyCourses: FC<ScreenProps<'MyCourses'>> = ({ navigation }) => {
                   <Paragraph>
                     ⭐{course.Scoremin}
                   </Paragraph>
-                  <TouchableOpacity onPress={handleViewCertificate}><Text style={styles.certificateText}>VIEW CERTIFICATE</Text></TouchableOpacity>
+                  <TouchableOpacity onPress={() => handleViewCertificate(course)}>
+                    <Text style={styles.certificateText}>VIEW CERTIFICATE</Text>
+                  </TouchableOpacity>
                 </View>
               </Card.Content>
               </View>
@@ -266,7 +268,7 @@ export const MyCourses: FC<ScreenProps<'MyCourses'>> = ({ navigation }) => {
         {isOngoingActive && (
           <View style={{paddingTop:15,}}>
           {filteredOngoingCourses.map(course => (
-          <TouchableOpacity key={course.id_cours}onPress={() => handleOngoingCoursePress(course)}>
+          <TouchableOpacity key={course.id_cours} onPress={() => handleOngoingCoursePress(course)}>
             <Card key={course.id_cours} style={styles.courseCard}>
             <View style={{display:'flex',flexDirection:'row'}}>
             <Card.Cover source={{ uri: course.Bande_annonce_cours }} style={styles.courseImage} />

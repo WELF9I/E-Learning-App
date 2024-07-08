@@ -10,6 +10,8 @@ import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint.load
 import com.facebook.react.defaults.DefaultReactHost.getDefaultReactHost
 import com.facebook.react.defaults.DefaultReactNativeHost
 import com.facebook.soloader.SoLoader
+import com.swmansion.gesturehandler.react.RNGestureHandlerEnabledRootView
+import com.brentvatne.react.ReactVideoPackage
 
 class MainApplication : Application(), ReactApplication {
 

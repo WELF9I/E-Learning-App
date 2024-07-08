@@ -9,7 +9,7 @@ import BookmarkPressed from '../../assets/categories/BookmarkPressed.png';
 // @ts-ignore
 import BookmarkNotPressed from '../../assets/categories/BookmarkNotPressed.png';
 // @ts-ignore
-import FILTER from '../../assets/categories/filter.png';
+import FilterIcon from '../../assets/categories/FilterIcon.png';
 
 interface Course {
   id_cours: number;
@@ -221,7 +221,7 @@ export const OnlineCoursesScreen: FC<ScreenProps<'OnlineCoursesScreen'>> = ({ na
           icon={() => <Image source={CustomSearchIcon} style={styles.searchIcon} />}
         />
         <TouchableOpacity style={styles.filterButton}>
-          <Image source={FILTER} style={styles.filterIcon} />
+          <Image source={FilterIcon} style={styles.filterIcon} />
         </TouchableOpacity>
       </View>
       

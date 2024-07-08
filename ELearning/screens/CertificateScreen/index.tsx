@@ -1,16 +1,60 @@
-import React, { FC } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import React, { FC, useEffect, useState } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity ,Image} from 'react-native';
 import { captureRef } from 'react-native-view-shot';
 import Share from 'react-native-share';
 // @ts-ignore
-import CertificateSVG from '../../assets/svg/certificate-back.svg'; // Adjust the path to your SVG file
+import CertificateSVG from '../../assets/svg/certificate-back.svg'; 
 import { ScreenProps } from '../../types';
 import { CustomButton } from '../../components';
-//@ts-ignore
+// @ts-ignore
 import ArrowLeftBlueColor from '../../assets/svg/arrowLeftBlueColor.svg';
+// @ts-ignore
+import Signature from '../../assets/categories/signature.png';
 
-export const CertificateScreen: FC<ScreenProps<'CertificateScreen'>> = ({ navigation }) => {
+interface User {
+  Nom_utl: string;
+  pass: string;
+  Role: string;
+  education: string;
+  prénom: string;
+  Img: string;
+  E_mail: string;
+  Num: string;
+}
+
+const student: User[] = [
+  {
+    Nom_utl: 'A. Martin',
+    pass: 'password123',
+    Role: 'Student',
+    education: '3D Design Illustration',
+    prénom: 'Ronald',
+    Img: 'https://cdn-icons-png.flaticon.com/128/16683/16683419.png',
+    E_mail: 'ronald.martin@example.com',
+    Num: '29051481' 
+  }
+];
+
+export const CertificateScreen: FC<ScreenProps<'CertificateScreen'>> = ({ navigation,route}) => {
+  const { course } = route.params;
   const certificateRef = React.useRef<View>(null);
+  const [issueDate, setIssueDate] = useState<string>('');
+  const [certificateID, setCertificateID] = useState<string>('');
+
+  useEffect(() => {
+    const generateCertificateID = () => {
+      const randomID = `SK${Math.floor(10000000 + Math.random() * 90000000)}`;
+      return randomID;
+    };
+
+    const formatDate = (date: Date) => {
+      const options = { year: 'numeric', month: 'long', day: 'numeric' };
+      return date.toLocaleDateString('en-US', options);
+    };
+
+    setIssueDate(formatDate(new Date()));
+    setCertificateID(generateCertificateID());
+  }, []);
 
   const handleDownload = async () => {
     try {
@@ -34,22 +78,21 @@ export const CertificateScreen: FC<ScreenProps<'CertificateScreen'>> = ({ naviga
       <View style={styles.certificateContainer} ref={certificateRef}>
         <CertificateSVG width="140%" height="500" />
         <View style={styles.overlay}>
-          <Text style={styles.certificateText}>Certificate of Completions</Text>
-          <Text style={{marginBottom:5}}>This certificate thot</Text>
-          <Text style={styles.certificateName}>Calvin E. McGinnis</Text>
+          <Text style={styles.certificateTitle}>Certificate of Completions</Text>
+          <Text style={styles.subText}>This Certifies that</Text>
+          <Text style={styles.recipientName}>{` ${student[0].prénom} ${student[0].Nom_utl} `}</Text>
           <Text style={styles.certificateDetails}>
-            Has Successfully Completed the Wallace Training Program, Entitled.
+            Has Successfully Completed the Wallace Training Program, Entitled
           </Text>
-          <Text style={styles.courseName}>3D Design Illustration Course</Text>
-          <Text style={styles.issueDate}>Issued on November 24, 2022</Text>
-          <Text style={styles.certificateID}>ID: SK24568086</Text>
-          <Text style={styles.signature}>Calvin E. McGinnis</Text>
+          <Text style={styles.courseName}>{course.NomCourse}</Text>
+          <Text style={styles.issueDate}>Issued on {issueDate}</Text>
+          <Text style={styles.certificateID}>ID: {certificateID}</Text>
           <Text style={styles.issuer}>Virginia M. Patterson</Text>
-          <Text style={styles.issuerDetails}>Issued on November 24, 2022</Text>
+          <Image source={Signature} style={styles.SignatureIcon} />
         </View>
       </View>
       <CustomButton
-        pressEvent={()=>handleDownload()}
+        pressEvent={handleDownload}
         icon={<ArrowLeftBlueColor />}
         text="Download Certificate"
       />
@@ -62,10 +105,6 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 16,
     backgroundColor: '#f0f4f7',
-  },
-  title: {
-    fontSize: 18,
-    fontWeight: 'bold',
   },
   certificateContainer: {
     backgroundColor: 'white',
@@ -83,59 +122,69 @@ const styles = StyleSheet.create({
     bottom: 0,
     justifyContent: 'center',
     alignItems: 'center',
+    padding: 20,
   },
-  certificateText: {
+  certificateTitle: {
+    marginTop:50,
     fontSize: 18,
     fontWeight: 'bold',
-    marginBottom: 20,
-    color: 'black',
-    marginTop:25
+    marginBottom: 5,
+    color: '#2c3e50',
   },
-  certificateName: {
-    fontSize: 16,
+  subText: {
+    fontSize: 14,
+    marginBottom: 15,
+    color: '#34495e',
+  },
+  recipientName: {
+    fontSize: 20,
     fontWeight: 'bold',
-    marginBottom: 8,
-    color: 'black',
-    marginTop:15
+    color: '#2980b9',
   },
   certificateDetails: {
     fontSize: 14,
     textAlign: 'center',
-    marginBottom: 8,
-    color: 'black',
+    marginBottom: 18,
+    color: '#34495e',
+    marginTop:20,
   },
   courseName: {
-    fontSize: 16,
+    fontSize: 17,
     fontWeight: 'bold',
-    marginBottom: 8,
-    color: 'black',
+    marginBottom: 18,
+    color: '#e74c3c',
   },
   issueDate: {
     fontSize: 14,
     marginBottom: 8,
-    color: 'black',
+    color: '#34495e',
   },
   certificateID: {
-    fontSize: 14,
+    fontWeight: 'bold',
+    fontSize: 13,
     marginBottom: 16,
-    color: 'black',
+    marginTop:10,
+    color: '#34495e',
   },
   signature: {
     fontSize: 16,
     fontWeight: 'bold',
     marginBottom: 8,
-    color: 'black',
-    fontFamily:'Mishella'
+    color: '#2c3e50',
   },
   issuer: {
+    fontWeight: 'bold',
     fontSize: 14,
     marginBottom: 8,
-    color: 'black',
+    color: '#34495e',
   },
   issuerDetails: {
     fontSize: 14,
-    marginBottom: 8,
-    color: 'black',
+    color: '#34495e',
   },
+  SignatureIcon:{
+    width:50,
+    height:50,
+  }
 });
 

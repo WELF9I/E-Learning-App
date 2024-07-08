@@ -20,22 +20,46 @@ import CoursesLightIcon from '../../assets/svg/CoursesLight.svg';
 
 import { useTheme } from '../../utils/ThemeContext';
 
+interface User {
+  Nom_utl: string;
+  pass: string;
+  Role: string;
+  education: string;
+  prénom: string;
+  Img: string;
+  E_mail: string;
+  Num: string;
+}
+
+const student: User[] = [
+  {
+    Nom_utl: 'A. Martin',
+    pass: 'password123',
+    Role: 'Student',
+    education: '3D Design Illustration',
+    prénom: 'Ronald',
+    Img: 'https://cdn-icons-png.flaticon.com/128/16683/16683419.png',
+    E_mail: 'ronald.martin@example.com',
+    Num: '29051481' 
+  }
+];
+
 export const Footer: FC<ScreenProps<'Footer'>> = ({ navigation }) => {
   const { isDarkMode } = useTheme();
 
   return (
     <View style={{ flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center', backgroundColor: isDarkMode ? '#484848' : 'white', paddingVertical: 10}}>
       <TouchableOpacity onPress={() => navigation.navigate('HomeScreen')}>
-        {isDarkMode?<HomeLightIcon/>:<HomeIcon/>}
+        {isDarkMode ? <HomeLightIcon/> : <HomeIcon/>}
       </TouchableOpacity>
       <TouchableOpacity onPress={() => navigation.navigate('MyCourses')}>
-        {isDarkMode?<CoursesLightIcon/>:<CousesIcon />}
+        {isDarkMode ? <CoursesLightIcon/> : <CousesIcon />}
       </TouchableOpacity>
       <TouchableOpacity onPress={() => navigation.navigate('TransactionsScreen')}>
-        {isDarkMode?<PaymentLightIcon />:<PaymentIcon/>}
+        {isDarkMode ? <PaymentLightIcon /> : <PaymentIcon/>}
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
-        {isDarkMode?<ProfileLightIcon />:<ProfileIcon/>}
+      <TouchableOpacity onPress={() => navigation.navigate('Profile',{ student })}>
+        {isDarkMode ? <ProfileLightIcon /> : <ProfileIcon/>}
       </TouchableOpacity>
     </View>
   );

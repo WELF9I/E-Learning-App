@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useState, useEffect } from 'react';
 import { View, Text, FlatList, StyleSheet, TouchableOpacity, Image, Modal, Dimensions } from 'react-native';
 import { Card, Searchbar, Avatar, Title, Paragraph } from 'react-native-paper';
 import Video from 'react-native-video';
@@ -13,6 +13,7 @@ import ArrowLeftBlueColor from '../../assets/svg/arrowLeftBlueColor.svg';
 //@ts-ignore
 import CourseCompletedIcon from '../../assets/svg/Course-Completed.svg';
 import { Rating } from 'react-native-elements';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 interface Course {
   id_cours: number;
@@ -50,24 +51,36 @@ interface Section {
 const sections: Section[] = [
   { idSec: 1, sectionTitle: 'Introduction', title: 'Why Using Graphic De..', video: 'https://youtu.be/GQS7wPujL2k?si=lmVm_NnYDE8avnHo', attachments: 'Attachment1.pdf', description: 'Description1', captions: 'Captions1', lectureNote: 'LectureNote1', locked: false },
   { idSec: 2, sectionTitle: '', title: 'Setup Your Graphic De..', video: 'https://drive.google.com/file/d/1ADyGIL1-oS8VG1zmj2EHbWuoqTHiqWA3/view?usp=sharing', attachments: 'Attachment2.pdf', description: 'Description2', captions: 'Captions2', lectureNote: 'LectureNote2', locked: false },
-  { idSec: 3, sectionTitle: 'Graphic Design', title: 'Take a Look Graphic De..', video: '', attachments: 'Attachment3.pdf', description: 'Description3', captions: 'Captions3', lectureNote: 'LectureNote3', locked: false },
-  { idSec: 4, sectionTitle: '', title: 'Working with Graphic De..', video: 'https://youtu.be/GQS7wPujL2k?si=lmVm_NnYDE8avnHo', attachments: 'Attachment4.pdf', description: 'Description4', captions: 'Captions4', lectureNote: 'LectureNote4', locked: false },
-  { idSec: 5, sectionTitle: '', title: 'Working with Frame & Lay..', video: '', attachments: 'Attachment5.pdf', description: 'Description5', captions: 'Captions5', lectureNote: 'LectureNote5', locked: false },
-  { idSec: 6, sectionTitle: '', title: 'Using Graphic Plugins', video: '', attachments: 'Attachment6.pdf', description: 'Description6', captions: 'Captions6', lectureNote: 'LectureNote6', locked: false },
-  { idSec: 7, sectionTitle: "Let's Practice", title: 'Let’s Design a Sign Up Fo..', video: '', attachments: 'Attachment7.pdf', description: 'Description7', captions: 'Captions7', lectureNote: 'LectureNote7', locked: false },
+  { idSec: 3, sectionTitle: 'Graphic Design', title: 'Take a Look Graphic De..', video: 'https://youtu.be/TG6XSFeOT3g', attachments: 'Attachment3.pdf', description: 'Description3', captions: 'Captions3', lectureNote: 'LectureNote3', locked: false },
+  { idSec: 4, sectionTitle: '', title: 'Working with Graphic De..', video: 'https://youtu.be/QAcu7i5lFvA', attachments: 'Attachment4.pdf', description: 'Description4', captions: 'Captions4', lectureNote: 'LectureNote4', locked: false },
+  { idSec: 5, sectionTitle: '', title: 'Working with Frame & Lay..', video: 'https://youtu.be/dPMk6_HTBq8', attachments: 'Attachment5.pdf', description: 'Description5', captions: 'Captions5', lectureNote: 'LectureNote5', locked: false },
+  { idSec: 6, sectionTitle: '', title: 'Using Graphic Plugins', video: 'https://youtu.be/mVH3kRz7Tgo', attachments: 'Attachment6.pdf', description: 'Description6', captions: 'Captions6', lectureNote: 'LectureNote6', locked: false },
+  { idSec: 7, sectionTitle: "Let's Practice", title: 'Let’s Design a Sign Up Fo..', video: 'https://youtu.be/09n__iJvTeY', attachments: 'Attachment7.pdf', description: 'Description7', captions: 'Captions7', lectureNote: 'LectureNote7', locked: false },
 ];
 
 export const MyCoursesOngoing: FC<ScreenProps<'MyCoursesOngoing'>> = ({ navigation, route }) => {
-  //@ts-ignore
-  const course = route.params?.course || { prix: 0 };
+  const course = route.params;
   const [videoUrl, setVideoUrl] = useState<string | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [modalEventVisible, setModalEventVisible] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [lastWatchedVideoIndex, setLastWatchedVideoIndex] = useState<number | null>(null);
 
-  const handlePlayVideo = (url: string) => {
+  useEffect(() => {
+    const loadLastWatchedVideo = async () => {
+      const lastWatched = await AsyncStorage.getItem(`lastWatched_${course.id_cours}`);
+      if (lastWatched !== null) {
+        setLastWatchedVideoIndex(parseInt(lastWatched, 10));
+      }
+    };
+    loadLastWatchedVideo();
+  }, [course.id_cours]);
+
+  const handlePlayVideo = async (url: string, index: number) => {
     setVideoUrl(url);
     setModalVisible(true);
+    await AsyncStorage.setItem(`lastWatched_${course.id_cours}`, index.toString());
+    setLastWatchedVideoIndex(index);
   };
 
   const handleSearch = (query: string) => {
@@ -75,13 +88,20 @@ export const MyCoursesOngoing: FC<ScreenProps<'MyCoursesOngoing'>> = ({ navigati
   };
 
   const onContinueCourse = () => {
-    setModalEventVisible(true);
+    console.log("Current lastWatchedVideoIndex:", lastWatchedVideoIndex);
+    if (lastWatchedVideoIndex !== null && lastWatchedVideoIndex < sections.length - 1) {
+      const nextVideoIndex = lastWatchedVideoIndex + 1;
+      const nextVideo = sections[nextVideoIndex];
+      console.log("Playing next video:", nextVideoIndex, nextVideo.title);
+      handlePlayVideo(nextVideo.video, nextVideoIndex);
+    } else {
+      setModalEventVisible(true);
+    }
   };
 
-  const handleWriteReview=(course:Course)=>{
-    //@ts-ignore
-    navigation.navigate('WriteReview',{course});
-  }
+  const handleWriteReview = (course: Course) => {
+    navigation.navigate('WriteReview', { course });
+  };
 
   const renderVideoPlayer = () => {
     if (videoUrl && videoUrl.includes('youtu')) {
@@ -98,7 +118,6 @@ export const MyCoursesOngoing: FC<ScreenProps<'MyCoursesOngoing'>> = ({ navigati
         />
       );
     } else if (videoUrl && videoUrl.includes('drive.google.com')) {
-      // Google Drive video link (example: https://drive.google.com/file/d/VIDEO_ID/view)
       const parts = videoUrl.split('/');
       const file = parts[parts.length - 2];
       const fileId = file.split('?')[0];
@@ -114,7 +133,6 @@ export const MyCoursesOngoing: FC<ScreenProps<'MyCoursesOngoing'>> = ({ navigati
         />
       );
     } else {
-      //@ts-ignore
       return <Video source={{ uri: videoUrl }} style={styles.video} controls fullscreen resizeMode="contain" />;
     }
   };
@@ -141,7 +159,7 @@ export const MyCoursesOngoing: FC<ScreenProps<'MyCoursesOngoing'>> = ({ navigati
         </View>
         <Text style={styles.sectionTitle}>{item.title}</Text>
         {!item.locked ? (
-          <TouchableOpacity onPress={() => handlePlayVideo(item.video)} style={{ marginRight: 10 }}>
+          <TouchableOpacity onPress={() => handlePlayVideo(item.video, item.idSec)} style={{ marginRight: 10 }}>
             <Image source={require('../../assets/categories/PlayIcon.png')} style={styles.icon} />
           </TouchableOpacity>
         ) : (
@@ -172,13 +190,15 @@ export const MyCoursesOngoing: FC<ScreenProps<'MyCoursesOngoing'>> = ({ navigati
         />
       </View>
 
-      <CustomButton
-        pressEvent={()=>onContinueCourse()}
-        icon={<ArrowLeftBlueColor/>}
-        text="Continue Course"
-      />
+      <View style={{ marginTop: 20 }}>
+        <CustomButton
+          pressEvent={onContinueCourse}
+          icon={<ArrowLeftBlueColor />}
+          text="Continue Course"
+        />
+      </View>
 
-        <EventModal
+      <EventModal
         icon={<CourseCompletedIcon />}
         isVisible={modalEventVisible}
         redirectFunction={() => {
@@ -193,7 +213,7 @@ export const MyCoursesOngoing: FC<ScreenProps<'MyCoursesOngoing'>> = ({ navigati
           
           <Heading>Course Completed</Heading>
           <Text style={{ marginLeft: 10, textAlign: 'center' }}>
-            Course Completed.Please Write a Review
+            Course Completed. Please Write a Review
           </Text>
           <Rating
             type="star"
@@ -203,14 +223,13 @@ export const MyCoursesOngoing: FC<ScreenProps<'MyCoursesOngoing'>> = ({ navigati
             startingValue={4}
           />
           <CustomButton
-            pressEvent={()=>handleWriteReview(course)}
+            pressEvent={() => handleWriteReview(course)}
             icon={<ArrowLeftBlueColor />}
             text="Write a Review"
           />
           
         </VStack>
       </EventModal>
-
 
       {videoUrl && (
         <Modal
@@ -221,7 +240,6 @@ export const MyCoursesOngoing: FC<ScreenProps<'MyCoursesOngoing'>> = ({ navigati
         >
           <View style={styles.modalContainer}>
             {renderVideoPlayer()}
-            <Button title="Close" onPress={() => setModalVisible(false)} />
           </View>
         </Modal>
       )}
@@ -240,7 +258,7 @@ const styles = StyleSheet.create({
     width: '90%',
     marginTop: 20,
     marginLeft: 20,
-    marginBottom:10,
+    marginBottom: 10,
   },
   searchbar: {
     flex: 1,

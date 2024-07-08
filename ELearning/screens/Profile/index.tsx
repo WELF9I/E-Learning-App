@@ -45,7 +45,8 @@ import { useTheme } from '../../utils/ThemeContext';
 import { ScreenProps } from '../../types';
 import { useTranslation } from 'react-i18next';
 
-export const Profile: FC<ScreenProps<'Profile'>> = ({ navigation }) => {
+export const Profile: FC<ScreenProps<'Profile'>> = ({ navigation,route }) => {
+  const {student}=route.params;
   const { t } = useTranslation();
   const [avatarUri, setAvatarUri] = useState<string | null>(null);
   const [userName,setUserName]=useState('Ronald A. Martin');
@@ -103,8 +104,8 @@ export const Profile: FC<ScreenProps<'Profile'>> = ({ navigation }) => {
             )}
           </Avatar>
         </Center>
-        <Text style={[styles.name, { color: isDarkMode ? '#fff' : '#202244' }]}>{userName}</Text>
-        <Text style={[styles.email, { color: isDarkMode ? '#ccc' : '#545454' }]}>{userEmail}</Text>
+        <Text style={[styles.name, { color: isDarkMode ? '#fff' : '#202244' }]}>{` ${student[0].prénom} ${student[0].Nom_utl} `}</Text>
+        <Text style={[styles.email, { color: isDarkMode ? '#ccc' : '#545454' }]}>{` ${student[0].E_mail} `}</Text>
         {menuItems.map((item, index) => (
           <TouchableOpacity key={index} style={styles.menuItem} onPress={item.onPress}>
             <View style={styles.menuItemContent}>

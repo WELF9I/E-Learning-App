@@ -1,6 +1,6 @@
 import React, { FC, useState } from 'react';
 import { View, Text, FlatList, StyleSheet, TouchableOpacity, Image, Modal, Dimensions } from 'react-native';
-import { Card, Searchbar, Avatar, Title, Paragraph } from 'react-native-paper';
+import { Searchbar } from 'react-native-paper';
 import Video from 'react-native-video';
 import { WebView } from 'react-native-webview';
 import { Button } from '@gluestack-ui/themed';
@@ -53,7 +53,7 @@ const sections: Section[] = [
 
 export const MyCoursesCompleted: FC<ScreenProps<'MyCoursesCompleted'>> = ({ navigation, route }) => {
   //@ts-ignore  
-  const course = route.params?.course || { prix: 0 };
+  const { course } = route.params;
   const [videoUrl, setVideoUrl] = useState<string | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -63,12 +63,20 @@ export const MyCoursesCompleted: FC<ScreenProps<'MyCoursesCompleted'>> = ({ navi
     setModalVisible(true);
   };
 
-  const handleCertificate=()=>{
-    navigation.navigate('CertificateScreen');
-  }
+  const handleCertificate = (course: Course) => {
+    console.log("course : ", course);
+    navigation.navigate('CertificateScreen', { course });
+  };
 
   const handleSearch = (query: string) => {
     setSearchQuery(query);
+  };
+
+  const startCourseAgain = () => {
+    const firstSectionWithVideo = sections.find(section => section.video);
+    if (firstSectionWithVideo) {
+      handlePlayVideo(firstSectionWithVideo.video);
+    }
   };
 
   const renderVideoPlayer = () => {
@@ -86,7 +94,6 @@ export const MyCoursesCompleted: FC<ScreenProps<'MyCoursesCompleted'>> = ({ navi
         />
       );
     } else if (videoUrl && videoUrl.includes('drive.google.com')) {
-      // Google Drive video link (example: https://drive.google.com/file/d/VIDEO_ID/view)
       const parts = videoUrl.split('/');
       const file = parts[parts.length - 2];
       const fileId = file.split('?')[0];
@@ -160,17 +167,17 @@ export const MyCoursesCompleted: FC<ScreenProps<'MyCoursesCompleted'>> = ({ navi
         />
       </View>
 
-     <View style={{display:'flex',flexDirection:'row', justifyContent:'space-between',alignItems:'center',width:'85%',margin:'auto'}}>
-      <TouchableOpacity onPress={()=>{handleCertificate()}}>
-          <Image 
-            source={require('../../assets/categories/diploma.png')} 
-            style={styles.diplomaIcon} 
+      <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', width: '85%', margin: 'auto' }}>
+        <TouchableOpacity onPress={() => { handleCertificate(course) }}>
+          <Image
+            source={require('../../assets/categories/diploma.png')}
+            style={styles.diplomaIcon}
           />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.enrollButton}>
+        <TouchableOpacity style={styles.enrollButton} onPress={startCourseAgain}>
           <Text style={styles.enrollButtonText}>Start Course Again</Text>
         </TouchableOpacity>
-     </View>
+      </View>
 
       {videoUrl && (
         <Modal
@@ -181,7 +188,6 @@ export const MyCoursesCompleted: FC<ScreenProps<'MyCoursesCompleted'>> = ({ navi
         >
           <View style={styles.modalContainer}>
             {renderVideoPlayer()}
-            <Button title="Close" onPress={() => setModalVisible(false)} />
           </View>
         </Modal>
       )}
@@ -200,7 +206,7 @@ const styles = StyleSheet.create({
     width: '90%',
     marginTop: 20,
     marginLeft: 20,
-    marginBottom:10,
+    marginBottom: 10,
   },
   searchbar: {
     flex: 1,
@@ -256,7 +262,7 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 16,
   },
-  diplomaIcon:{
+  diplomaIcon: {
     width: 55,
     height: 55,
   },

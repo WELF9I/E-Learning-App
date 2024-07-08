@@ -7,7 +7,7 @@ import CustomSearchIcon from '../../assets/categories/search.png';
 // @ts-ignore
 import NOTIFICATIONS from '../../assets/categories/NOTIFICATIONS.png';
 // @ts-ignore
-import FILTER from '../../assets/categories/filter.png';
+import FilterIcon from '../../assets/categories/FilterIcon.png';
 // @ts-ignore
 import BgOff from '../../assets/categories/BgOff.jpg';
 import { Footer } from '../Footer';
@@ -54,6 +54,19 @@ interface Former extends User {
   Certifications: string;
   bio: string;
 }
+
+const student: User[] = [
+  {
+    Nom_utl: 'A. Martin',
+    pass: 'password123',
+    Role: 'Student',
+    education: '3D Design Illustration',
+    prénom: 'Ronald',
+    Img: 'https://cdn-icons-png.flaticon.com/128/16683/16683419.png',
+    E_mail: 'ronald.martin@example.com',
+    Num: '29051481' 
+  }
+];
 
 const courses: Course[] = [
   {
@@ -345,7 +358,7 @@ export const HomeScreen: FC<ScreenProps<'HomeScreen'>> = ({ navigation, route })
       <ScrollView style={styles.scrollContainer} contentContainerStyle={styles.contentContainer}>
         <View style={styles.header}>
           <View style={styles.headerText}>
-            <Text style={styles.greeting}>Hi, Ronald A. Martin</Text>
+          <Text style={styles.greeting}>Hi, {` ${student[0].prénom} ${student[0].Nom_utl} `}</Text>
             <Text style={styles.subGreeting}>What would you like to learn today?</Text>
             <Text>Search below.</Text>
           </View>
@@ -363,7 +376,7 @@ export const HomeScreen: FC<ScreenProps<'HomeScreen'>> = ({ navigation, route })
             style={styles.searchbar}
           />
           <TouchableOpacity onPress={handleFilterPressed}>
-            <Image source={FILTER} style={styles.filterIcon} />
+            <Image source={FilterIcon} style={styles.filterIcon} />
           </TouchableOpacity>
         </View>
   
