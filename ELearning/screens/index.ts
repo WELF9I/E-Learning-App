@@ -38,3 +38,4 @@ export {MyCoursesCompleted} from './MyCoursesCompleted';
 export {MyCoursesOngoing} from './MyCoursesOngoing';
 export {Filter} from './Filter';
 export {CertificateScreen} from './CertificateScreen';
+export {Quizz} from './Quizz';

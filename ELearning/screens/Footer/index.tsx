@@ -17,6 +17,10 @@ import ProfileLightIcon from '../../assets/svg/ProfileLight.svg';
 import PaymentLightIcon from '../../assets/svg/PaymentLight.svg';
 //@ts-ignore
 import CoursesLightIcon from '../../assets/svg/CoursesLight.svg';
+//@ts-ignore
+import QuizzIcon from '../../assets/categories/quizz.png';
+//@ts-ignore
+import QuizzLightIcon from '../../assets/categories/quizzWhite.png';
 
 import { useTheme } from '../../utils/ThemeContext';
 
@@ -54,6 +58,9 @@ export const Footer: FC<ScreenProps<'Footer'>> = ({ navigation }) => {
       </TouchableOpacity>
       <TouchableOpacity onPress={() => navigation.navigate('MyCourses')}>
         {isDarkMode ? <CoursesLightIcon/> : <CousesIcon />}
+      </TouchableOpacity>
+      <TouchableOpacity onPress={() => navigation.navigate('Quizz')}>
+        {isDarkMode ? <QuizzLightIcon/> : <QuizzIcon />}
       </TouchableOpacity>
       <TouchableOpacity onPress={() => navigation.navigate('TransactionsScreen')}>
         {isDarkMode ? <PaymentLightIcon /> : <PaymentIcon/>}
