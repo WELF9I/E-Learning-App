@@ -65,6 +65,7 @@ export const MyCoursesCompleted: FC<ScreenProps<'MyCoursesCompleted'>> = ({ navi
 
   const handleCertificate = (course: Course) => {
     console.log("course : ", course);
+    //@ts-ignore
     navigation.navigate('CertificateScreen', { course });
   };
 

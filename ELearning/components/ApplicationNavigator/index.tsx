@@ -42,7 +42,8 @@ import {
   WriteReview,
   PaymentMethods,
   Filter,
-  CertificateScreen
+  CertificateScreen,
+  Quizz
 } from '../../screens';
 import {Text} from '@gluestack-ui/themed';
 
@@ -145,20 +146,6 @@ export const ApplicationNavigator: FC = (): JSX.Element => {
           }}
           name="SetFingerPrint"
           component={SetFingerPrint}
-        />
-
-        <Stack.Screen
-          options={{
-            headerTitle(props:any) {
-              return (
-                <Text>
-                  {props.children.replace(/([a-z])([A-Z])/g, '$1 $2')}
-                </Text>
-              );
-            },
-          }}
-          name="TopCoursesScreen"
-          component={TopCoursesScreen}
         />
          </Stack.Group> */}
         
@@ -543,7 +530,21 @@ export const ApplicationNavigator: FC = (): JSX.Element => {
           }}
           name="CertificateScreen"
           component={CertificateScreen}
-        />       
+        />
+
+        <Stack.Screen
+          options={{
+            headerTitle(props:any) {
+              return (
+                <Text>
+                  {props.children.replace(/([a-z])([A-Z])/g, '$1 $2')}
+                </Text>
+              );
+            },
+          }}
+          name="Quizz"
+          component={Quizz}
+        />        
 
       </Stack.Group>
     </Stack.Navigator>

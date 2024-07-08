@@ -44,6 +44,7 @@ export type rootStackParamList = {
   MyCoursesOngoing:undefined;
   Filter:undefined;
   CertificateScreen:undefined;
+  Quizz:undefined;
 };
 
 export interface ScreenProps<ScreenName extends keyof rootStackParamList>

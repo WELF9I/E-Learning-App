@@ -36,6 +36,7 @@ const student: User[] = [
 ];
 
 export const CertificateScreen: FC<ScreenProps<'CertificateScreen'>> = ({ navigation,route}) => {
+  //@ts-ignore
   const { course } = route.params;
   const certificateRef = React.useRef<View>(null);
   const [issueDate, setIssueDate] = useState<string>('');
@@ -49,6 +50,7 @@ export const CertificateScreen: FC<ScreenProps<'CertificateScreen'>> = ({ naviga
 
     const formatDate = (date: Date) => {
       const options = { year: 'numeric', month: 'long', day: 'numeric' };
+      //@ts-ignore
       return date.toLocaleDateString('en-US', options);
     };
 

@@ -17,6 +17,10 @@ import ProfileLightIcon from '../../assets/svg/ProfileLight.svg';
 import PaymentLightIcon from '../../assets/svg/PaymentLight.svg';
 //@ts-ignore
 import CoursesLightIcon from '../../assets/svg/CoursesLight.svg';
+//@ts-ignore
+import QuizzIcon from '../../assets/svg/Quizz.svg';
+//@ts-ignore
+import QuizzLightIcon from '../../assets/svg/QuizzWhiteIcon.svg'
 
 import { useTheme } from '../../utils/ThemeContext';
 
@@ -46,6 +50,10 @@ const student: User[] = [
 
 export const Footer: FC<ScreenProps<'Footer'>> = ({ navigation }) => {
   const { isDarkMode } = useTheme();
+  const handleUser=()=>{
+    //@ts-ignore
+    navigation.navigate('Profile',{ student })
+  }  
 
   return (
     <View style={{ flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center', backgroundColor: isDarkMode ? '#484848' : 'white', paddingVertical: 10}}>
@@ -55,10 +63,13 @@ export const Footer: FC<ScreenProps<'Footer'>> = ({ navigation }) => {
       <TouchableOpacity onPress={() => navigation.navigate('MyCourses')}>
         {isDarkMode ? <CoursesLightIcon/> : <CousesIcon />}
       </TouchableOpacity>
+      <TouchableOpacity onPress={() => navigation.navigate('Quizz')}>
+        {isDarkMode ? <QuizzLightIcon/> : <QuizzIcon />}
+      </TouchableOpacity>
       <TouchableOpacity onPress={() => navigation.navigate('TransactionsScreen')}>
         {isDarkMode ? <PaymentLightIcon /> : <PaymentIcon/>}
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => navigation.navigate('Profile',{ student })}>
+      <TouchableOpacity onPress={() =>handleUser() }>
         {isDarkMode ? <ProfileLightIcon /> : <ProfileIcon/>}
       </TouchableOpacity>
     </View>
