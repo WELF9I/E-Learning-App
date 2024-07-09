@@ -5,8 +5,8 @@ import RNPrint from 'react-native-print';
 import Clipboard from '@react-native-clipboard/clipboard';
 import QRCode from 'react-native-qrcode-svg';
 import ViewShot, { captureRef } from 'react-native-view-shot';
-import RNFS from 'react-native-fs';
 import { ScreenProps } from '../../types';
+import { useTheme } from '../../utils/ThemeContext';
 // @ts-ignore
 import Facture from '../../assets/svg/Facture.svg';
 // @ts-ignore
@@ -21,8 +21,11 @@ import Download from '../../assets/svg/Download.svg';
 import Print from '../../assets/svg/Print.svg';
 // @ts-ignore
 import ShareIcon from '../../assets/svg/Share.svg';
+//@ts-ignore
+import CopyWhite from '../../assets/svg/CopyWhite.svg'
 
 export const Receipt: FC<ScreenProps<'Receipt'>> = ({ route, navigation }) => {
+  const { isDarkMode } = useTheme();
   const [isListVisible, setIsListVisible] = useState(false);
   const viewShotRef = useRef<View>(null);
   // @ts-ignore
@@ -139,46 +142,51 @@ export const Receipt: FC<ScreenProps<'Receipt'>> = ({ route, navigation }) => {
   const qrCodeValue = JSON.stringify(transaction);
 
   return (
-    <View style={styles.container}>
-    <ViewShot ref={ReceiptRef} style={styles.container}>
-      <View style={{ alignItems: 'center', marginTop: '24%' }}>
-        <Facture />
-      </View>
-      <View style={{ marginLeft: 130, marginTop: 30 }}>
-        <QRCode
-          value={qrCodeValue}
-          logo={{ uri: '../../assets/LOGO_Telead.png' }}
-          logoSize={30}
-          logoBackgroundColor='transparent'
-        />
-      </View>
-      <View style={styles.courseDetails}>
-        {details.map((detail, index) => (
-          <View style={styles.detailRow} key={index}>
-            <Text style={styles.detailItem}>{detail.label}:</Text>
-            <Text
-              style={[
-                styles.detailValue,
-                detail.isStatus && (detail.value.toUpperCase() === 'PAID' ? styles.statusPaid : styles.statusUnpaid),
-              ]}
-            >
-              {detail.value}
-            </Text>
-            {detail.isCopyable && (
-              <TouchableOpacity onPress={() => copyToClipboard(detail.value)}>
-                <Copy style={styles.copyIcon} />
-              </TouchableOpacity>
-            )}
-          </View>
-        ))}
-      </View>
+    <View style={[styles.container, isDarkMode && styles.containerDark]}>
+      <ViewShot ref={ReceiptRef} style={[styles.container, isDarkMode && styles.containerDark]}>
+        <View style={{ alignItems: 'center', marginTop: '24%' }}>
+          <Facture />
+        </View>
+        <View style={{ marginLeft: 130, marginTop: 30 }}>
+          <QRCode
+            value={qrCodeValue}
+            logo={{ uri: '../../assets/LOGO_Telead.png' }}
+            logoSize={30}
+            logoBackgroundColor='transparent'
+          />
+        </View>
+        <View style={styles.courseDetails}>
+          {details.map((detail, index) => (
+            <View style={styles.detailRow} key={index}>
+              <Text style={[styles.detailItem, isDarkMode && styles.detailItemDark]}>{detail.label}:</Text>
+              <Text
+                style={[
+                  styles.detailValue,
+                  isDarkMode && styles.detailValueDark,
+                  detail.isStatus && (detail.value.toUpperCase() === 'PAID' ? styles.statusPaid : styles.statusUnpaid),
+                ]}
+              >
+                {detail.value}
+              </Text>
+              {detail.isCopyable && (
+                <TouchableOpacity onPress={() => copyToClipboard(detail.value)}>
+                  {isDarkMode ?
+                  <CopyWhite style={styles.copyIcon} />
+                  :
+                  <Copy style={styles.copyIcon} />
+                  }
+                </TouchableOpacity>
+              )}
+            </View>
+          ))}
+        </View>
       </ViewShot>
       <View style={styles.iconContainer}>
         <TouchableOpacity onPress={handleToggleList}>
           {isListVisible ? <Exit /> : <BarOption />}
         </TouchableOpacity>
         {isListVisible && (
-          <View style={styles.listContainer}>
+          <View style={[styles.listContainer, isDarkMode && styles.listContainerDark]}>
             <TouchableOpacity onPress={handleShare} style={styles.listItem}>
               <ShareIcon />
               <Text style={styles.listText}>Share</Text>
@@ -194,7 +202,7 @@ export const Receipt: FC<ScreenProps<'Receipt'>> = ({ route, navigation }) => {
           </View>
         )}
       </View>
-      </View>
+    </View>
   );
 };
 
@@ -204,11 +212,14 @@ const styles = StyleSheet.create({
     padding: 10,
     backgroundColor: '#f8f8f8',
   },
+  containerDark: {
+    backgroundColor: '#333',
+  },
   courseDetails: {
     marginLeft: 10,
     justifyContent: 'center',
     flex: 1,
-    marginBottom:35
+    marginBottom: 35,
   },
   detailRow: {
     flexDirection: 'row',
@@ -220,9 +231,15 @@ const styles = StyleSheet.create({
     color: '#202244',
     width: 100,
   },
+  detailItemDark: {
+    color: '#CFD8DC',
+  },
   detailValue: {
     flex: 1,
     color: '#545454',
+  },
+  detailValueDark: {
+    color: '#CFD8DC',
   },
   copyIcon: {
     marginRight: 130,
@@ -262,6 +279,10 @@ const styles = StyleSheet.create({
     top: 40,
     right: 0,
   },
+  listContainerDark: {
+    backgroundColor: '#333',
+    shadowColor: '#fff',
+  },
   listItem: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -273,3 +294,4 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
 });
+

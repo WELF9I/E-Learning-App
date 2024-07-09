@@ -11,6 +11,7 @@ import FilterIcon from '../../assets/categories/FilterIcon.png';
 // @ts-ignore
 import BgOff from '../../assets/categories/BgOff.jpg';
 import { Footer } from '../Footer';
+import {useTheme} from '../../utils/ThemeContext';
 
 interface Course {
   id_cours: number;
@@ -181,6 +182,8 @@ export const HomeScreen: FC<ScreenProps<'HomeScreen'>> = ({ navigation, route })
   const [bookmarkedCourses, setBookmarkedCourses] = useState<number[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [filters, setFilters] = useState<{ [key: string]: boolean }>({});
+  const { isDarkMode } = useTheme();
+  const styles = createStyles(isDarkMode);
 
   useEffect(() => {
     if (selectedCategory === 'All') {
@@ -196,6 +199,7 @@ export const HomeScreen: FC<ScreenProps<'HomeScreen'>> = ({ navigation, route })
     if (route.params?.filters) {
       //@ts-ignore
       setFilters(route.params.filters);
+      //@ts-ignore
       console.log('Applied Filters:', route.params?.filters);
 
     }
@@ -308,7 +312,7 @@ export const HomeScreen: FC<ScreenProps<'HomeScreen'>> = ({ navigation, route })
     color: '#3399ff',
   };
   const textStyle2 = {
-    color: 'black',
+    color: isDarkMode?'#e7e7e7':'black',
   };
 
   const textStyle3 = {
@@ -360,7 +364,7 @@ export const HomeScreen: FC<ScreenProps<'HomeScreen'>> = ({ navigation, route })
           <View style={styles.headerText}>
           <Text style={styles.greeting}>Hi, {` ${student[0].prénom} ${student[0].Nom_utl} `}</Text>
             <Text style={styles.subGreeting}>What would you like to learn today?</Text>
-            <Text>Search below.</Text>
+            <Text style={styles.SearchTextbelow}>Search below.</Text>
           </View>
           <TouchableOpacity onPress={handleViewNotifications}>
             <Image source={NOTIFICATIONS} style={styles.notificationsIcon} />
@@ -459,7 +463,7 @@ export const HomeScreen: FC<ScreenProps<'HomeScreen'>> = ({ navigation, route })
                     <Title style={styles.courseTitle}>{course.NomCourse}</Title>
                     <View style={{ display: 'flex', flexDirection: 'row' }}>
                       <Paragraph style={styles.coursePrice}>${course.prix}</Paragraph>
-                      <Paragraph>
+                      <Paragraph style={styles.RatingLabel}>
                         | ⭐{course.Scoremin}
                       </Paragraph>
                     </View>
@@ -480,14 +484,14 @@ export const HomeScreen: FC<ScreenProps<'HomeScreen'>> = ({ navigation, route })
         {isSearching ? (
           <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.mentorList}>
             {filteredMentors.map((mentor) => (
-              <View key={mentor.idF} style={styles.mentorItem}>
-                <TouchableOpacity onPress={()=> handleDataMentor(mentor)}>
+              
+                <TouchableOpacity key={mentor.idF} onPress={()=> handleDataMentor(mentor)} style={styles.mentorItem}>
                       <Avatar.Image size={50} source={{ uri: mentor.Img }} />
                       <Text style={styles.mentorName}>
                           {`${mentor.Nom_utl} ${mentor.prénom}`}
                       </Text>
                 </TouchableOpacity>
-              </View>
+              
             ))}
           </ScrollView>
         ) : (
@@ -511,10 +515,11 @@ export const HomeScreen: FC<ScreenProps<'HomeScreen'>> = ({ navigation, route })
 };  
 
 
-const styles = StyleSheet.create({
+const createStyles = (isDarkMode: boolean) =>
+  StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#F5F9FF",
+    backgroundColor: isDarkMode?'#333':"#F5F9FF",
   },
   scrollContainer: {
     padding: 16,
@@ -534,11 +539,14 @@ const styles = StyleSheet.create({
   greeting: {
     fontSize: 24,
     fontWeight: 'bold',
-    color:"black",
+    color:isDarkMode?'#FFF':"black",
   },
   subGreeting: {
     fontSize: 16,
-    color: '#666',
+    color: isDarkMode?'#e7e7e7':'#666',
+  },
+  SearchTextbelow:{
+    color:isDarkMode?'#e7e7e7':'black'
   },
   notificationsIcon: {
     width: 30,
@@ -617,7 +625,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 18,
     fontWeight: 'bold',
-    color:'#202244',  
+    color:isDarkMode?'#FFF':'#202244',  
   },
   sectionLittleTitle: {
     fontSize: 15,
@@ -641,7 +649,7 @@ const styles = StyleSheet.create({
     height:216,
     marginRight: 16,
     marginLeft:2,
-    backgroundColor:'white',
+    backgroundColor:isDarkMode?'#666666':'white',
     elevation:2,
   },
   courseImage: {
@@ -656,7 +664,7 @@ const styles = StyleSheet.create({
   },
   courseTopic: {
     fontSize: 12,
-    color: '#FF6B00',
+    color: isDarkMode?'#fbfef8':'#FF6B00',
     paddingTop:5,
   },
   coursePrice: {
@@ -664,6 +672,9 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#3399ff',
     marginRight:10
+  },
+  RatingLabel:{
+    color:isDarkMode?'#FFF':'black'
   },
   courseButton: {
     marginTop: 10,
@@ -679,6 +690,7 @@ const styles = StyleSheet.create({
   mentorName: {
     marginTop: 5,
     fontSize: 12,
+    color:isDarkMode?'#FFF':'black'
   },
   filterIcon: {
     width: 34,

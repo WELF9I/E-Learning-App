@@ -8,6 +8,7 @@ import IsNotClickedHeart from '../../assets/categories/IsNotClickedHeart.png';
 // @ts-ignore
 import ArrowLeftBlueColor from '../../assets/svg/arrowLeftBlueColor.svg';
 import { CustomButton } from '../../components';
+import {useTheme} from '../../utils/ThemeContext';
 
 interface Course {
   id_cours: number;
@@ -94,6 +95,8 @@ export const ViewCourse: FC<ScreenProps<'ViewCourse'>> = ({navigation,route }) =
   const [isCurriculumActive, setIsCurriculumActive] = useState<boolean>(true);
   const [likedReviews, setLikedReviews] = useState<{ [key: string]: boolean }>({});
   const [reviews, setReviews] = useState(initialReviews);
+  const { isDarkMode } = useTheme();
+  const styles = createStyles(isDarkMode);
 
   const handleLikeReview = (id: string) => {
     setLikedReviews((prevState) => ({
@@ -171,7 +174,7 @@ export const ViewCourse: FC<ScreenProps<'ViewCourse'>> = ({navigation,route }) =
     width:'90%',
     marginLeft:'5%',
     height:'63%',
-    backgroundColor: '#fff',
+    backgroundColor: isDarkMode?'#333':'#fff',
     borderRadius:20,
     padding: 16,
     paddingTop: 32,
@@ -181,7 +184,7 @@ export const ViewCourse: FC<ScreenProps<'ViewCourse'>> = ({navigation,route }) =
     width:'90%',
     marginLeft:'5%',
     height:'34%',
-    backgroundColor: '#fff',
+    backgroundColor: isDarkMode?'#333':'#fff',
     borderRadius:20,
     padding: 16,
     paddingTop: 32,
@@ -200,7 +203,7 @@ export const ViewCourse: FC<ScreenProps<'ViewCourse'>> = ({navigation,route }) =
         </View>
        <View style={{display:'flex',flexDirection:'row',justifyContent:'space-between',marginTop:10,}}>
         <Text style={styles.courseCategory}>{course.topic}</Text>
-        <Text style={{marginRight:10,color:'black',fontWeight:'bold'}}>⭐{course.Scoremin}</Text>
+        <Text style={{marginRight:10,color:isDarkMode?'#FFF':'black',fontWeight:'bold'}}>⭐{course.Scoremin}</Text>
        </View>
         <Text style={styles.courseTitle}>{course.NomCourse}</Text>
         <View style={styles.courseInfo}>
@@ -246,8 +249,8 @@ export const ViewCourse: FC<ScreenProps<'ViewCourse'>> = ({navigation,route }) =
         </ScrollView>)
          : (
             <View>
-                <Text style={{fontSize:16,marginBottom:15}}>Graphic Design now a popular profession graphic design by off your career about tantas regiones barbarorum pedibus obiit.</Text>
-                <Text  style={{fontSize:16,}}>Graphic Design in a popular profession l Cur tantas regiones barbarorum pedibus obiit, maria transmi Et ne nimium beatus est; Addidisti ad extremum etiam.</Text>
+                <Text style={{fontSize:16,marginBottom:15,color:isDarkMode?'#FFF':'black'}}>Graphic Design now a popular profession graphic design by off your career about tantas regiones barbarorum pedibus obiit.</Text>
+                <Text  style={{fontSize:16,color:isDarkMode?'#FFF':'black'}}>Graphic Design in a popular profession l Cur tantas regiones barbarorum pedibus obiit, maria transmi Et ne nimium beatus est; Addidisti ad extremum etiam.</Text>
             </View>
                 
          )}            
@@ -352,10 +355,11 @@ export const ViewCourse: FC<ScreenProps<'ViewCourse'>> = ({navigation,route }) =
   );
 };
 
-const styles = StyleSheet.create({
+const createStyles = (isDarkMode: boolean) =>
+  StyleSheet.create({
   container: {
     flexGrow: 1,
-    backgroundColor: '#F5F9FF',
+    backgroundColor: isDarkMode?'#414141':'#F5F9FF',
   },
   sectionHeaderContainer: {
     flexDirection: 'row',
@@ -366,6 +370,7 @@ const styles = StyleSheet.create({
   sectionHeader: {
     fontSize: 16,
     fontWeight: 'bold',
+    color:isDarkMode?'#FFF':'black'
   },
   sectionHeaderTitle: {
     color: '#0080ff',
@@ -373,7 +378,7 @@ const styles = StyleSheet.create({
   sectionContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#fff',
+    backgroundColor: isDarkMode?'#333':'#fff',
     borderRadius: 8,
     padding: 16,
     marginBottom: 8,
@@ -428,7 +433,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     marginVertical: 8,
-    color:'black'
+    color:isDarkMode?'#FFF':'black'
   },
   courseInfo: {
     flexDirection: 'row',
@@ -452,11 +457,12 @@ const styles = StyleSheet.create({
 
   section: {
     marginVertical: 8,
+
   },
   sectionTitle: {
     fontSize: 18,
     fontWeight: 'bold',
-    color:'black'
+    color:isDarkMode?'#FFF':'black'
   },
   sectionDuration: {
     color: '#0080ff',
@@ -520,7 +526,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     marginBottom: 8,
-    color:'black'
+    color:isDarkMode?'#FFF':'black'
   },
   instructor: {
     flexDirection: 'row',
@@ -537,10 +543,10 @@ const styles = StyleSheet.create({
   instructorName: {
     fontSize: 16,
     fontWeight: 'bold',
-    color:'black'
+    color:isDarkMode?'#FFF':'black'
   },
   instructorRole: {
-    color: '#666',
+    color: isDarkMode?'black':'#666',
   },
   detailsContainer: {
     marginTop: 16,
@@ -549,7 +555,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     marginBottom: 8,
-    color:'black'
+    color:isDarkMode?'#FFF':'black'
   },
   detailItem: {
     flexDirection: 'row',
@@ -563,7 +569,7 @@ const styles = StyleSheet.create({
   },
   detailText: {
     fontSize: 16,
-    color: '#666',
+    color: isDarkMode?'#FFF':'#666',
   },
   reviewsContainer: {
     marginTop: 16,
@@ -576,7 +582,7 @@ const styles = StyleSheet.create({
   reviewsTitle: {
     fontSize: 18,
     fontWeight: 'bold',
-    color:'black'
+    color:isDarkMode?'#FFF':'black'
   },
   seeAll: {
     color: '#0080ff',
@@ -602,7 +608,7 @@ const styles = StyleSheet.create({
     color:'black'
   },
   reviewComment: {
-    color: '#666',
+    color: isDarkMode?'#FFF':'#666',
   },
   reviewDetails: {
     flexDirection: 'row',
@@ -614,7 +620,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   reviewTime: {
-    color: '#666',
+    color: isDarkMode?'#FFF':'#666',
     marginRight:140,
   },
   heartIcon:{

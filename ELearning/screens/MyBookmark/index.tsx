@@ -1,11 +1,13 @@
 import React, { FC, useState } from 'react';
-import { ScreenProps } from '../../types';
 import { View, Text, ScrollView, StyleSheet, TouchableOpacity, Image, ToastAndroid } from 'react-native';
 import { Card, Paragraph, Title } from 'react-native-paper';
-// @ts-ignore
+//@ts-ignore
 import BookmarkPressed from '../../assets/categories/BookmarkPressed.png';
-// @ts-ignore
+//@ts-ignore
 import BookmarkNotPressed from '../../assets/categories/BookmarkNotPressed.png';
+import { useTheme } from '../../utils/ThemeContext';  // import the custom useTheme hook
+import { ScreenProps } from '../../types';
+import { useTranslation } from 'react-i18next';
 
 interface Course {
     id_cours: number;
@@ -29,8 +31,10 @@ interface Course {
 }
 
 export const MyBookmark: FC<ScreenProps<'MyBookmark'>> = ({ navigation }) => {
+    const { isDarkMode, toggleDarkMode } = useTheme();
     const [selectedCategory, setSelectedCategory] = useState<string>('All');
     const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
+    const { t } = useTranslation();
     const courses: Course[] = [
         {
             id_cours: 1,
@@ -39,7 +43,7 @@ export const MyBookmark: FC<ScreenProps<'MyBookmark'>> = ({ navigation }) => {
             Niveau_du_cours: 'Advanced',
             language: 'English',
             duration: '6 weeks',
-            topic: 'Graphic Design',
+            topic: t('Graphic Design'),
             date_Creations: new Date('2023-01-01'),
             Date_miseaj: new Date('2023-01-10'),
             Information_de_cours: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
@@ -59,7 +63,7 @@ export const MyBookmark: FC<ScreenProps<'MyBookmark'>> = ({ navigation }) => {
             Niveau_du_cours: 'Intermediate',
             language: 'English',
             duration: '4 weeks',
-            topic: '3D Design',
+            topic: t('3D Design'),
             date_Creations: new Date('2023-02-01'),
             Date_miseaj: new Date('2023-02-10'),
             Information_de_cours: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
@@ -77,53 +81,16 @@ export const MyBookmark: FC<ScreenProps<'MyBookmark'>> = ({ navigation }) => {
     const [bookmarkedCourses, setBookmarkedCourses] = useState<number[]>(courses.map(course => course.id_cours));
 
     const categories = [
-        'All',
-        'Graphic Design',
-        '3D Design',
-        'Web Development',
-        'Seo & Marketing',
-        'Finance & Accounting',
-        'Personal Development',
-        'Office Productivity',
-        'HR Management',
+        t('All'),
+        t('Graphic Design'),
+        t('3D Design'),
+        t('Web Development'),
+        t('Seo & Marketing'),
+        t('Finance & Accounting'),
+        t('Personal Development'),
+        t('Office Productivity'),
+        t('HR Management'),
     ];
-
-    const textStyle1 = {
-        color: '#3399ff',
-    };
-    const textStyle2 = {
-        color: 'black',
-    };
-
-    const textStyle3 = {
-        color: 'white',
-        fontWeight: 'bold',
-    };
-    const textStyle4 = {
-        color: 'black',
-    };
-
-    const ButtonStyle1 = {
-        backgroundColor: '#167F71',
-        marginBottom: 10,
-        marginLeft: 5,
-        padding: 10,
-        borderRadius: 20,
-        marginRight: 2,
-        elevation: 2,
-        shadowRadius: 2,
-    };
-
-    const ButtonStyle2 = {
-        backgroundColor: '#E8F1FF',
-        marginBottom: 10,
-        marginLeft: 5,
-        padding: 10,
-        borderRadius: 20,
-        marginRight: 2,
-        elevation: 2,
-        shadowRadius: 2,
-    };
 
     const handlePressCategory = (category: string) => {
         setSelectedCategory(category);
@@ -149,30 +116,31 @@ export const MyBookmark: FC<ScreenProps<'MyBookmark'>> = ({ navigation }) => {
         });
     };
 
-    const filteredCourses = selectedCategory === 'All'
+    const filteredCourses = selectedCategory === t('All')
         ? courses
         : courses.filter(course => course.topic === selectedCategory);
 
     return (
         <>
-            <View style={{ marginTop: 20 }}>
+            <View style={{ backgroundColor: isDarkMode ? '#333' : '#fff',height:'100%' }}>
+            <View style={{ marginTop: 20, backgroundColor: isDarkMode ? '#333' : '#fff' }}>
                 <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.categoriesContainer}>
                     {categories.map((category) => (
                         <TouchableOpacity
                             key={category}
                             onPress={() => handlePressCategory(category)}
-                            style={selectedCategory === category ? ButtonStyle1 : ButtonStyle2}
+                            style={selectedCategory === category ? (isDarkMode ? styles.ButtonStyle1Dark : styles.ButtonStyle1) : (isDarkMode ? styles.ButtonStyle2Dark : styles.ButtonStyle2)}
                         >
-                            <Text style={selectedCategory === category ? textStyle3 : textStyle4}>{category}</Text>
+                            <Text style={selectedCategory === category ? styles.textStyle3 : (isDarkMode ? styles.textStyle4Dark : styles.textStyle4)}>{category}</Text>
                         </TouchableOpacity>
                     ))}
                 </ScrollView>
             </View>
 
-            <View>
+            <View style={{ backgroundColor: isDarkMode ? '#333' : '#fff' }}>
                 <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollViewContent}>
                     {filteredCourses.map((course) => (
-                        <Card key={course.id_cours} style={styles.courseCard}>
+                        <Card key={course.id_cours} style={isDarkMode ? styles.courseCardDark : styles.courseCard}>
                             <View style={{ display: 'flex', flexDirection: 'row' }}>
                                 <Card.Cover source={{ uri: course.Bande_annonce_cours }} style={styles.courseImage} />
                                 <Card.Content style={{ paddingTop: 25, width: '63%' }}>
@@ -183,13 +151,13 @@ export const MyBookmark: FC<ScreenProps<'MyBookmark'>> = ({ navigation }) => {
                                                 style={styles.bookmarkIcon}
                                             />
                                         </TouchableOpacity>
-                                        <Paragraph style={styles.courseTopic}>{course.topic}</Paragraph>
+                                        <Paragraph style={isDarkMode ? styles.courseTopicDark : styles.courseTopic}>{course.topic}</Paragraph>
                                     </View>
-                                    <Title style={styles.courseTitle}>{course.NomCourse}</Title>
+                                    <Title style={isDarkMode ? styles.courseTitleDark : styles.courseTitle}>{course.NomCourse}</Title>
                                     <View style={styles.courseDetails}>
                                         <Text style={styles.coursePrice}>${course.prix}</Text>
                                         <Text style={styles.courseOriginalPrice}>${course.Nouveau_prix}</Text>
-                                        <Paragraph>
+                                        <Paragraph style={isDarkMode ? styles.courseTextDark : {}}>
                                             ⭐{course.Scoremin} | {course.NbEssai_Quiz} Std
                                         </Paragraph>
                                     </View>
@@ -199,6 +167,7 @@ export const MyBookmark: FC<ScreenProps<'MyBookmark'>> = ({ navigation }) => {
                     ))}
                 </ScrollView>
             </View>
+            </View>
         </>
     );
 }
@@ -207,7 +176,27 @@ const styles = StyleSheet.create({
     categoriesContainer: {
         marginBottom: 16,
     },
-    categoryButton: {
+    ButtonStyle1: {
+        backgroundColor: '#167F71',
+        marginBottom: 10,
+        marginLeft: 5,
+        padding: 10,
+        borderRadius: 20,
+        marginRight: 2,
+        elevation: 2,
+        shadowRadius: 2,
+    },
+    ButtonStyle1Dark: {
+        backgroundColor: '#4CAF50',
+        marginBottom: 10,
+        marginLeft: 5,
+        padding: 10,
+        borderRadius: 20,
+        marginRight: 2,
+        elevation: 2,
+        shadowRadius: 2,
+    },
+    ButtonStyle2: {
         backgroundColor: '#E8F1FF',
         marginBottom: 10,
         marginLeft: 5,
@@ -217,27 +206,64 @@ const styles = StyleSheet.create({
         elevation: 2,
         shadowRadius: 2,
     },
-    categoryType: {
-        marginRight: 4,
-        padding: 5,
+    ButtonStyle2Dark: {
+        backgroundColor: '#37474F',
+        marginBottom: 10,
+        marginLeft: 5,
+        padding: 10,
         borderRadius: 20,
-        color: '#A0A4AB',
+        marginRight: 2,
+        elevation: 2,
+        shadowRadius: 2,
     },
-    sectionTitle: {
-        fontSize: 18,
+    textStyle3: {
+        color: 'white',
+        fontWeight: 'bold',
+    },
+    textStyle4: {
+        color: 'black',
+    },
+    textStyle4Dark: {
+        color: 'white',
+    },
+    scrollViewContent: {
+        paddingBottom: 16,
+    },
+    courseCard: {
+        marginBottom: 16,
+        backgroundColor: 'white',
+        elevation: 2,
+    },
+    courseCardDark: {
+        marginBottom: 16,
+        backgroundColor: '#263238',
+        elevation: 2,
+    },
+    courseImage: {
+        height: 150,
+        width: 140,
+    },
+    courseTopic: {
+        fontSize: 12,
+        color: '#FF6B00',
+        paddingTop: 5,
+    },
+    courseTopicDark: {
+        fontSize: 12,
+        color: '#FF9800',
+        paddingTop: 5,
+    },
+    courseTitle: {
+        fontSize: 14.5,
         fontWeight: 'bold',
         color: '#202244',
+        marginVertical: 5,
     },
-    sectionLittleTitle: {
-        fontSize: 15,
+    courseTitleDark: {
+        fontSize: 14.5,
         fontWeight: 'bold',
-        color: '#3399ff',
-    },
-    CategoriesSeeAll: {
-        display: 'flex',
-        flexDirection: 'row',
-        marginBottom: 10,
-        justifyContent: 'space-between',
+        color: '#CFD8DC',
+        marginVertical: 5,
     },
     courseDetails: {
         flexDirection: 'row',
@@ -255,35 +281,8 @@ const styles = StyleSheet.create({
         textDecorationLine: 'line-through',
         marginRight: 10,
     },
-    scrollViewContent: {
-        paddingBottom: 16,
-    },
-    card: {
-        marginBottom: 16,
-    },
-    courseCard: {
-        marginBottom: 16,
-        backgroundColor: 'white',
-        elevation: 2,
-    },
-    courseImage: {
-        height: 150,
-        width: 140,
-    },
-    courseTopic: {
-        fontSize: 12,
-        color: '#FF6B00',
-        paddingTop: 5,
-    },
-    courseTitle: {
-        fontSize: 14.5,
-        fontWeight: 'bold',
-        color: '#202244',
-        marginVertical: 5,
-    },
-    filterIcon: {
-        width: 34,
-        height: 34,
+    courseTextDark: {
+        color: '#CFD8DC',
     },
     bookmarkIcon: {
         width: 20,

@@ -45,7 +45,7 @@ export const SignIn: FC<ScreenProps<'SignIn'>> = ({navigation}) => {
   const onSubmit = (data: any) => {
     console.log(data);
     // Handle sign-in logic here
-    navigation.navigate('SignUp');
+    navigation.navigate('HomeScreen');
   };
 
   const getErrorMessage = (error: any) => {

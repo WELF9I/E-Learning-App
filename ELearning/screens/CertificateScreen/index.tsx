@@ -10,6 +10,7 @@ import { CustomButton } from '../../components';
 import ArrowLeftBlueColor from '../../assets/svg/arrowLeftBlueColor.svg';
 // @ts-ignore
 import Signature from '../../assets/categories/signature.png';
+import { useTheme } from '../../utils/ThemeContext';
 
 interface User {
   Nom_utl: string;
@@ -41,6 +42,8 @@ export const CertificateScreen: FC<ScreenProps<'CertificateScreen'>> = ({ naviga
   const certificateRef = React.useRef<View>(null);
   const [issueDate, setIssueDate] = useState<string>('');
   const [certificateID, setCertificateID] = useState<string>('');
+  const { isDarkMode } = useTheme();
+  const styles = createStyles(isDarkMode);
 
   useEffect(() => {
     const generateCertificateID = () => {
@@ -102,11 +105,12 @@ export const CertificateScreen: FC<ScreenProps<'CertificateScreen'>> = ({ naviga
   );
 };
 
-const styles = StyleSheet.create({
+const createStyles = (isDarkMode: boolean) =>
+  StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
-    backgroundColor: '#f0f4f7',
+    backgroundColor: isDarkMode?'#333':'#f0f4f7',
   },
   certificateContainer: {
     backgroundColor: 'white',

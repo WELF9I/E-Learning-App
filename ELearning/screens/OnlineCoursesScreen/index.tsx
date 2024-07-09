@@ -10,6 +10,7 @@ import BookmarkPressed from '../../assets/categories/BookmarkPressed.png';
 import BookmarkNotPressed from '../../assets/categories/BookmarkNotPressed.png';
 // @ts-ignore
 import FilterIcon from '../../assets/categories/FilterIcon.png';
+import {useTheme} from '../../utils/ThemeContext'
 
 interface Course {
   id_cours: number;
@@ -143,6 +144,8 @@ export const OnlineCoursesScreen: FC<ScreenProps<'OnlineCoursesScreen'>> = ({ na
   const [bookmarkedCourses, setBookmarkedCourses] = useState<number[]>([]);
   const [isCoursesActive, setIsCoursesActive] = useState<boolean>(true);
   const [isMentorsActive, setIsMentorsActive] = useState<boolean>(false);
+  const { isDarkMode } = useTheme();
+  const styles = createStyles(isDarkMode);
 
   const handleCoursePress = (course: Course) => {
     //@ts-ignore
@@ -166,6 +169,11 @@ export const OnlineCoursesScreen: FC<ScreenProps<'OnlineCoursesScreen'>> = ({ na
   const handleSearch = (query: string) => {
     setSearchQuery(query);
   };
+
+  const handleDataMentor=(mentor:Former)=>{
+    //@ts-ignore
+    navigation.navigate('MentorProfile', { mentor });
+  }
 
   const toggleCourses = () => {
     setIsCoursesActive(true);
@@ -251,7 +259,7 @@ export const OnlineCoursesScreen: FC<ScreenProps<'OnlineCoursesScreen'>> = ({ na
                 <View style={styles.courseDetails}>
                   <Text style={styles.coursePrice}>${course.prix}</Text>
                   <Text style={styles.courseOriginalPrice}>${course.Nouveau_prix}</Text>
-                  <Paragraph>
+                  <Paragraph style={styles.Rate}>
                     ⭐{course.Scoremin}
                   </Paragraph>
                 </View>
@@ -266,12 +274,14 @@ export const OnlineCoursesScreen: FC<ScreenProps<'OnlineCoursesScreen'>> = ({ na
         {isMentorsActive && (
           <View>
             {filteredMentors.map(mentor => (
-              <View key={mentor.idF} style={styles.mentorItem}>
+              <View key={mentor.idF} >
+                <TouchableOpacity style={styles.mentorItem} onPress={()=> handleDataMentor(mentor)}>
                 <Avatar.Image size={55} source={{ uri: mentor.Img }} />
-                <View style={{marginLeft:10}}>
-                  <Text style={styles.mentorName}>{mentor.Nom_utl} {mentor.prénom}</Text>
-                  <Paragraph style={styles.mentorCertification}>{mentor.Certifications}</Paragraph>
-                </View>
+                  <View style={{marginLeft:10}}>
+                    <Text style={styles.mentorName}>{mentor.Nom_utl} {mentor.prénom}</Text>
+                    <Paragraph style={styles.mentorCertification}>{mentor.Certifications}</Paragraph>
+                  </View>
+                </TouchableOpacity>
             </View>
             ))}
           </View>
@@ -281,11 +291,12 @@ export const OnlineCoursesScreen: FC<ScreenProps<'OnlineCoursesScreen'>> = ({ na
   );
 };
 
-const styles = StyleSheet.create({
+const createStyles = (isDarkMode: boolean) =>
+StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: isDarkMode?'#333':'#f5f5f5',
   },
   searchContainer: {
     flexDirection: 'row',
@@ -294,18 +305,11 @@ const styles = StyleSheet.create({
   },
   searchbar: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: isDarkMode?'#FFF':'#FFF',
   },
   searchIcon: {
     width: 35,
     height: 35,
-  },
-  filterButton: {
-    marginLeft: 8,
-  },
-  filterIcon: {
-    width: 31,
-    height: 31,
   },
   buttonsContainer: {
     width:'90%',
@@ -343,7 +347,7 @@ const styles = StyleSheet.create({
   },
   courseCard: {
     marginBottom: 16,
-    backgroundColor: 'white',
+    backgroundColor: isDarkMode?'#333':'white',
     elevation: 2,
     width:'99.4%'
   },
@@ -359,7 +363,7 @@ const styles = StyleSheet.create({
   courseTitle: {
     fontSize: 14.5,
     fontWeight: 'bold',
-    color: '#202244',
+    color: isDarkMode?'#FFF':'#202244',
     marginVertical: 5,
   },
   courseDetails: {
@@ -389,10 +393,13 @@ const styles = StyleSheet.create({
     fontWeight:'bold',
     marginTop: 5,
     fontSize: 16,
-    color:'#000'
+    color:isDarkMode?'#FFF':'#000'
   },
   mentorCertification:{
-    color : '#545454'
+    color : isDarkMode?'#fbfef8':'#545454'
+  },
+  Rate:{
+    color:isDarkMode?'#FFF':'black',
   }
 });
 

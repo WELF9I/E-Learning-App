@@ -1,7 +1,8 @@
 import React, { FC, useState } from 'react';
 import { View, Text, ScrollView, StyleSheet, TouchableOpacity, Image } from 'react-native';
-import { Card, Searchbar, Avatar,Title, Paragraph } from 'react-native-paper';
+import { Searchbar, Avatar, Paragraph } from 'react-native-paper';
 import { ScreenProps } from '../../types';
+import { useTheme } from '../../utils/ThemeContext';
 // @ts-ignore
 import CustomSearchIcon from '../../assets/categories/search.png';
 
@@ -66,21 +67,24 @@ const mentors: Former[] = [
   },
 ];
 
-export const TopMentorsScreen : FC<ScreenProps<'TopMentorsScreen'>> = ({ navigation }) => {
+export const TopMentorsScreen: FC<ScreenProps<'TopMentorsScreen'>> = ({ navigation }) => {
+  const { isDarkMode } = useTheme();
+  const styles = createStyles(isDarkMode);
   const [searchQuery, setSearchQuery] = useState('');
   const [mentorsData, setMentorsData] = useState<Former[]>([]);
   const filteredMentors = mentors.filter(mentor =>
     mentor.Nom_utl.toLowerCase().includes(searchQuery.toLowerCase()) ||
     mentor.prénom.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
   const handleSearch = (query: string) => {
     setSearchQuery(query);
   };
-  const handleDataMentor=(mentor:Former)=>{
+
+  const handleDataMentor = (mentor: Former) => {
     //@ts-ignore
     navigation.navigate('MentorProfile', { mentor });
-  }
-
+  };
 
   return (
     <View style={styles.container}>
@@ -94,60 +98,64 @@ export const TopMentorsScreen : FC<ScreenProps<'TopMentorsScreen'>> = ({ navigat
         />
       </View>
       <ScrollView contentContainerStyle={styles.scrollViewContent} showsVerticalScrollIndicator={false}>
-      <View>
-            {filteredMentors.map(mentor => (
-              <View key={mentor.idF}>
-                <TouchableOpacity onPress={() => handleDataMentor(mentor)} style={styles.mentorItem}>
+        <View>
+          {filteredMentors.map(mentor => (
+            <View key={mentor.idF}>
+              <TouchableOpacity onPress={() => handleDataMentor(mentor)} style={styles.mentorItem}>
                 <Avatar.Image size={55} source={{ uri: mentor.Img }} />
-                <View style={{marginLeft:10}}>
+                <View style={{ marginLeft: 10 }}>
                   <Text style={styles.mentorName}>{mentor.Nom_utl} {mentor.prénom}</Text>
                   <Paragraph style={styles.mentorCertification}>{mentor.Certifications}</Paragraph>
                 </View>
-                </TouchableOpacity>
+              </TouchableOpacity>
             </View>
-            ))}
-          </View>
+          ))}
+        </View>
       </ScrollView>
     </View>
-  )
-  
-}
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 16,
-    backgroundColor: '#fff',
-  },
-  searchContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 16,
-  },
-  searchbar: {
-    flex: 1,
-    marginBottom:30,
-  },
-  searchIcon: {
-    width: 35,
-    height: 35,
-  },
-  scrollViewContent: {
-    paddingBottom: 16,
-  },
-  mentorItem: {
-    marginLeft:15,
-    marginBottom:30,
-    display:'flex',
-    flexDirection:'row',
-    alignItems: 'center',
-  },
-  mentorName: {
-    fontWeight:'bold',
-    marginTop: 5,
-    fontSize: 16,
-    color:'#000'
-  },
-  mentorCertification:{
-    color : '#545454'
-  },
-});
+  );
+};
+
+const createStyles = (isDarkMode: boolean) =>
+  StyleSheet.create({
+    container: {
+      flex: 1,
+      padding: 16,
+      backgroundColor: isDarkMode ? '#333' : '#fff',
+    },
+    searchContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      marginBottom: 16,
+    },
+    searchbar: {
+      flex: 1,
+      marginBottom: 30,
+      backgroundColor:'#fff',
+      color: isDarkMode ? '#fff' : '#000',
+    },
+    searchIcon: {
+      width: 35,
+      height: 35,
+    },
+    scrollViewContent: {
+      paddingBottom: 16,
+    },
+    mentorItem: {
+      marginLeft: 15,
+      marginBottom: 30,
+      display: 'flex',
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+    mentorName: {
+      fontWeight: 'bold',
+      marginTop: 5,
+      fontSize: 16,
+      color: isDarkMode ? '#ffffff' : '#000000',
+    },
+    mentorCertification: {
+      color: isDarkMode ? '#cccccc' : '#545454',
+    },
+  });
+

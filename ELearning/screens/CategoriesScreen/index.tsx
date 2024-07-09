@@ -21,6 +21,7 @@ import IconOfficeProductivity from '../../assets/categories/ICONOfficeProductivi
 import CustomSearchIcon from '../../assets/categories/search.png'; // Custom search icon
 
 import { ScreenProps } from '../../types';
+import { useTheme } from '../../utils/ThemeContext';
 
 const categories = [
   { id: 1, name: '3D Design', icon: Icon3DDesign },
@@ -34,6 +35,8 @@ const categories = [
 ];
 
 export const CategoriesScreen: FC<ScreenProps<'CategoriesScreen'>> = ({ navigation }) => {
+  const { isDarkMode } = useTheme();
+  const styles = createStyles(isDarkMode);
   const [searchQuery, setSearchQuery] = useState('');
   const filteredCategories = categories.filter(category =>
     category.name.toLowerCase().includes(searchQuery.toLowerCase())
@@ -60,48 +63,48 @@ export const CategoriesScreen: FC<ScreenProps<'CategoriesScreen'>> = ({ navigati
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 16,
-    backgroundColor: '#F5F5F5',
-  },
-  searchbar: {
-    backgroundColor: '#FFF',
-    elevation: 15, 
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 2,
-    borderRadius: 10,
-    marginBottom: 35
-  },
-  searchIcon: {
-    width: 30,
-    height: 30,
-  },
-  categoriesContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
-  },
-  categoryItem: {
-    width: '48%',
-    padding: 20,
-    marginBottom: 16,
-    backgroundColor: '#FFF',
-    borderRadius: 10,
-    alignItems: 'center',
-  },
-  categoryIcon: {
-    width: 40,
-    height: 40,
-    marginBottom: 10,
-  },
-  categoryText: {
-    fontSize: 16,
-    marginTop: 8,
-  },
-});
-
-export default CategoriesScreen;
+const createStyles = (isDarkMode: boolean) =>
+  StyleSheet.create({
+    container: {
+      flex: 1,
+      padding: 16,
+      backgroundColor: isDarkMode ? '#121212' : '#F5F5F5',
+    },
+    searchbar: {
+      backgroundColor:'#FFF',
+      elevation: 15, 
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.2,
+      shadowRadius: 2,
+      borderRadius: 10,
+      marginBottom: 35,
+    },
+    searchIcon: {
+      width: 30,
+      height: 30,
+    },
+    categoriesContainer: {
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      justifyContent: 'space-between',
+    },
+    categoryItem: {
+      width: '48%',
+      padding: 20,
+      marginBottom: 16,
+      backgroundColor: isDarkMode ? '#333' : '#FFF',
+      borderRadius: 10,
+      alignItems: 'center',
+    },
+    categoryIcon: {
+      width: 40,
+      height: 40,
+      marginBottom: 10,
+    },
+    categoryText: {
+      fontSize: 16,
+      marginTop: 8,
+      color: isDarkMode ? '#FFF' : '#000',
+    },
+  });

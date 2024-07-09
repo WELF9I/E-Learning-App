@@ -6,4 +6,3 @@ export {CustomButton} from './CustomButton';
 export {RoundedLogoContainer} from './RoundedLogoContainer';
 export {AuthContainer} from './AuthContainer';
 export {EventModal} from './EventModal';
-export {Footer} from './Footer';

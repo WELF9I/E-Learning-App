@@ -10,6 +10,7 @@ import IsNotClickedHeart from '../../assets/categories/IsNotClickedHeart.png';
 import ArrowLeftBlueColor from '../../assets/svg/arrowLeftBlueColor.svg';
 import { CustomButton } from '../../components';
 import { useTranslation } from 'react-i18next';
+import {useTheme} from '../../utils/ThemeContext';
 
 interface Course {
   id_cours: number;
@@ -84,6 +85,8 @@ export const ReviewCourse: FC<ScreenProps<'ReviewCourse'>> = ({ navigation,route
   //@ts-ignore
   const { course } = route.params;
   const [selectedLevel, setSelectedLevel] = useState<string>('Excellent');
+  const { isDarkMode } = useTheme();
+  const styles = createStyles(isDarkMode);
   const [likeStates, setLikeStates] = useState<{ [key: string]: boolean }>({});
   const [likeCounts, setLikeCounts] = useState<{ [key: string]: number }>(() => {
     const initialLikeCounts = {};
@@ -197,10 +200,11 @@ export const ReviewCourse: FC<ScreenProps<'ReviewCourse'>> = ({ navigation,route
   );
 };
 
-const styles = StyleSheet.create({
+const createStyles = (isDarkMode: boolean) =>
+  StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F5F5F5',
+    backgroundColor: isDarkMode?'#333':'#F5F5F5',
     padding: 16,
   },
   header: {
@@ -210,7 +214,7 @@ const styles = StyleSheet.create({
   averageRating: {
     fontSize: 35,
     fontWeight: 'bold',
-    color: '#202244',
+    color: isDarkMode?'#FFF':'#202244',
   },
   reviewsCount: {
     fontSize: 16,
@@ -244,7 +248,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   reviewCard: {
-    backgroundColor: '#FFF',
+    backgroundColor: isDarkMode?'#9c9c9c':'#FFF',
     padding: 16,
     borderRadius: 8,
     marginBottom: 16,

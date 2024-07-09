@@ -8,7 +8,6 @@ export {CreateNewPin} from './CreateNewPin';
 export {SetFingerPrint} from './SetFingerPrint';
 export {CategoriesScreen} from './CategoriesScreen';
 export {HomeScreen} from './HomeScreen';
-export {InboxScreen} from './InboxScreen';
 export {Profile} from './Profile';
 export {TransactionsScreen} from './TransactionsScreen';
 export {ForgotPassword} from './ForgotPassword';

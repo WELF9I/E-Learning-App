@@ -15,7 +15,6 @@ export type rootStackParamList = {
   MyCoursesScreen:undefined;
   HomeScreen:undefined;
   TransactionsScreen:undefined;
-  InboxScreen:undefined;
   Profile:undefined;
   ForgotPassword:undefined;
   VerifyForgotPassword:undefined;

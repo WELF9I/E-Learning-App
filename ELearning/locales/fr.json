@@ -87,5 +87,14 @@
   "reviewPlaceholder": "Souhaitez-vous écrire quelque chose à propos de ce produit ?",
   "submitReview": "Soumettre l'avis",
   "maxCharacters": "Maximum de 250 caractères autorisés",
-  "BookMark":"FavorisLivre"
+  "BookMark":"FavorisLivre",
+  "All":"Tous",
+  "Graphic Design":"Conception graphique",
+  "3D Design":"Conception 3D",
+  "Web Development":"Développement Web",
+  "SEO & Marketing":"SEO & Marketing",
+  "Finance & Accounting":"Finance & Comptabilité",
+  "Personal Development":"Développement personnel",
+  "Office Productivity":"Productivité bureautique",
+  "HR Management":"Gestion des RH"
 }

@@ -5,15 +5,14 @@ import Video from 'react-native-video';
 import { WebView } from 'react-native-webview';
 import { Button, Heading, VStack } from '@gluestack-ui/themed';
 import { ScreenProps } from '../../types';
-// @ts-ignore
 import CustomSearchIcon from '../../assets/categories/search.png';
-import { CustomButton, EventModal } from '../../components';
-//@ts-ignore
 import ArrowLeftBlueColor from '../../assets/svg/arrowLeftBlueColor.svg';
-//@ts-ignore
 import CourseCompletedIcon from '../../assets/svg/Course-Completed.svg';
 import { Rating } from 'react-native-elements';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
+import { CustomButton, EventModal } from '../../components';
+import { useTheme } from '../../utils/ThemeContext';
 
 interface Course {
   id_cours: number;
@@ -65,23 +64,21 @@ export const MyCoursesOngoing: FC<ScreenProps<'MyCoursesOngoing'>> = ({ navigati
   const [modalEventVisible, setModalEventVisible] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [lastWatchedVideoIndex, setLastWatchedVideoIndex] = useState<number | null>(null);
+  const { isDarkMode } = useTheme(); // Assuming useTheme() provides isDarkMode
 
   useEffect(() => {
     const loadLastWatchedVideo = async () => {
-      //@ts-ignore
       const lastWatched = await AsyncStorage.getItem(`lastWatched_${course.id_cours}`);
       if (lastWatched !== null) {
         setLastWatchedVideoIndex(parseInt(lastWatched, 10));
       }
     };
     loadLastWatchedVideo();
-    //@ts-ignore
   }, [course.id_cours]);
 
   const handlePlayVideo = async (url: string, index: number) => {
     setVideoUrl(url);
     setModalVisible(true);
-    //@ts-ignore
     await AsyncStorage.setItem(`lastWatched_${course.id_cours}`, index.toString());
     setLastWatchedVideoIndex(index);
   };
@@ -91,11 +88,9 @@ export const MyCoursesOngoing: FC<ScreenProps<'MyCoursesOngoing'>> = ({ navigati
   };
 
   const onContinueCourse = () => {
-    console.log("Current lastWatchedVideoIndex:", lastWatchedVideoIndex);
     if (lastWatchedVideoIndex !== null && lastWatchedVideoIndex < sections.length - 1) {
       const nextVideoIndex = lastWatchedVideoIndex + 1;
       const nextVideo = sections[nextVideoIndex];
-      console.log("Playing next video:", nextVideoIndex, nextVideo.title);
       handlePlayVideo(nextVideo.video, nextVideoIndex);
     } else {
       setModalEventVisible(true);
@@ -103,7 +98,6 @@ export const MyCoursesOngoing: FC<ScreenProps<'MyCoursesOngoing'>> = ({ navigati
   };
 
   const handleWriteReview = (course: Course) => {
-    //@ts-ignore
     navigation.navigate('WriteReview', { course });
   };
 
@@ -137,7 +131,6 @@ export const MyCoursesOngoing: FC<ScreenProps<'MyCoursesOngoing'>> = ({ navigati
         />
       );
     } else {
-      //@ts-ignore
       return <Video source={{ uri: videoUrl }} style={styles.video} controls fullscreen resizeMode="contain" />;
     }
   };
@@ -152,17 +145,17 @@ export const MyCoursesOngoing: FC<ScreenProps<'MyCoursesOngoing'>> = ({ navigati
     <View>
       {item.sectionTitle ? (
         <View style={styles.sectionHeaderContainer}>
-          <Text style={styles.sectionHeader}>
+          <Text style={[styles.sectionHeader, isDarkMode && styles.darkText]}>
             Section {item.idSec.toString().padStart(2, '0')} -{' '}
-            <Text style={styles.sectionHeaderTitle}>{item.sectionTitle}</Text>
+            <Text style={[styles.sectionHeaderTitle, isDarkMode && styles.darkText]}>{item.sectionTitle}</Text>
           </Text>
         </View>
       ) : null}
-      <View style={styles.sectionContainer}>
+      <View style={[styles.sectionContainer, isDarkMode && styles.darkSection]}>
         <View style={styles.indexCircle}>
           <Text style={styles.indexText}>{item.idSec.toString().padStart(2, '0')}</Text>
         </View>
-        <Text style={styles.sectionTitle}>{item.title}</Text>
+        <Text style={[styles.sectionTitle, isDarkMode && styles.darkText]}>{item.title}</Text>
         {!item.locked ? (
           <TouchableOpacity onPress={() => handlePlayVideo(item.video, item.idSec)} style={{ marginRight: 10 }}>
             <Image source={require('../../assets/categories/PlayIcon.png')} style={styles.icon} />
@@ -176,17 +169,19 @@ export const MyCoursesOngoing: FC<ScreenProps<'MyCoursesOngoing'>> = ({ navigati
 
   return (
     <>
+    <View style={[isDarkMode &&styles.containerDark]}>
       <View style={styles.searchContainer}>
         <Searchbar
           placeholder="Search for ..."
           onChangeText={handleSearch}
           value={searchQuery}
-          style={styles.searchbar}
+          style={[styles.searchbar, isDarkMode && styles.darkSearchbar]}
           icon={() => <Image source={CustomSearchIcon} style={styles.searchIcon} />}
         />
       </View>
+      </View>
 
-      <View style={styles.container}>
+      <View style={[styles.container, isDarkMode && styles.darkContainer]}>
         <FlatList
           data={filteredSections}
           renderItem={renderItem}
@@ -228,7 +223,6 @@ export const MyCoursesOngoing: FC<ScreenProps<'MyCoursesOngoing'>> = ({ navigati
             startingValue={4}
           />
           <CustomButton
-            //@ts-ignore
             pressEvent={() => handleWriteReview(course)}
             icon={<ArrowLeftBlueColor />}
             text="Write a Review"
@@ -258,6 +252,16 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#f5f5f5',
   },
+  containerDark: {
+    backgroundColor: '#333',
+    color:"white"
+  },
+  containerWhite: {
+    backgroundColor: '#FFF',
+  },
+  darkContainer: {
+    backgroundColor: '#333',
+  },
   searchContainer: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -269,6 +273,9 @@ const styles = StyleSheet.create({
   searchbar: {
     flex: 1,
     backgroundColor: 'white',
+  },
+  darkSearchbar: {
+    backgroundColor: '#333', 
   },
   searchIcon: {
     width: 35,
@@ -286,6 +293,10 @@ const styles = StyleSheet.create({
   sectionHeader: {
     fontSize: 16,
     fontWeight: 'bold',
+    color: '#000', // Light mode text color
+  },
+  darkText: {
+    color: '#fff', // Dark mode text color
   },
   sectionHeaderTitle: {
     color: '#0080ff',
@@ -293,7 +304,7 @@ const styles = StyleSheet.create({
   sectionContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#fff',
+    backgroundColor: '#fff', // Light mode background
     borderRadius: 8,
     padding: 16,
     marginBottom: 8,
@@ -302,6 +313,9 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 8,
     elevation: 2,
+  },
+  darkSection: {
+    backgroundColor: '#1e1e1e', // Dark mode background
   },
   indexCircle: {
     width: 32,
@@ -319,6 +333,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     flex: 1,
     fontSize: 16,
+    color: '#000', // Light mode text color
   },
   icon: {
     width: 25,
@@ -328,7 +343,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#000',
+    backgroundColor: '#000', // Modal background
   },
   video: {
     width: Dimensions.get('window').width,

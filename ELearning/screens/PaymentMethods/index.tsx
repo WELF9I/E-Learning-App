@@ -17,6 +17,7 @@ import GooglePayIcon from '../../assets/svg/GooglePay-icon.svg';
 import ApplePayIcon from '../../assets/svg/ApplePay-icon.svg';
 
 import { Heading, VStack } from '@gluestack-ui/themed';
+import { useTheme } from '../../utils/ThemeContext';
 
 const PaymentIcons = {
   paypal: <PaypalIcon />,
@@ -36,6 +37,8 @@ export const PaymentMethods: FC<ScreenProps<'PaymentMethods'>> = ({ navigation,r
   const [selectedMethod, setSelectedMethod] = useState('card');
   const [PaymentList, setPaymentList] = useState(['Paypal', 'Google Pay', 'Apple Pay', '**** **** **** 3054']);
   const [modalVisible, setModalVisible] = useState(false);
+  const { isDarkMode } = useTheme();
+  const styles = createStyles(isDarkMode);
 
   const onSubmit = (data: any) => {
     console.log(data);
@@ -101,17 +104,18 @@ export const PaymentMethods: FC<ScreenProps<'PaymentMethods'>> = ({ navigation,r
   );
 };
 
-const styles = StyleSheet.create({
+const createStyles = (isDarkMode: boolean) =>
+  StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
-    backgroundColor: '#F8F8F8',
+    backgroundColor: isDarkMode?'#333':'#F8F8F8',
   },
   card: {
     flexDirection: 'row',
     alignItems: 'center',
     padding: 16,
-    backgroundColor: '#fff',
+    backgroundColor: isDarkMode?'#696969':'#FFF',
     borderRadius: 8,
     marginVertical: 16,
     shadowColor: '#000',
@@ -135,20 +139,21 @@ const styles = StyleSheet.create({
   },
   cardSubtitle: {
     fontSize: 14,
-    color: '#202244',
+    color: isDarkMode?'#e7e7e7':'#202244',
     fontWeight: 'bold',
   },
   selectionText: {
     fontSize: 16,
     fontWeight: 'bold',
     marginVertical: 8,
+    color:isDarkMode?'#FFF':'black'
   },
   paymentOption: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     padding: 16,
-    backgroundColor: '#fff',
+    backgroundColor: isDarkMode?'#696969':'#FFF',
     borderRadius: 8,
     marginVertical: 8,
     shadowColor: '#000',
@@ -160,7 +165,7 @@ const styles = StyleSheet.create({
   paymentText: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: '#202244',
+    color: isDarkMode?'#FFF':'#202244',
   },
   LinkCourse: {
     textDecorationLine: 'underline',

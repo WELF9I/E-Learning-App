@@ -4,6 +4,7 @@ import { View, Text, ScrollView, StyleSheet, TouchableOpacity } from 'react-nati
 import CheckBox from '@react-native-community/checkbox';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { CustomButton } from '../../components';
+import { useTheme } from '../../utils/ThemeContext';
 //@ts-ignore
 import ArrowLeftBlueColor from '../../assets/svg/arrowLeftBlueColor.svg';
 
@@ -23,6 +24,8 @@ const prices = ['Paid', 'Free'];
 const ratings = ['4.5 & Up Above', '4.0 & Up Above', '3.5 & Up Above', '3.0 & Up Above'];
 
 export const Filter: FC<ScreenProps<'Filter'>> = ({ navigation, route }) => {
+  const { isDarkMode } = useTheme();
+  const styles = createStyles(isDarkMode);
   const [checkedItems, setCheckedItems] = useState<{ [key: string]: boolean }>({});
 
   useEffect(() => {
@@ -97,33 +100,36 @@ export const Filter: FC<ScreenProps<'Filter'>> = ({ navigation, route }) => {
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    padding: 16,
-    backgroundColor: '#f0f4f7',
-  },
-  section: {
-    marginBottom: 16,
-  },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 8,
-  },
-  checkboxContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 8,
-  },
-  label: {
-    marginLeft: 8,
-    fontSize: 16,
-  },
-  clearText: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#167F71',
-    marginBottom: 16,
-    textAlign: 'right',
-  },
-});
+const createStyles = (isDarkMode: boolean) =>
+  StyleSheet.create({
+    container: {
+      padding: 16,
+      backgroundColor: isDarkMode ? '#333' : '#f0f4f7',
+    },
+    section: {
+      marginBottom: 16,
+    },
+    sectionTitle: {
+      fontSize: 18,
+      fontWeight: 'bold',
+      marginBottom: 8,
+      color: isDarkMode ? '#ffffff' : '#000000',
+    },
+    checkboxContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      marginBottom: 8,
+    },
+    label: {
+      marginLeft: 8,
+      fontSize: 16,
+      color: isDarkMode ? '#bbbbbb' : '#000000',
+    },
+    clearText: {
+      fontSize: 16,
+      fontWeight: 'bold',
+      color: isDarkMode ? '#5DA3FA' : '#167F71',
+      marginBottom: 16,
+      textAlign: 'right',
+    },
+  });

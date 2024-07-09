@@ -7,6 +7,7 @@ import { Button } from '@gluestack-ui/themed';
 import { ScreenProps } from '../../types';
 // @ts-ignore
 import CustomSearchIcon from '../../assets/categories/search.png';
+import { useTheme } from '../../utils/ThemeContext';
 
 interface Course {
   id_cours: number;
@@ -52,6 +53,8 @@ const sections: Section[] = [
 ];
 
 export const MyCoursesCompleted: FC<ScreenProps<'MyCoursesCompleted'>> = ({ navigation, route }) => {
+  const { isDarkMode } = useTheme();
+  const styles = createStyles(isDarkMode);
   //@ts-ignore  
   const { course } = route.params;
   const [videoUrl, setVideoUrl] = useState<string | null>(null);
@@ -125,17 +128,17 @@ export const MyCoursesCompleted: FC<ScreenProps<'MyCoursesCompleted'>> = ({ navi
     <View>
       {item.sectionTitle ? (
         <View style={styles.sectionHeaderContainer}>
-          <Text style={styles.sectionHeader}>
+          <Text style={[styles.sectionHeader, isDarkMode && styles.sectionHeaderDark]}>
             Section {item.idSec.toString().padStart(2, '0')} -{' '}
             <Text style={styles.sectionHeaderTitle}>{item.sectionTitle}</Text>
           </Text>
         </View>
       ) : null}
-      <View style={styles.sectionContainer}>
-        <View style={styles.indexCircle}>
-          <Text style={styles.indexText}>{item.idSec.toString().padStart(2, '0')}</Text>
+      <View style={[styles.sectionContainer, isDarkMode && styles.sectionContainerDark]}>
+        <View style={[styles.indexCircle, isDarkMode && styles.indexCircleDark]}>
+          <Text style={[styles.indexText, isDarkMode && styles.indexTextDark]}>{item.idSec.toString().padStart(2, '0')}</Text>
         </View>
-        <Text style={styles.sectionTitle}>{item.title}</Text>
+        <Text style={[styles.sectionTitle, isDarkMode && styles.sectionTitleDark]}>{item.title}</Text>
         {!item.locked ? (
           <TouchableOpacity onPress={() => handlePlayVideo(item.video)} style={{ marginRight: 10 }}>
             <Image source={require('../../assets/categories/PlayIcon.png')} style={styles.icon} />
@@ -149,17 +152,18 @@ export const MyCoursesCompleted: FC<ScreenProps<'MyCoursesCompleted'>> = ({ navi
 
   return (
     <>
+    <View style={[isDarkMode &&styles.containerDark]}>
       <View style={styles.searchContainer}>
         <Searchbar
           placeholder="Search for ..."
           onChangeText={handleSearch}
           value={searchQuery}
-          style={styles.searchbar}
+          style={[styles.searchbar, isDarkMode && styles.searchbarDark]}
           icon={() => <Image source={CustomSearchIcon} style={styles.searchIcon} />}
         />
       </View>
-
-      <View style={styles.container}>
+      </View>
+      <View style={[styles.container, isDarkMode && styles.containerDark]}>
         <FlatList
           data={filteredSections}
           renderItem={renderItem}
@@ -168,7 +172,7 @@ export const MyCoursesCompleted: FC<ScreenProps<'MyCoursesCompleted'>> = ({ navi
         />
       </View>
 
-      <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', width: '85%', margin: 'auto' }}>
+      <View style={[styles.footerCourse]}>
         <TouchableOpacity onPress={() => { handleCertificate(course) }}>
           <Image
             source={require('../../assets/categories/diploma.png')}
@@ -196,10 +200,26 @@ export const MyCoursesCompleted: FC<ScreenProps<'MyCoursesCompleted'>> = ({ navi
   );
 };
 
-const styles = StyleSheet.create({
+const createStyles = (isDarkMode: boolean) =>
+  StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: isDarkMode?'#FFF':'#f5f5f5',
+  },
+  containerDark: {
+    backgroundColor: '#333',
+    color:"white"
+  },
+  containerFooterDark: {
+    backgroundColor: '#333',
+    width:'100%',
+    margin:'auto',
+    justifyContent:'space-between',
+    
+    
+  },
+  containerWhite: {
+    backgroundColor: '#FFF',
   },
   searchContainer: {
     flexDirection: 'row',
@@ -212,6 +232,10 @@ const styles = StyleSheet.create({
   searchbar: {
     flex: 1,
     backgroundColor: 'white',
+  },
+  searchbarDark: {
+    backgroundColor: '#333',
+    color: 'white',
   },
   searchIcon: {
     width: 35,
@@ -230,6 +254,9 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
   },
+  sectionHeaderDark: {
+    color: 'white',
+  },
   sectionHeaderTitle: {
     color: '#0080ff',
   },
@@ -246,6 +273,9 @@ const styles = StyleSheet.create({
     shadowRadius: 8,
     elevation: 2,
   },
+  sectionContainerDark: {
+    backgroundColor: '#1e1e1e',
+  },
   indexCircle: {
     width: 32,
     height: 32,
@@ -255,13 +285,22 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginRight: 16,
   },
+  indexCircleDark: {
+    backgroundColor: '#3e3e3e',
+  },
   indexText: {
     fontSize: 14,
     fontWeight: 'bold',
   },
+  indexTextDark: {
+    color: 'white',
+  },
   sectionTitle: {
     flex: 1,
     fontSize: 16,
+  },
+  sectionTitleDark: {
+    color: 'white',
   },
   diplomaIcon: {
     width: 55,
@@ -293,6 +332,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#000',
+  },
+  footerCourse:{
+      display: 'flex',
+      flexDirection: 'row', 
+      justifyContent: 'space-between', 
+      alignItems: 'center', 
+      width: '85%', 
+      margin: 'auto',
   },
   video: {
     width: Dimensions.get('window').width,

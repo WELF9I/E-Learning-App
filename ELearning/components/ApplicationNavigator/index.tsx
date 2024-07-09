@@ -54,7 +54,7 @@ export const ApplicationNavigator: FC = (): JSX.Element => {
     <Stack.Navigator>
 
 
-      {/* <Stack.Group
+      <Stack.Group
         screenOptions={{
           headerShown: false,
         }}>
@@ -147,8 +147,9 @@ export const ApplicationNavigator: FC = (): JSX.Element => {
           name="SetFingerPrint"
           component={SetFingerPrint}
         />
-         </Stack.Group> */}
+         </Stack.Group>
         
+        {/*Next Part*/}
            
         <Stack.Group
         screenOptions={{

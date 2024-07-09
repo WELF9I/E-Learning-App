@@ -87,6 +87,15 @@
   "reviewPlaceholder": "Would you like to write anything about this Product?",
   "submitReview": "Submit Review",
   "maxCharacters": "Maximum 250 characters allowed",
-  "BookMark":"BookMark"
+  "BookMark":"BookMark",
+  "All":"All",
+  "Graphic Design":"Graphic Design",
+  "3D Design":"3D Design",
+  "Web Development":"Web Development",
+  "SEO & Marketing":"SEO & Marketing",
+  "Finance & Accounting":"Finance & Accounting",
+  "Personal Development":"Personal Development",
+  "Office Productivity":"Office Productivity",
+  "HR Management":"HR Management"
   
 }

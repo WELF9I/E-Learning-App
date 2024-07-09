@@ -10,6 +10,7 @@ import IsNotClickedHeart from '../../assets/categories/IsNotClickedHeart.png';
 import BookmarkPressed from '../../assets/categories/BookmarkPressed.png';
 // @ts-ignore
 import BookmarkNotPressed from '../../assets/categories/BookmarkNotPressed.png';
+import { useTheme } from '../../utils/ThemeContext';
 
 export const MentorProfile: FC<ScreenProps<'MentorProfile'>> = ({ navigation,route }) => {
   //@ts-ignore
@@ -91,6 +92,8 @@ export const MentorProfile: FC<ScreenProps<'MentorProfile'>> = ({ navigation,rou
   const [isRatingsActive, setIsRatingsActive] = useState<boolean>(true);
   const [isCoursesActive, setIsCoursesActive] = useState<boolean>(false);
   const [bookmarkedCourses, setBookmarkedCourses] = useState<number[]>([]);
+  const { isDarkMode } = useTheme();
+  const styles = createStyles(isDarkMode);
 
   const handleLikeReview = (id: string) => {
     setLikedReviews((prevState) => ({
@@ -283,7 +286,7 @@ export const MentorProfile: FC<ScreenProps<'MentorProfile'>> = ({ navigation,rou
                   <View style={styles.courseDetails}>
                     <Text style={styles.coursePrice}>${course.prix}</Text>
                     <Text style={styles.courseOriginalPrice}>${course.Nouveau_prix}</Text>
-                    <Paragraph>
+                    <Paragraph style={styles.RatingLabel}>
                       ⭐{course.Scoremin}
                     </Paragraph>
                   </View>
@@ -298,7 +301,8 @@ export const MentorProfile: FC<ScreenProps<'MentorProfile'>> = ({ navigation,rou
   
 };
 
-const styles = StyleSheet.create({
+const createStyles = (isDarkMode: boolean) =>
+  StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
@@ -306,7 +310,7 @@ const styles = StyleSheet.create({
   header: {
     alignItems: 'center',
     padding: 16,
-    backgroundColor: '#f0f0f0',
+    backgroundColor: isDarkMode?'#333':'#f0f0f0',
   },
   avatar: {
     marginTop: 16,
@@ -315,10 +319,11 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     marginTop: 8,
+    color:isDarkMode?'#FFF':'black'
   },
   title: {
     fontSize: 14,
-    color: '#666',
+    color: isDarkMode?'#FFF':'#666',
     marginVertical: 4,
   },
   stats: {
@@ -332,19 +337,20 @@ const styles = StyleSheet.create({
   statNumber: {
     fontSize: 16,
     fontWeight: 'bold',
+    color:isDarkMode?'#FFF':'black'
   },
   statLabel: {
     fontSize: 12,
-    color: '#666',
+    color: isDarkMode?'#FFF':'#666',
   },
 
   description: {
     padding: 16,
-    backgroundColor: '#e0e0e0',
+    backgroundColor: isDarkMode?'#848484':'#e0e0e0',
   },
   descriptionText: {
     fontSize: 14,
-    color: '#666',
+    color: isDarkMode?'#FFF':'#666',
     textAlign: 'center',
   },
   tabs: {
@@ -366,6 +372,7 @@ const styles = StyleSheet.create({
     padding: 16,
     borderBottomWidth: 1,
     borderBottomColor: '#e0e0e0',
+    backgroundColor:isDarkMode?'#333':'#f0f0f0'
   },
   reviewAvatar: {
     marginRight: 16,
@@ -376,10 +383,11 @@ const styles = StyleSheet.create({
   reviewName: {
     fontSize: 16,
     fontWeight: 'bold',
+    color:isDarkMode?'#FFF':'black'
   },
   reviewDescription: {
     fontSize: 14,
-    color: '#666',
+    color: isDarkMode?'#e0e0e0':'#666',
     marginVertical: 4,
   },
   reviewStats: {
@@ -394,12 +402,12 @@ const styles = StyleSheet.create({
   },
   likesText: {
     fontSize: 14,
-    color: '#666',
+    color: isDarkMode?'#e0e0e0':'#666',
     marginLeft:-90
   },
   time: {
     fontSize: 14,
-    color: '#666',
+    color: isDarkMode?'#e0e0e0':'#666',
   },
   reviewRating: {
     color: '#000',
@@ -424,7 +432,7 @@ const styles = StyleSheet.create({
   },
   courseCard: {
     marginBottom: 16,
-    backgroundColor: 'white',
+    backgroundColor: isDarkMode?'#333':'white',
     elevation: 2,
   },
   courseImage: {
@@ -439,7 +447,7 @@ const styles = StyleSheet.create({
   courseTitle: {
     fontSize: 14.5,
     fontWeight: 'bold',
-    color: '#202244',
+    color: isDarkMode?'#FFF':'#202244',
     marginVertical: 5,
   },
   courseDetails: {
@@ -458,5 +466,8 @@ const styles = StyleSheet.create({
     textDecorationLine: 'line-through',
     marginRight: 10,
   },
+  RatingLabel:{
+    color:isDarkMode?'#FFF':'black'
+  }
 });
 

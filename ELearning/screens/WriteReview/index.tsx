@@ -11,12 +11,15 @@ import UploadFileIcon from '../../assets/svg/Upload-Files.svg';
 //@ts-ignore
 import ArrowLeftBlueColor from '../../assets/svg/arrowLeftBlueColor.svg';
 import { CustomButton } from '../../components';
+import { useTheme } from '../../utils/ThemeContext';
 
 export const WriteReview: FC<ScreenProps<'WriteReview'>> = ({ navigation,route }) => {
   //@ts-ignore
   const { course } = route.params;
   const { t } = useTranslation();
   const [imageUri, setImageUri] = useState<string | null>(null);
+  const { isDarkMode } = useTheme();
+  const styles = createStyles(isDarkMode);
   const { control, handleSubmit, formState: { errors } } = useForm({
     resolver: yupResolver(
       yup.object().shape({
@@ -51,7 +54,6 @@ export const WriteReview: FC<ScreenProps<'WriteReview'>> = ({ navigation,route }
 
   return (
     <View style={styles.container}>
-
       <View style={styles.card}>
         <View style={styles.productInfo}>
           <View style={styles.imagePlaceholder}></View>
@@ -102,14 +104,15 @@ export const WriteReview: FC<ScreenProps<'WriteReview'>> = ({ navigation,route }
   );
 };
 
-const styles = StyleSheet.create({
+const createStyles = (isDarkMode: boolean) =>
+  StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: '#F0F4F8',
+    backgroundColor: isDarkMode?'#333':'#F0F4F8',
   },
   card: {
-    backgroundColor: '#FFF',
+    backgroundColor: isDarkMode?'#9c9c9c':'#fff',
     borderRadius: 15,
     padding: 20,
     shadowColor: '#000',
@@ -132,7 +135,7 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   productTitle: {
-    color: 'orange',
+    color: isDarkMode?'#006604':'orange',
     fontSize: 16,
     fontWeight: 'bold',
   },
@@ -144,17 +147,17 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
     marginBottom: 10,
-    color: '#202244',
+    color: isDarkMode?'#FFF':'#202244',
   },
   imageUpload: {
     height: 100,
-    borderColor: '#FFF',
+    borderColor: isDarkMode?'#9c9c9c':'#fff',
     borderWidth: 1,
     borderRadius: 10,
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 20,
-    backgroundColor: '#FFF',
+    backgroundColor: isDarkMode?'#9c9c9c':'#fff',
   },
   uploadContent: {
     justifyContent: 'center',
@@ -172,12 +175,12 @@ const styles = StyleSheet.create({
   },
   input: {
     height: 120,
-    borderColor: '#FFF',
+    borderColor: isDarkMode?'#9c9c9c':'#fff',
     borderWidth: 1,
     borderRadius: 10,
     padding: 10,
     textAlignVertical: 'top',
-    backgroundColor: '#fff',
+    backgroundColor: isDarkMode?'#9c9c9c':'#fff',
     marginBottom: 20,
   },
   errorInput: {

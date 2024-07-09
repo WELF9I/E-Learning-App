@@ -7,6 +7,7 @@ import { ScreenProps } from '../../types';
 import { CustomButton } from '../../components';
 // @ts-ignore
 import ArrowLeftBlueColor from '../../assets/svg/arrowLeftBlueColor.svg';
+import { useTheme } from '../../utils/ThemeContext';
 
 interface Course {
   id_cours: number;
@@ -56,6 +57,8 @@ export const Curriculum:FC<ScreenProps<'Curriculum'>> = ({navigation,route }) =>
   const course = route.params?.course || { prix: 0 };
   const [videoUrl, setVideoUrl] = useState<string | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
+  const { isDarkMode } = useTheme();
+  const styles = createStyles(isDarkMode);
 
   const handlePlayVideo = (url: string) => {
     setVideoUrl(url);
@@ -166,10 +169,11 @@ export const Curriculum:FC<ScreenProps<'Curriculum'>> = ({navigation,route }) =>
   );
 };
 
-const styles = StyleSheet.create({
+const createStyles = (isDarkMode: boolean) =>
+  StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: isDarkMode?'#333':'#f5f5f5',
   },
   listContainer: {
     padding: 16,
@@ -183,6 +187,7 @@ const styles = StyleSheet.create({
   sectionHeader: {
     fontSize: 16,
     fontWeight: 'bold',
+    color:isDarkMode?'#FFF':'black'
   },
   sectionHeaderTitle: {
     color: '#0080ff',
@@ -190,7 +195,7 @@ const styles = StyleSheet.create({
   sectionContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#fff',
+    backgroundColor: isDarkMode?'#9c9c9c':'#fff',
     borderRadius: 8,
     padding: 16,
     marginBottom: 8,
@@ -216,6 +221,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     flex: 1,
     fontSize: 16,
+    color:'black'
   },
   icon: {
     width: 25,

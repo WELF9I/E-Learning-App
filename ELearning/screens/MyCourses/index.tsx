@@ -6,6 +6,7 @@ import { ScreenProps } from '../../types';
 // @ts-ignore
 import CustomSearchIcon from '../../assets/categories/search.png';
 import { Footer } from '../Footer';
+import { useTheme } from '../../utils/ThemeContext';
 
 interface Course {
   id_cours: number;
@@ -144,6 +145,8 @@ export const MyCourses: FC<ScreenProps<'MyCourses'>> = ({ navigation,route }) =>
   const [bookmarkedCourses, setBookmarkedCourses] = useState<number[]>([]);
   const [isCompletedActive, setIsCompletedActive] = useState<boolean>(false);
   const [isOngoingActive, setIsOngoingActive] = useState<boolean>(true);
+  const { isDarkMode } = useTheme();
+  const styles = createStyles(isDarkMode);
 
   useEffect(() => {
     let progress = 0.46;
@@ -165,6 +168,7 @@ export const MyCourses: FC<ScreenProps<'MyCourses'>> = ({ navigation,route }) =>
     navigation.navigate('MyCoursesOngoing', { course });
   };
   const handleCompletedCoursePress = (course: Course) => {
+    //@ts-ignore
     navigation.navigate('MyCoursesCompleted', { course });
   };
 
@@ -172,6 +176,7 @@ export const MyCourses: FC<ScreenProps<'MyCourses'>> = ({ navigation,route }) =>
     setSearchQuery(query);
   };
   const handleViewCertificate = (course: Course) => {
+    //@ts-ignore
     navigation.navigate('CertificateScreen', { course });
   };
   
@@ -250,7 +255,7 @@ export const MyCourses: FC<ScreenProps<'MyCourses'>> = ({ navigation,route }) =>
               </View>
                 <Title style={styles.courseTitle}>{course.NomCourse}</Title>
                 <View style={styles.courseDetails}>
-                  <Paragraph>
+                  <Paragraph style={styles.Rate}>
                     ⭐{course.Scoremin}
                   </Paragraph>
                   <TouchableOpacity onPress={() => handleViewCertificate(course)}>
@@ -275,7 +280,7 @@ export const MyCourses: FC<ScreenProps<'MyCourses'>> = ({ navigation,route }) =>
             <Card.Content style={{paddingTop:25,width:'63%'}}>   
               <Paragraph style={styles.courseTopic}>{course.topic}</Paragraph>
               <Title style={styles.courseTitle}>{course.NomCourse}</Title>
-                <Paragraph>
+                <Paragraph style={styles.Rate}>
                   ⭐{course.Scoremin}
                 </Paragraph>
                 <View style={styles.progressBar}>
@@ -300,11 +305,12 @@ export const MyCourses: FC<ScreenProps<'MyCourses'>> = ({ navigation,route }) =>
   );
 };
 
-const styles = StyleSheet.create({
+const createStyles = (isDarkMode: boolean) =>
+  StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: isDarkMode?'#333':'#f5f5f5',
   },
   progressBar: {
     height: 10,
@@ -366,7 +372,7 @@ const styles = StyleSheet.create({
   },
   courseCard: {
     marginBottom: 25,
-    backgroundColor: 'white',
+    backgroundColor: isDarkMode?'#333':'white',
     width:'99.4%'
   },
   courseImage: {
@@ -381,7 +387,7 @@ const styles = StyleSheet.create({
   courseTitle: {
     fontSize: 14,
     fontWeight: 'bold',
-    color: '#202244',
+    color: isDarkMode?'#FFF':'#202244',
   },
   courseDetails: {
     flexDirection: 'row',
@@ -426,6 +432,9 @@ const styles = StyleSheet.create({
     position:'absolute',
     right:20,
     top:-37,
+  },
+  Rate:{
+    color:isDarkMode?'#FFF':'black',
   }
 });
 

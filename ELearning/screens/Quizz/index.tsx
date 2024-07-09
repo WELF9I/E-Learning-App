@@ -29,6 +29,7 @@ import correcte from '../../assets/categories/correct-mark.png';
 import wrong from '../../assets/categories/wrong-mark.png';
 // @ts-ignore
 import congratulation from '../../assets/categories/congratulation.png';
+import {useTheme} from '../../utils/ThemeContext';
 
 interface Question {
   id: number;
@@ -70,6 +71,7 @@ const quizzes = [
 ];
 
 quizzes.forEach(quiz => {
+  //@ts-ignore
   quiz.questions = questions.filter(q => q.idQuiz === quiz.id);
 });
 
@@ -83,6 +85,8 @@ export const Quizz: FC<ScreenProps<'Quizz'>> = ({navigation }) => {
   const [quizCompleted, setQuizCompleted] = useState<boolean>(false);
   const [timerInterval, setTimerInterval] = useState<NodeJS.Timeout | null>(null);
   const [progressValue, setProgressValue] = useState<number>(1);
+  const { isDarkMode } = useTheme();
+  const styles = createStyles(isDarkMode);
 
   useEffect(() => {
     if (selectedQuiz !== null && !quizCompleted) {
@@ -256,10 +260,11 @@ export const Quizz: FC<ScreenProps<'Quizz'>> = ({navigation }) => {
           );
           };
           
-          const styles = StyleSheet.create({
+          const createStyles = (isDarkMode: boolean) =>
+            StyleSheet.create({
           container: {
           flex: 1,
-          backgroundColor: "#F5F9FF",
+          backgroundColor: isDarkMode?'#333':"#F5F9FF",
           },
           progressBar: {
             height: 10,
@@ -273,27 +278,27 @@ export const Quizz: FC<ScreenProps<'Quizz'>> = ({navigation }) => {
             marginTop:-25,
           },
           headerText: {
-            color:'#0080ff',
+          color:'#0080ff',
           fontSize: 24,
           fontWeight: "bold",
           textAlign: "center",
           marginVertical: 20,
-          marginTop:40,
+          marginTop:18,
           },
           subHeaderText: {
           fontSize: 18,
           textAlign: "center",
-          marginBottom: 7,
+          color:isDarkMode?'#FFF':'black'
           },
           categoriesContainer: {
             marginTop:30,
-          paddingHorizontal: 20,
+            paddingHorizontal: 20,
           },
           categoryItem: {
-            paddingLeft:10,
-            height:60,
-            borderRadius:10,
-            backgroundColor:'#fff',
+          paddingLeft:10,
+          height:60,
+          borderRadius:10,
+          backgroundColor:isDarkMode?'#5f5f5f':'#FFF',
           flexDirection: "row",
           alignItems: "center",
           marginVertical: 5,
@@ -310,6 +315,7 @@ export const Quizz: FC<ScreenProps<'Quizz'>> = ({navigation }) => {
           },
           categoryText: {
           fontSize: 18,
+          color:isDarkMode?'#FFF':'black'
           },
           quizzesContainer: {
             padding:10,
@@ -361,6 +367,7 @@ export const Quizz: FC<ScreenProps<'Quizz'>> = ({navigation }) => {
           resultText: {
           fontSize: 20,
           fontWeight:'bold',
+          color:isDarkMode?'#FFF':'black'
           },
           noQuestionsContainer: {
           flex: 1,
@@ -371,22 +378,25 @@ export const Quizz: FC<ScreenProps<'Quizz'>> = ({navigation }) => {
           fontSize: 18,
           textAlign: "center",
           paddingHorizontal: 20,
+          color:isDarkMode?'#FFF':'black'
           },
           questionContainer: {
           flex: 1,
           padding: 20,
           },
           timerText: {
-            marginBottom:30,
+          marginBottom:30,
           fontSize: 18,
           textAlign: "center",
           marginVertical: 10,
+          color:isDarkMode?'#FFF':'black'
           },
           questionText: {
           fontSize: 20,
           fontWeight: "bold",
           marginBottom: 20,
           textAlign: "center",
+          color:isDarkMode?'#dfdfdf':'black'
           },
           answerButton: {
           backgroundColor: "#f0f0f0",
