@@ -1,7 +1,7 @@
 import React, { FC, useState ,useEffect} from 'react';
 import { View, Text, ScrollView, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { Card, Searchbar, Avatar,Title, Paragraph } from 'react-native-paper';
-import { ProgressBar, MD3Colors } from 'react-native-paper';
+import { ProgressBar } from 'react-native-paper';
 import { ScreenProps } from '../../types';
 // @ts-ignore
 import CustomSearchIcon from '../../assets/categories/search.png';

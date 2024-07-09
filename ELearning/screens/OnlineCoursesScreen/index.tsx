@@ -220,9 +220,6 @@ export const OnlineCoursesScreen: FC<ScreenProps<'OnlineCoursesScreen'>> = ({ na
           style={styles.searchbar}
           icon={() => <Image source={CustomSearchIcon} style={styles.searchIcon} />}
         />
-        <TouchableOpacity style={styles.filterButton}>
-          <Image source={FilterIcon} style={styles.filterIcon} />
-        </TouchableOpacity>
       </View>
       
      {/* Buttons */}
